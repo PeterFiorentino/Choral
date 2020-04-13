@@ -1,5 +1,6 @@
 import React from 'react'
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import trackArray from './assets/tracks.js'
 import colors from './assets/colors.js'
 
@@ -135,7 +136,7 @@ class App extends React.Component {
               return (
                 <div key={track} style={{display:'grid'}}>
                   <button onClick={() => this.muteTrack(track)} style={{width:'100px', height:'100px', backgroundColor:`${this.state[track].color}`}}></button>
-                  <button onClick={() => this.unmerge(track)}>UNMERGE</button>
+                  <button onClick={() => this.unmerge(track)} style={{width:'102px'}}>UNMERGE</button>
                 </div>
               )
             } return true
@@ -156,7 +157,7 @@ class App extends React.Component {
               return (
                 <div key={track} style={{display:'grid'}}>
                   <button onClick={() => this.checkPool(track)} style={{width:'100px', height:'100px', backgroundColor:`${this.state[track].color}`}}></button>
-                  <button onClick={() => this.merge(track)}>MERGE</button>
+                  <button onClick={() => this.merge(track)} style={{width:'102px'}}>MERGE</button>
                 </div>
               )
             } return true
