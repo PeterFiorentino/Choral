@@ -6,27 +6,27 @@ import horns from './horns.mp3'
 
 let track1 = {
     audio: drums,
-    approved: true
+    approved: 'always'
 }
 
 let track2 = {
     audio: bass,
-    approved: false
+    approved: 'no'
 }
 
 let track3 = {
     audio: horns,
-    approved: false
+    approved: 'no'
 }
 
 let track4 = {
     audio: guitar,
-    approved: false
+    approved: 'no'
 }
 
 let track5 = {
     audio: clav,
-    approved: false
+    approved: 'no'
 }
 
 const tracks = [track1,track2,track3, track4, track5]
