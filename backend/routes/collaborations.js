@@ -47,5 +47,24 @@ const multer = require('multer');
     }
   });
   
+  router.patch('/:collab_id', async (req, res)  => {
+    let approved = req.body.approved
+    try {
+      let collabs =  await db.none(`UPDATE collabs SET approved = $1 WHERE id=$2`, [approved, req.params.session_id]);
+      res.json({
+        message: "Success",
+        payload: {
+          user: collabs
+        }, 
+        error: null
+      })
+    } catch (error) {
+      res.json({
+        message: "There is no collabs for that session",
+        payload: null,
+        error: error
+      })
+    }
+  });
 
 module.exports = router;

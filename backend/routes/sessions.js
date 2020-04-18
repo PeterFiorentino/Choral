@@ -41,6 +41,25 @@ router.get('/', async (req, res) => {
     }
   });
 
+  router.get('user/:user_id', async (req, res)  => {
+    try {
+      let usersSessions =  await db.one(`SELECT * FROM sessions WHERE user_id=$1`, req.params.user_id);
+      res.json({
+        message: "Success",
+        payload: {
+          user: usersSessions
+        }, 
+        error: null
+      })
+    } catch (error) {
+      res.json({
+        message: "There is no session for that user",
+        payload: null,
+        error: error
+      })
+    }
+  });
+
 
   router.post('/', async (req, res) => {
     let user_id = req.body.user_id
@@ -71,6 +90,25 @@ router.get('/', async (req, res) => {
     }
   });
   
+  router.patch('/:id', async (req, res)  => {
+    let newAudio = req.body.newAudio
+    try {
+      let updateSession =  await db.none(`UPDATE sessions SET audio = $1 WHERE id=$2`, [newAudio,req.params.id]);
+      res.json({
+        message: "Success",
+        payload: {
+          user: updateSession
+        }, 
+        error: null
+      })
+    } catch (error) {
+      res.json({
+        message: "Cannot change that session",
+        payload: null,
+        error: error
+      })
+    }
+  });
 
 
   module.exports = router;
