@@ -14,7 +14,7 @@ class Collaborators extends Component {
         return(
             <div>
                 <NavBar />
-                <p>Collaborators Page</p>
+                <h1>Collaborators</h1>
             </div>
         )
     }
