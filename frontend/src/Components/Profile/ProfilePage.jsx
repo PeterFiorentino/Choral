@@ -20,24 +20,31 @@ class ProfilePage extends Component {
     }
     fetchUserData = async () => {
         const {loggedUser} = this.state
-        console.log(loggedUser)
         try{
-            const userData = await axios.get(`http://localhost:3001/users/${loggedUser.id}`)
+            const response = await axios.get(`http://localhost:3001/users/${loggedUser.id}`)
+            const userData = response.data.payload.user
             console.log(userData)
-            // this.setState({
-            //     username: 
-            // })
+            this.setState({
+                loggedUser: {
+                    username: userData.username,
+                    email: userData.email,
+                    avatar: userData.avatar
+                }  
+            })
         }catch(error){
             console.log('err =>', error)
-        }  
+        } 
     }
 
     render(){
+        const {loggedUser} = this.state
+        // console.log(loggedUser)
         return(
             <div className='profile-page'>
                 <NavBar />
                 <h1 className='title'>Choral</h1>
-                
+                <img src={loggedUser.avatar} height='300px' width= '300px'></img>
+                <h3>{loggedUser.username}</h3>
             </div>
         )
     }
