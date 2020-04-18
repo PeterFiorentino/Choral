@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './Components/Landing/LandingPage.css';
+import './LandingPage.css';
 
 class LandingPage extends Component {
     constructor(){
@@ -11,8 +11,12 @@ class LandingPage extends Component {
     }
     render(){
         return(
-            <div>
+            <div className='main-page'>
                 <p>Landing</p>
+                <div>
+                    <button>Log In</button>
+                    <button>Sign up</button>
+                </div>
             </div>
         )
     }
