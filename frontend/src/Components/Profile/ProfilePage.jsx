@@ -1,5 +1,6 @@
 import React,{Component} from 'react'
 import NavBar from '../NavBar/NavBar.jsx'
+import axios from 'axios'
 import './Profile.css'
 
 class ProfilePage extends Component {
@@ -7,12 +8,28 @@ class ProfilePage extends Component {
         super(props)
         this.state = {
            loggedUser: {
-               id: '',
+               id: 1,
                username: '',
                email: '',
                avatar: '',
            },
         }
+    }
+    componentDidMount = () => {
+        this.fetchUserData()
+    }
+    fetchUserData = async () => {
+        const {loggedUser} = this.state
+        console.log(loggedUser)
+        try{
+            const userData = await axios.get(`http://localhost:3001/users/${loggedUser.id}`)
+            console.log(userData)
+            // this.setState({
+            //     username: 
+            // })
+        }catch(error){
+            console.log('err =>', error)
+        }  
     }
 
     render(){
