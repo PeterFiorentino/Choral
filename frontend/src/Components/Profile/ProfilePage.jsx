@@ -1,16 +1,19 @@
 import React,{Component} from 'react'
-import './Components/Profile/ProfilePage.css'
+import NavBar from '../NavBar/NavBar.jsx'
+import './Profile.css'
 
 class ProfilePage extends Component {
     constructor(){
         super()
         this.state = {
-            userLoggedIn: ''
+            userLoggedIn: false,
+            userName: '',
         }
     }
     render(){
         return(
             <div>
+                <NavBar />
                 <p>Profile Page</p>
             </div>
         )

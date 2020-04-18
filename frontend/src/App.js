@@ -1,6 +1,5 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom'
-import NavBar from './Components/NavBar/NavBar'
 import LandingPage from './Components/Landing/LandingPage'
 import ProfilePage from './Components/Profile/ProfilePage'
 import Sessions from './Components/Session/Session'
@@ -12,14 +11,13 @@ function App() {
   return (
     <div className="App">
       <div className= "nav">
-        <NavBar />
       </div>
       <div>
         <Switch>
           <Route exact path = "/" component= {LandingPage}/>
           <Route path = "/profile" render = {() => <ProfilePage /> } />
           <Route path = "/session" render = {() =>  <Sessions /> } />
-          <Route path = "/collaborators" render = { () => <Collaborators />} />
+          <Route path = "/collaborators" render = {() => <Collaborators />} />
         </Switch>
       </div>
       

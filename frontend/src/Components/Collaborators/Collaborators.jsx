@@ -1,14 +1,19 @@
 import React, {Components, Component} from 'react'
-import './Components/Collaborators/Collaborators.css'
+import './Collaborators.css'
+import NavBar from '../NavBar/NavBar.jsx'
 
 class Collaborators extends Component {
     constructor(){
         super()
-
+        this.state = {
+            userName: '',
+            collaborators: {}
+        }
     }
     render(){
         return(
             <div>
+                <NavBar />
                 <p>Collaborators Page</p>
             </div>
         )
