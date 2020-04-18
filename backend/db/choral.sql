@@ -43,11 +43,11 @@ INSERT INTO users (username, email, password, avatar)
 
 
 
-INSERT INTO sessions (user_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, session_closed, volume)
+INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, session_closed, volume)
     VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', 'http://localhost:3001/audios/drums.mp3', false, 80),
     VALUES (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', false, 80);
 
-INSERT INTO collaborations (collaborator_id, session_id, session_owner, audio, comment, approved)
+INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approved, volume)
     VALUES (1, 1, 'http://localhost:3001/audios/bassguitar.mp3', '', false, 80),
            (2, 1, 'http://localhost:3001/audios/leadguitar.mp3', '', false, 80),
            (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80),
