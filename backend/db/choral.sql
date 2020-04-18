@@ -42,6 +42,7 @@ INSERT INTO users (username, email, password, avatar)
            ('Owen', 'owenjones@pursuit.org', 'abc123', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/68651886_3598543233505261_6173724632814714880_o.jpg?_nc_cat=108&_nc_sid=85a577&_nc_oc=AQngpc5LQJWLalKfc4YVDei2AcYDZ1Q_Bv4-Jb0WNenPJg3G2Qi6P_Py5NuCvUzX2tD3LXHHz_U94s7iUFR7wliU&_nc_ht=scontent-lga3-1.xx&oh=c683d319bb8ce8d2681d06a977a6b5e5&oe=5EBF55A3');
 
 
+
 INSERT INTO sessions (user_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, session_closed)
     VALUES(1, 'BassLineJam', 'hip-hop', 107, 'F# Major', 'F#-A-D-F', 'some kick heavy drums', 'location', false);
 
