@@ -1,10 +1,10 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom'
-import NavBar from './Components/NavBar'
-import LandingPage from './Components/LandingPage'
-import ProfilePage from './Components/ProfilePage'
-import Sessions from './Components/Sessions'
-import Collaborators from './Components/Collaborators'
+import NavBar from './Components/NavBar/NavBar'
+import LandingPage from './Components/Landing/LandingPage'
+import ProfilePage from './Components/Profile/ProfilePage'
+import Sessions from './Components/Session/Session'
+import Collaborators from './Components/Collaborators/Collaborators'
 import logo from './logo.svg';
 import './App.css';
 
@@ -18,7 +18,7 @@ function App() {
         <Switch>
           <Route exact path = "/" component= {LandingPage}/>
           <Route path = "/profile" render = {() => <ProfilePage /> } />
-          <Route path = "/sessions" render = {() =>  <Sessions /> } />
+          <Route path = "/session" render = {() =>  <Sessions /> } />
           <Route path = "/collaborators" render = { () => <Collaborators />} />
         </Switch>
       </div>
