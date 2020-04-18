@@ -1,4 +1,4 @@
-import React, {Components, Component} from 'react'
+import React, {Component} from 'react'
 import './Collaborators.css'
 import NavBar from '../NavBar/NavBar.jsx'
 
