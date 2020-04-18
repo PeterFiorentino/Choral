@@ -7,7 +7,7 @@ const cors = require('cors');
 
 const storage = multer.diskStorage({
     destination: (req,file,cb) =>{
-        cb(null,"./public/images")
+        cb(null,"./public/audios")
     },
     filename: (req,file,cb) =>{
         let name = Date.now() + "-" + file.originalname
