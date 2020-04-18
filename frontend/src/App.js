@@ -12,6 +12,12 @@ function App() {
       <div className= "nav">
         <NavBar />
       </div>
+      <div>
+        <Switch>
+          <Route exact path = "/" component= {LandingPage}/>
+        </Switch>
+      </div>
+      
     </div>
   );
 }
