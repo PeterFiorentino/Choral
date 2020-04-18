@@ -9,7 +9,8 @@ const NavBar = () => {
                 <Link to= "/landing"> Home </Link>{" "}
                 <Link to= "/profile"> Profile Page</Link>{" "}
                 <Link to= "/collaborators">Collaborators</Link>{" "}
-                <Link to= "/sessions"> Sessions</Link>{" "}
+                <Link to= "/feed"> Feed</Link>{" "}
+                <Link to= "/logout"> Log out</Link>{" "}
             </nav>
         </div>
     )
