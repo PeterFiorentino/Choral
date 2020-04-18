@@ -7,7 +7,7 @@ class Collaborators extends Component {
         super()
         this.state = {
             userName: '',
-            collaborators: {}
+            collaborators: []
         }
     }
     render(){
