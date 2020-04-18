@@ -22,7 +22,8 @@ CREATE TABLE sessions (
     chord_progression VARCHAR,
     looking_for VARCHAR,
     audio VARCHAR,
-    session_closed BOOLEAN
+    session_closed BOOLEAN,
+    volume INT
 );
 
 CREATE TABLE collaborations (
@@ -31,7 +32,8 @@ CREATE TABLE collaborations (
     session_owner INT REFERENCES users(id),
     audio VARCHAR,
     comment VARCHAR,
-    approved BOOLEAN
+    approved BOOLEAN,
+    volume INT
 );
 
 INSERT INTO users (username, email, password, avatar)
