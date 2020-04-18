@@ -13,7 +13,7 @@ class Feed extends Component {
         return(
             <div>
                 <NavBar />
-                <p>Feed</p>
+                <h1>Feed</h1>
             </div>
         )
     }
