@@ -5,7 +5,7 @@ class LandingPage extends Component {
     constructor(){
         super()
         this.state = {
-            userName: '',
+            username: '',
             password: '',
         }
     }

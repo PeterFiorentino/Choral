@@ -6,8 +6,7 @@ class ProfilePage extends Component {
     constructor(){
         super()
         this.state = {
-            userLoggedIn: false,
-            userName: '',
+           loggedUser: {},
         }
     }
     render(){
