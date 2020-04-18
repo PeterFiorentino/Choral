@@ -1,12 +1,15 @@
 import React, {Component} from 'react'
+import './Session.css'
+import NavBar from '../NavBar/NavBar.jsx'
 
-class Sessions extends Component {
+class Session extends Component {
     constructor(){
         super()
     }
     render(){
         return(
             <div>
+                <NavBar />
                 <p>Sessions Page</p>
             </div>
         )
@@ -16,4 +19,4 @@ class Sessions extends Component {
 
 
 
-export default Sessions
+export default Session
