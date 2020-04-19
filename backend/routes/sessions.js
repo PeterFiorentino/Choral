@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
       res.json({
         message: "Success",
         payload: {
-          users: allSessions
+          sessions: allSessions
         }, 
         error: null
       })
@@ -24,11 +24,11 @@ router.get('/', async (req, res) => {
 
   router.get('/:id', async (req, res)  => {
     try {
-      let singleSession =  await db.one(`SELECT * FROM sessions WHERE id=$1`, req.params.id);
+      let singleSession =  await db.one(`SELECT sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.session_closed, sessions.volume, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE sessions.id = $1;`, req.params.id);
       res.json({
         message: "Success",
         payload: {
-          user: singleSession
+          session: singleSession
         }, 
         error: null
       })
@@ -44,7 +44,8 @@ router.get('/', async (req, res) => {
   router.get('/user/:user_id', async (req, res)  => {
     // ~Changed the user_id =$1 to owner_id~
     try {
-      let usersSessions =  await db.one(`SELECT * FROM sessions WHERE owner_id=$1`, req.params.user_id);
+      let usersSessions =  await db.any(`SELECT * FROM sessions WHERE user_id=$1`, req.params.user_id);
+
       res.json({
         message: "Success",
         payload: {
