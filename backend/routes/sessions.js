@@ -42,7 +42,6 @@ router.get('/', async (req, res) => {
   });
 
   router.get('/user/:user_id', async (req, res)  => {
-    // ~Changed the user_id =$1 to owner_id~
     try {
       let usersSessions =  await db.any(`SELECT * FROM sessions WHERE user_id=$1`, req.params.user_id);
 

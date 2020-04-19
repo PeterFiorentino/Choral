@@ -1,5 +1,6 @@
 import React,{Component} from 'react'
 import NavBar from '../NavBar/NavBar.jsx'
+import Post from '../Post/Post.jsx'
 import axios from 'axios'
 import './Profile.css'
 
@@ -48,11 +49,12 @@ class ProfilePage extends Component {
         const {loggedUser} = this.state
         try {
             const response = await axios.get(`http://localhost:3001/sessions/user/${loggedUser.id}`)
+            // const response2 =
             const sessionList = response.data.payload
-            console.log(sessionList)
             this.setState({
-                sessionData: sessionList
+                sessionData: [sessionList]
             })
+            console.log(this.state.sessionData)
         } catch(error){
             console.log('err =>', error)
         }
@@ -63,12 +65,14 @@ class ProfilePage extends Component {
 
         // console.log(loggedUser)
         return(
-            <div className='profile-page'>
+            <>
+            <div className='user-info'>
                 <NavBar />
                 <h1 className='title'>Choral</h1>
                 <img src={loggedUser.avatar} height='300px' width= '300px'></img>
                 <h3>{loggedUser.username}</h3>
             </div>
+            </>
         )
     }
 }
@@ -76,3 +80,5 @@ class ProfilePage extends Component {
 
 
 export default ProfilePage
+
+
