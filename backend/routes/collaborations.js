@@ -9,7 +9,7 @@ const multer = require('multer');
       res.json({
         message: "Success",
         payload: {
-          user: collabs
+          collabs: collabs
         }, 
         error: null
       })
@@ -30,11 +30,11 @@ const multer = require('multer');
     let approved = req.body.approved
   
     try {
-      let newUser = await db.one(`INSERT INTO users(session_id, session_owner, audio, comment, approved) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [session_id, session_owner, audio, comment, approved]);
+      let newCollab = await db.one(`INSERT INTO users(session_id, session_owner, audio, comment, approved) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [session_id, session_owner, audio, comment, approved]);
       res.json({
         message: "Success",
         payload: {
-          newUser: newUser
+          newCollab: newCollab
         }, 
         error: null
       })
@@ -54,7 +54,7 @@ const multer = require('multer');
       res.json({
         message: "Success",
         payload: {
-          user: collabs
+          collabs: collabs
         }, 
         error: null
       })
