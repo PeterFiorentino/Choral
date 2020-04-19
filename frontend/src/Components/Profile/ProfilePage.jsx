@@ -13,10 +13,12 @@ class ProfilePage extends Component {
                email: '',
                avatar: '',
            },
+           sessionData: []
         }
     }
     componentDidMount = () => {
         this.fetchUserData()
+        this.fetchUserSessions()
     }
     fetchUserData = async () => {
         const {loggedUser} = this.state
@@ -34,6 +36,16 @@ class ProfilePage extends Component {
         }catch(error){
             console.log('err =>', error)
         } 
+    }
+    fetchUserSessions = async () => {
+        const {sessionData, loggedUser} = this.state
+        try {
+            const response = await axios.get(`http://localhost:3001/sessions/user/${loggedUser.id}`)
+            const sessionList = response.data.payload
+            console.log(sessionList)
+        } catch(error){
+            console.log('err =>', error)
+        }
     }
 
     render(){
