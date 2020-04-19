@@ -41,9 +41,11 @@ router.get('/', async (req, res) => {
     }
   });
 
-  router.get('user/:user_id', async (req, res)  => {
+  router.get('/user/:user_id', async (req, res)  => {
     try {
+
       let usersSessions =  await db.any(`SELECT * FROM sessions WHERE owner_id=$1`, req.params.user_id);
+      
       res.json({
         message: "Success",
         payload: {
