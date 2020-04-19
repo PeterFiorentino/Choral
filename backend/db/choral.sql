@@ -53,6 +53,4 @@ INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approve
            (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80),
            (1, 2, 'http://localhost:3001/audios/beat.mp3', '', false, 80);
 
-SELECT * FROM users;
-SELECT * FROM sessions;
-SELECT * FROM collaborations;
+
