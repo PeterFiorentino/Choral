@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
   router.get('/:id', async (req, res)  => {
     try {
-      let singleSession =  await db.any(`SELECT sessions.id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.session_closed, sessions.volume, ARRAY_AGG(collaborations.audio ORDER BY collaborations.audio) AS collabs FROM sessions LEFT JOIN collaborations ON collaborations.session_id = sessions.id GROUP BY collabs WHERE sessions.id = $1;`, req.params.id);
+      let singleSession =  await db.any(`SELECT sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.session_closed, sessions.volume, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE sessions.id = $1;`, req.params.id);
       res.json({
         message: "Success",
         payload: {
