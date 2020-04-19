@@ -8,7 +8,7 @@ class ProfilePage extends Component {
         super(props)
         this.state = {
            loggedUser: {
-               id: 1,
+               id: 2,
                username: '',
                email: '',
                avatar: '',
@@ -38,18 +38,21 @@ class ProfilePage extends Component {
         } 
     }
     fetchUserSessions = async () => {
-        const {sessionData, loggedUser} = this.state
+        const {loggedUser} = this.state
         try {
             const response = await axios.get(`http://localhost:3001/sessions/user/${loggedUser.id}`)
             const sessionList = response.data.payload
             console.log(sessionList)
+            this.setState({
+                sessionData: sessionList
+            })
         } catch(error){
             console.log('err =>', error)
         }
     }
 
     render(){
-        const {loggedUser} = this.state
+        const {loggedUser,sessionData} = this.state
         // console.log(loggedUser)
         return(
             <div className='profile-page'>
