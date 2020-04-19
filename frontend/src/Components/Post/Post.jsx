@@ -1,5 +1,6 @@
 import React from 'react'
 import { ProgressBar } from 'react-bootstrap'
+import './Post.css'
 
 class Post extends React.Component {
     constructor(props) {
@@ -19,22 +20,20 @@ class Post extends React.Component {
             time: audioElements[0].currentTime
         })
         if (audioElements[0].currentTime >= 45) {
-            this.stop()
+            this.preview()
         }
     }
 
     preview = () => {
-        console.log('click')
         let audioElements = this.getAudioElements()
-        for (let index = 0; index < audioElements.length; index ++) {
-            audioElements[index].play()
-        }
-    }
-
-    stop = () => {
-        let audioElements = this.getAudioElements()
-        for (let index = 0; index < audioElements.length; index ++) {
-            audioElements[index].load()
+        if (audioElements[0].currentTime === 0) { 
+            for (let index = 0; index < audioElements.length; index ++) {
+                audioElements[index].play()
+            }
+        } else {
+            for (let index = 0; index < audioElements.length; index ++) {
+                audioElements[index].load()
+            }
         }
     }
 
@@ -42,11 +41,10 @@ class Post extends React.Component {
         return (
             <>
             <div className='post'>
-                <img className='owner' src={this.props.session.avatar}></img>
-                <button onClick={this.preview}>PREVIEW</button>
-                <button onClick={this.stop}>STOP</button>
-                <ProgressBar now={this.state.time} max='45' variant='info' style={{marginLeft:'10%', width: '80%', height:'40px'}}></ProgressBar>
-                {this.props.collaborations.map((collaboration) => {
+                <img className='owner' src={session.avatar} alt=''></img>
+                <button className='control' onClick={this.preview}>PREVIEW</button>
+                <ProgressBar now={this.state.time} max='45' variant='info' style={{width: '100%', height:'5rem', gridRow: '1 / 2', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
+                {this.props.session.collaborations.map((collaboration) => {
                     if (collaboration.approved) {
                         return (
                             <img className='merged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
@@ -59,13 +57,13 @@ class Post extends React.Component {
                 })}
             </div>
             <div className='audios'>
-                <audio controls className='audio-element' volume={this.props.session.volume} onTimeUpdate={this.handleTime}>
+                <audio className='audio-element' volume={this.props.session.volume} onTimeUpdate={this.handleTime}>
                     <source src={this.props.session.audio}></source>
                 </audio>
-                {this.props.collaborations.map((collaboration) => {
+                {this.props.session.collaborations.map((collaboration) => {
                     if (collaboration.approved) {
-                        return (
-                            <audio controls className='audio-element' volume={collaboration.volume} key={collaboration.id}>
+                        return (   
+                            <audio className='audio-element' volume={collaboration.volume} key={collaboration.id}>
                                 <source src={collaboration.audio}></source>
                             </audio>
                         )
