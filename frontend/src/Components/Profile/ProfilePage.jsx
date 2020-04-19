@@ -1,19 +1,50 @@
 import React,{Component} from 'react'
 import NavBar from '../NavBar/NavBar.jsx'
+import axios from 'axios'
 import './Profile.css'
 
 class ProfilePage extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
-           loggedUser: {},
+           loggedUser: {
+               id: 1,
+               username: '',
+               email: '',
+               avatar: '',
+           },
         }
     }
+    componentDidMount = () => {
+        this.fetchUserData()
+    }
+    fetchUserData = async () => {
+        const {loggedUser} = this.state
+        try{
+            const response = await axios.get(`http://localhost:3001/users/${loggedUser.id}`)
+            const userData = response.data.payload.user
+            console.log(userData)
+            this.setState({
+                loggedUser: {
+                    username: userData.username,
+                    email: userData.email,
+                    avatar: userData.avatar
+                }  
+            })
+        }catch(error){
+            console.log('err =>', error)
+        } 
+    }
+
     render(){
+        const {loggedUser} = this.state
+        // console.log(loggedUser)
         return(
-            <div>
+            <div className='profile-page'>
                 <NavBar />
-                <p>Profile Page</p>
+                <h1 className='title'>Choral</h1>
+                <img src={loggedUser.avatar} height='300px' width= '300px'></img>
+                <h3>{loggedUser.username}</h3>
             </div>
         )
     }

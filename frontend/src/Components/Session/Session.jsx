@@ -10,7 +10,7 @@ class Session extends Component {
         return(
             <div>
                 <NavBar />
-                <p>Sessions Page</p>
+                <h1>Session</h1>
             </div>
         )
     }

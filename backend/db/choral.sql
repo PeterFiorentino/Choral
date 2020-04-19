@@ -14,7 +14,7 @@ CREATE TABLE users (
 
 CREATE TABLE sessions (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
+    owner_id INT REFERENCES users(id),
     session_name VARCHAR,
     genre VARCHAR,
     bpm INT,
@@ -28,8 +28,8 @@ CREATE TABLE sessions (
 
 CREATE TABLE collaborations (
     id SERIAL PRIMARY KEY,
+    collaborator_id INT REFERENCES users(id),
     session_id INT REFERENCES sessions(id),
-    session_owner INT REFERENCES users(id),
     audio VARCHAR,
     comment VARCHAR,
     approved BOOLEAN,
@@ -43,12 +43,17 @@ INSERT INTO users (username, email, password, avatar)
 
 
 
-INSERT INTO sessions (user_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, session_closed)
-    VALUES(1, 'BassLineJam', 'hip-hop', 107, 'F# Major', 'F#-A-D-F', 'some kick heavy drums', 'location', false);
+INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, session_closed, volume)
+    VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', 'http://localhost:3001/audios/drums.mp3', false, 80),
+           (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', false, 80);
 
-INSERT INTO collaborations (session_id, session_owner, audio, comment, approved)
-    VALUES(1, 1, 'location', 'The snares are a sample from a Marvin Gaye track', false);
+INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approved, volume)
+    VALUES (1, 1, 'http://localhost:3001/audios/bassguitar.mp3', '', false, 80),
+           (2, 1, 'http://localhost:3001/audios/leadguitar.mp3', '', false, 80),
+           (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80),
+           (1, 2, 'http://localhost:3001/audios/beat.mp3', '', false, 80);
 
-SELECT * FROM users;
-SELECT * FROM sessions;
-SELECT * FROM collaborations;
+SELECT sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.session_closed, sessions.volume, users.avatar,  FROM sessions 
+LEFT JOIN users ON sessions.owner_id = users.id 
+WHERE sessions.id = 1;
+

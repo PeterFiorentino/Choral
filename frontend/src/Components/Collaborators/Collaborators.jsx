@@ -1,4 +1,4 @@
-import React, {Components, Component} from 'react'
+import React, {Component} from 'react'
 import './Collaborators.css'
 import NavBar from '../NavBar/NavBar.jsx'
 
@@ -14,7 +14,7 @@ class Collaborators extends Component {
         return(
             <div>
                 <NavBar />
-                <p>Collaborators Page</p>
+                <h1>Collaborators</h1>
             </div>
         )
     }
