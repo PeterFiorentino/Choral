@@ -53,7 +53,4 @@ INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approve
            (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80),
            (1, 2, 'http://localhost:3001/audios/beat.mp3', '', false, 80);
 
-SELECT sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.session_closed, sessions.volume, users.avatar,  FROM sessions 
-LEFT JOIN users ON sessions.owner_id = users.id 
-WHERE sessions.id = 1;
 
