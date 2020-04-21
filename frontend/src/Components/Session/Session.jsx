@@ -1,23 +1,30 @@
 import React, {Component} from 'react'
 import './Session.css'
 import NavBar from '../NavBar/NavBar.jsx'
-import trackArray from '../../../notes/src/assets/tracks.js'
-import colors from '../../../assets/colors.js'
 import Slider from '@material-ui/core/Slider'
-import { ProgressBar } from 'react-bootstrap'
+import { ProgressBar, Spinner } from 'react-bootstrap'
+import axios from 'axios'
 
 
 class Session extends Component {
     constructor(){
         super()
         this.state = {
-            ...trackArray
+            sessionId: 1
         }
     }
 
     async componentDidMount() {
+        let response = await axios.get(`http://localhost:3001/sessions/${this.state.sessionId}`)
+        let sessionData = response.data.payload.session[0]
+        let response2 = await axios.get(`http://localhost:3001/collaborations/${this.state.sessionId}`)
+        let collabsData = response2.data.payload.collabs
+        this.setState({
+            sessionData: sessionData,
+            collabsData: collabsData
+        })
         this.stopAll()
-        setTimeout(() => this.completeState(), 500)
+        setTimeout(() => this.completeState(), 1000)
     }
 
     getAudioElements = () => {
@@ -25,31 +32,24 @@ class Session extends Component {
     }
 
     completeState = () => {
-        const tracks = this.state
         const audioElements = this.getAudioElements()
-        let newStateElement = tracks[0]
-        newStateElement.time = audioElements[0].currentTime
-        newStateElement.duration = audioElements[0].duration
-        newStateElement.color = colors[0]
+        let completeSessionData = this.state.sessionData
+        completeSessionData.time = audioElements[0].currentTime
+        completeSessionData.duration = audioElements[0].duration
+        // completeSessionData.color = colors[0]
         this.setState({
-            0: newStateElement
+            sessionData: completeSessionData
         })
-        for (let track in tracks) {
-            if (tracks[track].approved === 'yes') {
-            let newStateElement = tracks[track]
-            newStateElement.color = colors[track]
-            this.setState({
-                [track]: newStateElement
-            })
-            } else if (tracks[track].approved === 'no') {
-            let newStateElement = tracks[track]
-            newStateElement.color = 'gray'
-            audioElements[track].muted = true
-            this.setState({
-                [track]: newStateElement
-            })
+        let completeCollabsData = this.state.collabsData
+        for (let index = 0; index < completeCollabsData.length; index++) {
+            if (completeCollabsData[index].approved === false) {
+                // newStateElement.color = 'gray'
+                completeCollabsData[index].muted = true
             }
         }
+        this.setState({
+            collabsData: completeCollabsData
+        })
     }
 
     playAll = () => {
@@ -74,75 +74,81 @@ class Session extends Component {
     }
 
     muteTrack = (index) => {
+        const audioIndex = index + 1
         const audioElements = this.getAudioElements()
-        if (audioElements[index].muted === false) {
-            audioElements[index].muted = true
-            let newStateElement = this.state[index]
-            newStateElement.color = 'gray' 
-            this.setState({
-            [index]: newStateElement
-            })
+        // const collabsData = this.state.collabsData
+        // const collabIndex = audioIndex - 1
+        if (audioElements[audioIndex].muted === false) {
+            audioElements[audioIndex].muted = true
+            // let updatedCollabs = collabsData
+            // updatedCollabs[collabIndex].color = 'gray' 
+            // this.setState({
+            //     collabsData: updatedCollabs
+            // })
         } else {
-            audioElements[index].muted = false
-            let newStateElement = this.state[index]
-            newStateElement.color = colors[index]
-            this.setState({
-            [index]: newStateElement
-            })
+            audioElements[audioIndex].muted = false
+            // let updatedCollabs = collabsData
+            // updatedCollabs[collabIndex].color = colors[audioIndex]
+            // this.setState({
+            //     collabsData: updatedCollabs
+            // })
         }
     }
 
     checkPool = (index) => {
-        let tracks = this.state
-        for (let track in tracks) {
-            if (tracks[track].checking === true && track !== index.toString()) {
+        const audioIndex = index + 1
+        let collabsData = this.state.collabsData
+        let collabIndex = index
+        for (let i = 0; i < collabsData.length; i ++) {
+            if (collabsData[i].checking === true && i !== collabIndex.toString()) {
                 const audioElements = this.getAudioElements()
-                audioElements[track].muted = true
-                let newStateElement = this.state[track]
-                newStateElement.color = 'gray'
-                newStateElement.checking = false
+                audioElements[audioIndex].muted = true
+                let updatedCollabs = collabsData
+                // updatedCollabs.color = 'gray'
+                updatedCollabs[collabIndex].checking = false
                 this.setState({
-                    [track]: newStateElement
+                    collabsData: updatedCollabs
                 })
             }
         }
         const audioElements = this.getAudioElements()
-        if (audioElements[index].muted === true) {
-            audioElements[index].muted = false
-            let newStateElement = this.state[index]
-            newStateElement.color = colors[index]
-            newStateElement.checking = true
+        if (audioElements[audioIndex].muted === true) {
+            audioElements[audioIndex].muted = false
+            let updatedCollabs = collabsData
+            // updatedCollabs[collabIndex].color = colors[audioIndex]
+            updatedCollabs[collabIndex].checking = true
             this.setState({
-            [index]: newStateElement
+                collabsData: updatedCollabs
             })
         } else {
-            audioElements[index].muted = true
-            let newStateElement = this.state[index]
-            newStateElement.color = 'gray'
-            newStateElement.checking = false
+            audioElements[audioIndex].muted = true
+            let updatedCollabs = collabsData
+            // updatedCollabs.color = 'gray'
+            updatedCollabs[collabIndex].checking = false
             this.setState({
-            [index]: newStateElement
+                collabsData: updatedCollabs
             })
         }
     }
 
     merge = (index) => {
-        let newStateElement = this.state[index]
-        newStateElement.checking = false
-        newStateElement.approved = 'yes'
+        let updatedCollabs = this.state.collabsData
+        updatedCollabs[index].checking = false
+        updatedCollabs[index].approved = true
         this.setState({
-            [index]: newStateElement
+            collabsData: updatedCollabs
         })
     }
 
     unmerge = (index) => {
         const audioElements = this.getAudioElements()
-        audioElements[index].muted = true
-        let newStateElement = this.state[index]
-        newStateElement.approved = 'no'
-        newStateElement.color = 'gray'
+        const audioIndex = index + 1
+        audioElements[audioIndex].muted = true
+        let updatedCollabs = this.state.collabsData
+        updatedCollabs[index].approved = false
+        // updatedCollabs[index].color = 'gray'
         this.setState({
-            [index]: newStateElement
+            collabsData: updatedCollabs
         })
     }
 
@@ -150,10 +156,10 @@ class Session extends Component {
 
     handleTime = () => {
         let audioElements = this.getAudioElements()
-        let newStateElement = this.state[0]
-        newStateElement.time = audioElements[0].currentTime
+        let updatedSession = this.state.sessionData
+        updatedSession.time = audioElements[0].currentTime
         this.setState({
-            0: newStateElement
+            sessionData: updatedSession
         })
     }
 
@@ -165,10 +171,10 @@ class Session extends Component {
         for (let index = 0; index < audioElements.length; index ++) {
             audioElements[index].currentTime = audioElements[0].duration * percentage
         }
-        let newStateElement = this.state[0]
-        newStateElement.time = newStateElement.duration * percentage
+        let updatedSession = this.state.sessionData
+        updatedSession.time = updatedSession.duration * percentage
         this.setState({
-            0: newStateElement
+            sessionData: updatedSession
         })
     }
 
@@ -184,22 +190,23 @@ class Session extends Component {
         return(
             <div>
                 <NavBar />
+                {this.state.sessionData ? 
                 <div className='session'>
                     <h1>Session</h1>
                     <br/>
                     <h1>Tracks</h1>
                     <div className='tracks' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
                         <div style={{display:'grid', gridTemplateColumns: '110px 10px'}}>
-                            <button onClick={() => this.muteTrack('0')} style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px', backgroundColor:`${this.state[0].color}`}}></button>
+                            <img src={this.state.sessionData.avatar} alt='' style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
                             <Slider orientation='vertical' style={{marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(0, event)}></Slider>
                         </div>
-                        {tracks.map((track) => {
-                            if (this.state[track].approved === 'yes') {
+                        {this.state.collabsData.map((collab, index) => {
+                            if (collab.approved === true) {
                             return (
-                                <div key={track} style={{display:'grid', gridTemplateColumns:'110px 10px', gridTemplateRows:'110px 30px'}}>
-                                <button onClick={() => this.muteTrack(track)} style={{gridColumn:'1 / 2', borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px', backgroundColor:`${this.state[track].color}`}}></button>
-                                <button onClick={() => this.unmerge(track)} style={{gridColumn:'1 / 2', borderRadius:'10px'}}>UNMERGE</button>
-                                <Slider orientation='vertical' style={{gridRow: '1 / 2', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(track, event)}></Slider>
+                                <div key={index} style={{display:'grid', gridTemplateColumns:'110px 10px', gridTemplateRows:'110px 30px'}}>
+                                    <img onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{gridColumn:'1 / 2', borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
+                                    <button onClick={() => this.unmerge(index)} style={{gridColumn:'1 / 2', borderRadius:'10px'}}>UNMERGE</button>
+                                    <Slider orientation='vertical' style={{gridRow: '1 / 2', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
                                 </div>
                             )
                             } return true
@@ -208,7 +215,7 @@ class Session extends Component {
                     <br/>
                     <div className='transport'>
                         <div style={{paddingLeft:'10%', width:'90%'}}>
-                            <ProgressBar now={this.state[0].time} max={this.state[0].duration} style={{height:'80px', fontSize:'20px'}} variant='info' label={this.secondsToMinutes(this.state[0].time)} onClick={this.changeTime}></ProgressBar>
+                            <ProgressBar now={this.state.sessionData.time} max={this.state.sessionData.duration} style={{height:'80px', fontSize:'20px'}} variant='info' label={this.secondsToMinutes(this.state.sessionData.time)} onClick={this.changeTime}></ProgressBar>
                         </div>
                         <br/>
                         <button onClick={this.playAll}>PLAY</button>
@@ -218,27 +225,31 @@ class Session extends Component {
                     <br/>
                     <h1>Pool</h1>
                     <div className='pool' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
-                        {tracks.map((track) => {
-                            if (this.state[track].approved === 'no') {
-                            return (
-                                <div key={track} style={{display:'grid', gridTemplateRows:'110px 30px'}}>
-                                <button onClick={() => this.checkPool(track)} style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px', backgroundColor:`${this.state[track].color}`}}></button>
-                                <button onClick={() => this.merge(track)} style={{borderRadius: '10px'}}>MERGE</button>
-                                </div>
-                            )
-                            } return true
+                        {this.state.collabsData.map((collab, index) => {
+                            if (collab.approved === false) {
+                                return (
+                                    <div key={index} style={{display:'grid', gridTemplateRows:'110px 30px'}}>
+                                        <img onClick={() => this.checkPool(index)} src={collab.avatar} alt='' style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
+                                        <button onClick={() => this.merge(index)} style={{borderRadius: '10px'}}>MERGE</button>
+                                    </div>
+                                )
+                            }
                         })}
                     </div>
                     <div className='audios'>
-                        {tracks.map((track) => {
+                        <audio className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
+                            <source src={this.state.sessionData.audio}></source>
+                        </audio>
+                        {this.state.collabsData.map((collab, index) => {
                             return (
-                            <audio className='audio-element' onTimeUpdate={this.handleTime} key={track}>
-                                <source src={this.state[track].audio}></source>
-                            </audio>
+                                <audio className='audio-element' onTimeUpdate={this.handleTime} key={index}>
+                                    <source src={collab.audio}></source>
+                                </audio>
                             )
                         })}
                     </div>
                 </div>
+                : <Spinner animation='border' />}
             </div>
         )
     }
