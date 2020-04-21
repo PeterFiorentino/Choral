@@ -46,6 +46,7 @@ router.get('/', async (req, res) => {
 
       let usersSessions =  await db.any(`SELECT sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.session_closed, sessions.volume, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE sessions.owner_id = $1;`, req.params.user_id);
 
+
       res.json({
         message: "Success",
         payload: {

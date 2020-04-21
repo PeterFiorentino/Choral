@@ -17,22 +17,20 @@ class ProfilePage extends Component {
                avatar: '',
            },
 
-           sessionData: []
+        //    sessionData: [],
 
         }
     }
     componentDidMount = () => {
         this.fetchUserData()
-
-        this.fetchUserSessions()
-
+        this.fetchUserSessionsAndCollaborators()
     }
     fetchUserData = async () => {
         const {loggedUser} = this.state
         try{
             const response = await axios.get(`http://localhost:3001/users/${loggedUser.id}`)
             const userData = response.data.payload.user
-            console.log(userData)
+            // console.log(userData)
             this.setState({
                 loggedUser: {
                     username: userData.username,
@@ -45,23 +43,33 @@ class ProfilePage extends Component {
         } 
     }
 
-    fetchUserSessions = async () => {
+    fetchUserSessionsAndCollaborators = async () => {
         const {loggedUser} = this.state
         try {
-            const response = await axios.get(`http://localhost:3001/sessions/user/${loggedUser.id}`)
-            // const response2 =
-            const sessionList = response.data.payload
+            let response = await axios.get(`http://localhost:3001/sessions/user/${loggedUser.id}`)
+            const sessionList = response.data.payload.session
+
+            for (let sesh of sessionList){
+               sesh.collaborations = await this.fetchCollaborators(sesh.id)   
+            }
+           
             this.setState({
-                sessionData: [sessionList]
+                sessionData: sessionList
             })
             console.log(this.state.sessionData)
         } catch(error){
             console.log('err =>', error)
-        }
+        }  
     }
 
+    fetchCollaborators = async (id) => {
+        let response2 = await axios.get(`http://localhost:3001/collaborations/${id}`)
+        console.log(response2)
+        return response2.data.payload.collabs
+    }
+ 
     render(){
-        const {loggedUser,sessionData} = this.state
+        const {loggedUser} = this.state
 
         // console.log(loggedUser)
         return(
@@ -71,6 +79,12 @@ class ProfilePage extends Component {
                 <h1 className='title'>Choral</h1>
                 <img src={loggedUser.avatar} height='300px' width= '300px'></img>
                 <h3>{loggedUser.username}</h3>
+            </div>
+            
+            <div className='session-info'>
+                {this.state.sessionData ? 
+                this.state.sessionData.map((session) =>
+                <Post session={session}></Post>) : <></>}
             </div>
             </>
         )
