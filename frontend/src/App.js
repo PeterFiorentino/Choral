@@ -4,6 +4,7 @@ import LandingPage from './Components/Landing/LandingPage'
 import ProfilePage from './Components/Profile/ProfilePage'
 import Collaborators from './Components/Collaborators/Collaborators'
 import Feed from './Components/Feed/Feed'
+import Session from './Components/Session/Session'
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path = "/profile" render = {() => <ProfilePage /> } />
           <Route path = "/collaborators" render = {() => <Collaborators />} />
           <Route path = "/feed" render = {() => <Feed />} />
+          <Route path = "/session" render = {() => <Session />} />
         </Switch>
       </div>
       
