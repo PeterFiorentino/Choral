@@ -22,13 +22,19 @@
     align-self: center;
 }
 
+.collaborators {
+    grid-row: 2 / 3;
+    grid-column: 3 / 4;
+    width: 100%;
+}
+
 .unmerged-collaborator {
     grid-row: 2 / 3;
     grid-column: 3 / 4;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
-    justify-self: end;
+    float: right;
     filter: grayscale(100%)
 }
 
@@ -38,6 +44,6 @@
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
-    justify-self: start;
+    float: left;
 }
 
