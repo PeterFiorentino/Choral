@@ -44,26 +44,28 @@ class Post extends React.Component {
                 <img className='owner' src={this.props.session.avatar} alt=''></img>
                 <button className='control' onClick={this.preview}>PREVIEW</button>
                 <ProgressBar now={this.state.time} max='45' variant='info' style={{width: '100%', height:'5rem', gridRow: '1 / 2', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
-                {this.props.session.collaborations.map((collaboration) => {
-                    if (collaboration.approved) {
-                        return (
-                            <img className='merged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
-                        )
-                    } else {
-                        return (
-                            <img className='unmerged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
-                        )
-                    }
-                })}
+                <div className='collaborators'>
+                    {this.props.session.collaborations.map((collaboration) => {
+                        if (collaboration.approved) {
+                            return (
+                                <img className='merged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
+                            )
+                        } else {
+                            return (
+                                <img className='unmerged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
+                            )
+                        }
+                    })}
+                </div>
             </div>
             <div className='audios'>
-                <audio className='audio-element' volume={this.props.session.volume} onTimeUpdate={this.handleTime}>
+                <audio className='audio-element' volume={this.props.session.volume / 100} onTimeUpdate={this.handleTime}>
                     <source src={this.props.session.audio}></source>
                 </audio>
                 {this.props.session.collaborations.map((collaboration) => {
                     if (collaboration.approved) {
                         return (   
-                            <audio className='audio-element' volume={collaboration.volume} key={collaboration.id}>
+                            <audio className='audio-element' volume={collaboration.volume / 100} key={collaboration.id}>
                                 <source src={collaboration.audio}></source>
                             </audio>
                         )
