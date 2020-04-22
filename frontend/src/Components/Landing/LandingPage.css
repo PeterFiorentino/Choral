@@ -1,0 +1,11 @@
+body {
+    height: 100%;
+    background-color: rgb(254, 255, 241) ;
+}
+
+.main-title {
+    font-family: Boogaloo;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 96px;
+}
