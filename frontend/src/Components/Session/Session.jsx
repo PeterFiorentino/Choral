@@ -10,7 +10,8 @@ class Session extends Component {
     constructor(){
         super()
         this.state = {
-            sessionId: 1
+            sessionId: 1,
+            saved: false
         }
     }
 
@@ -136,7 +137,8 @@ class Session extends Component {
         updatedCollabs[index].checking = false
         updatedCollabs[index].approved = true
         this.setState({
-            collabsData: updatedCollabs
+            collabsData: updatedCollabs,
+            saved: false
         })
     }
 
@@ -148,7 +150,8 @@ class Session extends Component {
         updatedCollabs[index].approved = false
         // updatedCollabs[index].color = 'gray'
         this.setState({
-            collabsData: updatedCollabs
+            collabsData: updatedCollabs,
+            saved: false
         })
     }
 
@@ -168,7 +171,7 @@ class Session extends Component {
         let totalX = window.innerWidth * 0.8
         let percentage = clickX / totalX
         const audioElements = this.getAudioElements()
-        for (let index = 0; index < audioElements.length; index ++) {
+        for (let index = 0; index < audioElements.length; index++) {
             audioElements[index].currentTime = audioElements[0].duration * percentage
         }
         let updatedSession = this.state.sessionData
@@ -184,6 +187,16 @@ class Session extends Component {
             const audioElements = this.getAudioElements()
             audioElements[index].volume = currentValue / 100
         }
+    }
+
+    saveMix = async () => {
+        const { collabsData } = this.state
+        for (let collab of collabsData) {
+            await axios.patch(`http://localhost:3001/collaborations/${collab.id}`, { approved: collab.approved })
+        }
+        this.setState({
+            saved: true
+        })
     }
 
     render(){
@@ -205,6 +218,9 @@ class Session extends Component {
                     </div>
                     <br/>
                     <h1>Tracks</h1>
+                    <button onClick={this.saveMix}>SAVE MIX</button>
+                    {this.state.saved ? <h5>saved!</h5> : <></>}
+                    <br/>
                     <div className='tracks' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
                         <div style={{display:'grid', gridTemplateColumns: '110px 10px'}}>
                             <img src={this.state.sessionData.avatar} alt='' style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
