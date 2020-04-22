@@ -30,7 +30,7 @@ const multer = require('multer');
     let approved = req.body.approved
   
     try {
-      let newCollab = await db.one(`INSERT INTO users(session_id, session_owner, audio, comment, approved) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [session_id, session_owner, audio, comment, approved]);
+      let newCollab = await db.one(`INSERT INTO collaborations(session_id, session_owner, audio, comment, approved) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [session_id, session_owner, audio, comment, approved]);
       res.json({
         message: "Success",
         payload: {
@@ -50,12 +50,10 @@ const multer = require('multer');
   router.patch('/:collab_id', async (req, res)  => {
     let approved = req.body.approved
     try {
-      let collabs =  await db.none(`UPDATE collabs SET approved = $1 WHERE id=$2`, [approved, req.params.session_id]);
+      await db.none(`UPDATE collaborations SET approved = $1 WHERE id=$2`, [approved, req.params.collab_id]);
       res.json({
         message: "Success",
-        payload: {
-          collabs: collabs
-        }, 
+        payload: null,
         error: null
       })
     } catch (error) {
