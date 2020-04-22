@@ -5,7 +5,7 @@ const multer = require('multer');
 
   router.get('/:session_id', async (req, res)  => {
     try {
-      let collabs =  await db.any(`SELECT c.collaborator_id, c.session_id, c.audio, c.approved, c.volume, u.avatar, u.username FROM collaborations c LEFT JOIN users u ON u.id = c.collaborator_id WHERE c.session_id=$1`, req.params.session_id);
+      let collabs =  await db.any(`SELECT c.id, c.collaborator_id, c.session_id, c.audio, c.approved, c.volume, u.avatar, u.username FROM collaborations c LEFT JOIN users u ON u.id = c.collaborator_id WHERE c.session_id=$1`, req.params.session_id);
       res.json({
         message: "Success",
         payload: {
