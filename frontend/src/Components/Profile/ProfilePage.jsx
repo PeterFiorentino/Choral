@@ -48,7 +48,7 @@ class ProfilePage extends Component {
         try {
             let response = await axios.get(`http://localhost:3001/sessions/user/${loggedUser.id}`)
             const sessionList = response.data.payload.session
-
+            console.log(sessionList)
             for (let sesh of sessionList){
                sesh.collaborations = await this.fetchCollaborators(sesh.id)   
             }
@@ -84,7 +84,7 @@ class ProfilePage extends Component {
             <div className='session-info'>
                 {this.state.sessionData ? 
                 this.state.sessionData.map((session) =>
-                <Post session={session}></Post>) : <></>}
+                <Post session={session} key={session.id}></Post>) : <></>}
             </div>
             </>
         )
