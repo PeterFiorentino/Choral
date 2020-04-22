@@ -42,9 +42,10 @@ class Session extends Component {
         })
         let completeCollabsData = this.state.collabsData
         for (let index = 0; index < completeCollabsData.length; index++) {
+            let audioIndex = index + 1
             if (completeCollabsData[index].approved === false) {
                 // newStateElement.color = 'gray'
-                completeCollabsData[index].muted = true
+                audioElements[audioIndex].muted = true
             }
         }
         this.setState({
@@ -96,33 +97,32 @@ class Session extends Component {
     }
 
     checkPool = (index) => {
-        const audioIndex = index + 1
-        let collabsData = this.state.collabsData
-        let collabIndex = index
-        for (let i = 0; i < collabsData.length; i ++) {
-            if (collabsData[i].checking === true && i !== collabIndex.toString()) {
-                const audioElements = this.getAudioElements()
+        const audioElements = this.getAudioElements()
+        const collabIndex = index
+        for (let i = 0; i < this.state.collabsData.length; i++) {
+            if (this.state.collabsData[i].checking === true && i !== collabIndex) {
+                const audioIndex = i + 1
                 audioElements[audioIndex].muted = true
-                let updatedCollabs = collabsData
+                let updatedCollabs = this.state.collabsData
                 // updatedCollabs.color = 'gray'
-                updatedCollabs[collabIndex].checking = false
+                updatedCollabs[i].checking = false
                 this.setState({
                     collabsData: updatedCollabs
                 })
             }
         }
-        const audioElements = this.getAudioElements()
+        const audioIndex = index + 1
         if (audioElements[audioIndex].muted === true) {
             audioElements[audioIndex].muted = false
-            let updatedCollabs = collabsData
+            let updatedCollabs = this.state.collabsData
             // updatedCollabs[collabIndex].color = colors[audioIndex]
             updatedCollabs[collabIndex].checking = true
             this.setState({
                 collabsData: updatedCollabs
             })
-        } else {
+        } else if (audioElements[audioIndex].muted === false) {
             audioElements[audioIndex].muted = true
-            let updatedCollabs = collabsData
+            let updatedCollabs = this.state.collabsData
             // updatedCollabs.color = 'gray'
             updatedCollabs[collabIndex].checking = false
             this.setState({
@@ -193,6 +193,16 @@ class Session extends Component {
                 {this.state.sessionData ? 
                 <div className='session'>
                     <h1>Session</h1>
+                    <br/>
+                    <h1>Info</h1>
+                    <div className='info'>
+                        <h3>Name: {this.state.sessionData.session_name}</h3>
+                        <h3>Genre: {this.state.sessionData.genre}</h3>
+                        <h3>Bpm: {this.state.sessionData.bpm}</h3>
+                        <h3>Key: {this.state.sessionData.bpm}</h3>
+                        <h3>Chord Progression: {this.state.sessionData.chord_progression}</h3>
+                        <h3>Looking for: {this.state.sessionData.looking_for}</h3>
+                    </div>
                     <br/>
                     <h1>Tracks</h1>
                     <div className='tracks' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
