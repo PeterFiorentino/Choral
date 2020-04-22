@@ -35,15 +35,15 @@ class LandingPage extends Component {
     componentDidMount = () => {
         this.gatherAllUsers()
     }
+    
     render(){
         return(
             <div className='main-page'>
-                <h1>Choral</h1>
+                <h1 id='main-title'>Choral</h1>
                 <div className='login-signup'>
                     <LoginButton />
                     <SignupButton />
                 </div>
-
             </div>
         )
     }
