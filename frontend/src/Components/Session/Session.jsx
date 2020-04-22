@@ -10,7 +10,8 @@ class Session extends Component {
     constructor(){
         super()
         this.state = {
-            sessionId: 1
+            sessionId: 1,
+            saved: false
         }
     }
 
@@ -42,9 +43,10 @@ class Session extends Component {
         })
         let completeCollabsData = this.state.collabsData
         for (let index = 0; index < completeCollabsData.length; index++) {
+            let audioIndex = index + 1
             if (completeCollabsData[index].approved === false) {
                 // newStateElement.color = 'gray'
-                completeCollabsData[index].muted = true
+                audioElements[audioIndex].muted = true
             }
         }
         this.setState({
@@ -96,33 +98,32 @@ class Session extends Component {
     }
 
     checkPool = (index) => {
-        const audioIndex = index + 1
-        let collabsData = this.state.collabsData
-        let collabIndex = index
-        for (let i = 0; i < collabsData.length; i ++) {
-            if (collabsData[i].checking === true && i !== collabIndex.toString()) {
-                const audioElements = this.getAudioElements()
+        const audioElements = this.getAudioElements()
+        const collabIndex = index
+        for (let i = 0; i < this.state.collabsData.length; i++) {
+            if (this.state.collabsData[i].checking === true && i !== collabIndex) {
+                const audioIndex = i + 1
                 audioElements[audioIndex].muted = true
-                let updatedCollabs = collabsData
+                let updatedCollabs = this.state.collabsData
                 // updatedCollabs.color = 'gray'
-                updatedCollabs[collabIndex].checking = false
+                updatedCollabs[i].checking = false
                 this.setState({
                     collabsData: updatedCollabs
                 })
             }
         }
-        const audioElements = this.getAudioElements()
+        const audioIndex = index + 1
         if (audioElements[audioIndex].muted === true) {
             audioElements[audioIndex].muted = false
-            let updatedCollabs = collabsData
+            let updatedCollabs = this.state.collabsData
             // updatedCollabs[collabIndex].color = colors[audioIndex]
             updatedCollabs[collabIndex].checking = true
             this.setState({
                 collabsData: updatedCollabs
             })
-        } else {
+        } else if (audioElements[audioIndex].muted === false) {
             audioElements[audioIndex].muted = true
-            let updatedCollabs = collabsData
+            let updatedCollabs = this.state.collabsData
             // updatedCollabs.color = 'gray'
             updatedCollabs[collabIndex].checking = false
             this.setState({
@@ -136,7 +137,8 @@ class Session extends Component {
         updatedCollabs[index].checking = false
         updatedCollabs[index].approved = true
         this.setState({
-            collabsData: updatedCollabs
+            collabsData: updatedCollabs,
+            saved: false
         })
     }
 
@@ -148,7 +150,8 @@ class Session extends Component {
         updatedCollabs[index].approved = false
         // updatedCollabs[index].color = 'gray'
         this.setState({
-            collabsData: updatedCollabs
+            collabsData: updatedCollabs,
+            saved: false
         })
     }
 
@@ -168,7 +171,7 @@ class Session extends Component {
         let totalX = window.innerWidth * 0.8
         let percentage = clickX / totalX
         const audioElements = this.getAudioElements()
-        for (let index = 0; index < audioElements.length; index ++) {
+        for (let index = 0; index < audioElements.length; index++) {
             audioElements[index].currentTime = audioElements[0].duration * percentage
         }
         let updatedSession = this.state.sessionData
@@ -186,6 +189,16 @@ class Session extends Component {
         }
     }
 
+    saveMix = async () => {
+        const { collabsData } = this.state
+        for (let collab of collabsData) {
+            await axios.patch(`http://localhost:3001/collaborations/${collab.id}`, { approved: collab.approved })
+        }
+        this.setState({
+            saved: true
+        })
+    }
+
     render(){
         return(
             <div>
@@ -194,7 +207,20 @@ class Session extends Component {
                 <div className='session'>
                     <h1>Session</h1>
                     <br/>
+                    <h1>Info</h1>
+                    <div className='info'>
+                        <h3>Name: {this.state.sessionData.session_name}</h3>
+                        <h3>Genre: {this.state.sessionData.genre}</h3>
+                        <h3>Bpm: {this.state.sessionData.bpm}</h3>
+                        <h3>Key: {this.state.sessionData.bpm}</h3>
+                        <h3>Chord Progression: {this.state.sessionData.chord_progression}</h3>
+                        <h3>Looking for: {this.state.sessionData.looking_for}</h3>
+                    </div>
+                    <br/>
                     <h1>Tracks</h1>
+                    <button onClick={this.saveMix}>SAVE MIX</button>
+                    {this.state.saved ? <h5>saved!</h5> : <></>}
+                    <br/>
                     <div className='tracks' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
                         <div style={{display:'grid', gridTemplateColumns: '110px 10px'}}>
                             <img src={this.state.sessionData.avatar} alt='' style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
