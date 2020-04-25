@@ -24,13 +24,14 @@ const multer = require('multer');
 
   router.post('/', async (req, res) => {
     let session_id = req.body.session_id
-    let session_owner = req.body.session_owner
+    let collaborator_id = req.body.collaborator_id
     let audio = req.body.audio
     let comment = req.body.comment
     let approved = req.body.approved
+    let volume = req.body.volume
   
     try {
-      let newCollab = await db.one(`INSERT INTO collaborations(session_id, session_owner, audio, comment, approved) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [session_id, session_owner, audio, comment, approved]);
+      let newCollab = await db.one(`INSERT INTO collaborations(session_id, collaborator_id, audio, comment, approved, volume) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [session_id, collaborator_id, audio, comment, approved, volume]);
       res.json({
         message: "Success",
         payload: {
