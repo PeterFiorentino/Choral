@@ -10,8 +10,9 @@ class Session extends Component {
     constructor(){
         super()
         this.state = {
+            loggedUser: 1,
             sessionId: 1,
-            saved: false
+            saved: false,
         }
     }
 
@@ -182,21 +183,50 @@ class Session extends Component {
     }
 
     changeVolume = (index, event) => {
+        const audioIndex = index + 1
         let currentValue = event.target.getAttribute('aria-valuenow')
         if (currentValue !== 'NaN' && currentValue !== null) {
             const audioElements = this.getAudioElements()
-            audioElements[index].volume = currentValue / 100
+            audioElements[audioIndex].volume = currentValue / 100
         }
     }
 
-    saveMix = async () => {
+    saveMix = () => {
         const { collabsData } = this.state
         for (let collab of collabsData) {
-            await axios.patch(`http://localhost:3001/collaborations/${collab.id}`, { approved: collab.approved })
+            axios.patch(`http://localhost:3001/collaborations/${collab.id}`, { approved: collab.approved })
         }
         this.setState({
             saved: true
         })
+    }
+
+    fileHandler = (event) => {
+        this.setState({
+            selectedAudio: event.target.files[0]
+        })
+    }
+
+    uploadCollab = async () => {
+        const data = new FormData()
+        data.append('audio', this.state.selectedAudio)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        let response = await axios.post('http://localhost:3001/upload', data, config)
+        let location = response.data.audioUrl
+        let body = {
+            session_id: this.state.sessionData.id,
+            collaborator_id: this.state.loggedUser,
+            audio: location,
+            comment: '',
+            approved: false,
+            volume: 80
+        }
+        let response2 = await axios.post('http://localhost:3001/collaborations', body)
+        window.location.reload()
     }
 
     render(){
@@ -220,6 +250,8 @@ class Session extends Component {
                     <h1>Tracks</h1>
                     <button onClick={this.saveMix}>SAVE MIX</button>
                     {this.state.saved ? <h5>saved!</h5> : <></>}
+                    <button onClick={this.uploadCollab}>NEW COLLAB</button>
+                    <input type='file' name='audio' onChange={this.fileHandler}></input>
                     <br/>
                     <div className='tracks' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
                         <div style={{display:'grid', gridTemplateColumns: '110px 10px'}}>
