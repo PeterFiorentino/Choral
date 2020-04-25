@@ -9,7 +9,7 @@ class LandingPage extends Component {
         super()
         this.state = { 
             userId: '',
-            username: '',
+            username: 'ojones311',
             password: '',   
         }
 
@@ -37,11 +37,12 @@ class LandingPage extends Component {
     }
     
     render(){
+        const {isLoggedIn, userId, username, password} = this.state
         return(
             <div className='main-page'>
                 <h1 id='main-title'>Choral</h1>
                 <div className='login-signup'>
-                    <LoginButton />
+                    <LoginButton isLoggedIn = {isLoggedIn} userId={userId} username= {username} password={password} />
                     <SignupButton />
                 </div>
             </div>
