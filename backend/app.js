@@ -4,6 +4,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const multer = require('multer');
 const cors = require('cors');
+const session = require("express-session");
+const passport = require("passport");
+const bodyParser = require('body-parser');
 
 const storageAudio = multer.diskStorage({
     destination: (req,file,cb) =>{
@@ -41,6 +44,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const sessionsRouter = require('./routes/sessions');
 const collaborationsRouter = require('./routes/collaborations');
+const authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -51,10 +55,28 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser("NOT_A_GOOD_SECRET"));
+
+app.use(
+  session({
+    secret: "NOT_A_GOOD_SECRET",
+    resave: false,
+    saveUninitialized: true
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/users', usersRouter);
-app.use('/sessions', sessionsRouter);
-app.use('/collaborations', collaborationsRouter);
+app.use('/auth', authRouter);
+
+app.use('/', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/sessions', sessionsRouter);
+app.use('/api/collaborations', collaborationsRouter);
+app.use('/api/auth', authRouter);
 
 app.post('/upload/audio',uploadAudio.single("audio"),(req,res,next) =>{
     console.log("file",req.file) 
