@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './Session.css'
-import NavBar from '../NavBar/NavBar.jsx'
+import Navigation from '../Navigation/Navigation.jsx'
 import Slider from '@material-ui/core/Slider'
 import { ProgressBar, Spinner } from 'react-bootstrap'
 import axios from 'axios'
@@ -232,7 +232,7 @@ class Session extends Component {
     render(){
         return(
             <div>
-                <NavBar />
+                <Navigation />
                 {this.state.sessionData ? 
                 <div className='session'>
                     <h1>Session</h1>
