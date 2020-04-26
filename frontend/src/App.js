@@ -5,6 +5,7 @@ import ProfilePage from './Components/Profile/ProfilePage'
 import Collaborators from './Components/Collaborators/Collaborators'
 import FeedContainer from './Components/Feed/FeedContainer'
 import Session from './Components/Session/Session'
+import AddSession from './Components/AddSession/AddSession'
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path = "/collaborators" render = {() => <Collaborators />} />
           <Route path = "/feed" render = {() => <FeedContainer />} />
           <Route path = "/session" render = {() => <Session />} />
+          <Route path = "/add" render = {() => <AddSession />} />
         </Switch>
       </div>
       
