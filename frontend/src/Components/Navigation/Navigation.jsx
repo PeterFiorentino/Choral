@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton} from "@material-ui/core/"
+import {Drawer, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core/"
 import {makeStyles} from "@material-ui/core/styles"
 import HomeSharpIcon from '@material-ui/icons/HomeSharp';
 import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp';
@@ -27,7 +27,7 @@ const Navigation = () => {
         <div className= 'navigation'>
             <nav id='links'>
                 <Drawer
-                    style = {{width:'200px'}} 
+                    style = {{width:'180px'}} 
                     variant = 'persistent'
                     anchor =  'left'
                     open = {true}
@@ -35,8 +35,8 @@ const Navigation = () => {
                 >
                     <List>
                         <Link to= "/landing"> 
-                        <ListItem button>
-                            <ListItemIcon >
+                        <ListItem >
+                            <ListItemIcon button='true'>
                                 <HomeSharpIcon />
                             </ListItemIcon>
                             <ListItemText primary={"Home"} />
@@ -44,8 +44,8 @@ const Navigation = () => {
                        </Link>{" "}
 
                        <Link to= "/profile">
-                        <ListItem button>
-                            <ListItemIcon>
+                        <ListItem >
+                            <ListItemIcon button='true'>
                                 <AccountCircleSharpIcon />
                             </ListItemIcon> 
                             <ListItemText primary={"Profile"}/>
@@ -53,8 +53,8 @@ const Navigation = () => {
                         </Link>{" "}
 
                         <Link to= "/collaborators">
-                        <ListItem button>
-                            <ListItemIcon>
+                        <ListItem >
+                            <ListItemIcon button='true'>
                                 <GroupWorkSharpIcon />
                             </ListItemIcon>
                             <ListItemText primary={"Collaborators"}  />
@@ -63,7 +63,7 @@ const Navigation = () => {
 
                         <Link to= "/feed">
                         <ListItem>
-                            <ListItemIcon>
+                            <ListItemIcon button='true'>
                                 <ListSharpIcon />
                             </ListItemIcon>
                             <ListItemText primary={"Feed"}  />
@@ -72,7 +72,7 @@ const Navigation = () => {
 
                         <Link to= "/landing">
                         <ListItem>
-                            <ListItemIcon>
+                            <ListItemIcon button='true'>
                                 <ListItemIcon>
                                     <ExitToAppSharpIcon />
                                 </ListItemIcon>
