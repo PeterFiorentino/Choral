@@ -5,7 +5,7 @@ var logger = require('morgan');
 const multer = require('multer');
 const cors = require('cors');
 
-const storage = multer.diskStorage({
+const storageAudio = multer.diskStorage({
     destination: (req,file,cb) =>{
         cb(null,"./public/audios")
     },
@@ -15,9 +15,26 @@ const storage = multer.diskStorage({
     }
 
 })
-const upload = multer(
+
+const storageImage = multer.diskStorage({
+    destination: (req,file,cb) =>{
+        cb(null,"./public/images")
+    },
+    filename: (req,file,cb) =>{
+        let name = Date.now() + "-" + file.originalname
+        cb(null,name)
+    }
+
+})
+
+const uploadAudio = multer(
     {
-        storage: storage
+        storageAudio: storageAudio
+    })
+
+const uploadImage = multer(
+    {
+        storageImage: storageImage
     })
 
 const indexRouter = require('./routes/index');
@@ -39,13 +56,23 @@ app.use('/users', usersRouter);
 app.use('/sessions', sessionsRouter);
 app.use('/collaborations', collaborationsRouter);
 
-app.post('/upload',upload.single("audio"),(req,res,next) =>{
+app.post('/upload/audio',uploadAudio.single("audio"),(req,res,next) =>{
     console.log("file",req.file) 
     console.log("body",req.body)
     let audioURL = "http://localhost:3001" + req.file.path.replace('public','')
     res.json({
         message: "file uploaded",
         audioUrl: audioURL
+    })
+} )
+
+app.post('/upload/image',uploadImage.single("image"),(req,res,next) =>{
+    console.log("file",req.file) 
+    console.log("body",req.body)
+    let imageURL = "http://localhost:3001" + req.file.path.replace('public','')
+    res.json({
+        message: "file uploaded",
+        imageUrl: imageURL
     })
 } )
 
