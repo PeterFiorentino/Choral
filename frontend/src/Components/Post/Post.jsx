@@ -12,7 +12,7 @@ class Post extends React.Component {
     }
 
     getAudioElements = () => {
-        return document.getElementsByClassName('audio-element')
+        return document.getElementsByName(`session${this.props.session.id}`)
     }
 
     handleTime = () => {
@@ -64,13 +64,13 @@ class Post extends React.Component {
                 </div>
             </div>
             <div className='audios'>
-                <audio className='audio-element' volume={this.props.session.volume / 100} onTimeUpdate={this.handleTime}>
+                <audio className='audio-element' name={`session${this.props.session.id}`} volume={this.props.session.volume / 100} onTimeUpdate={this.handleTime}>
                     <source src={this.props.session.audio}></source>
                 </audio>
                 {this.props.session.collaborations.map((collaboration) => {
                     if (collaboration.approved) {
                         return (   
-                            <audio className='audio-element' volume={collaboration.volume / 100} key={collaboration.id}>
+                            <audio className='audio-element' name={`session${this.props.session.id}`} volume={collaboration.volume / 100} key={collaboration.id}>
                                 <source src={collaboration.audio}></source>
                             </audio>
                         )
