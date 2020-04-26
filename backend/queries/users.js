@@ -31,8 +31,15 @@ const getAllUsers = async () => {
 	const user = await db.oneOrNone("SELECT * FROM users WHERE username = $1", [username])
 	return user;
 }
+
+const getUserbyID = async (id) => {
+    const user = await db.oneOrNone("SELECT * FROM users WHERE id = $1", [id])
+	return user;
+}
+
   module.exports = { 
       createUser,
+      getUserbyID,
       getUserByUsername,
       getAllUsers
   }
