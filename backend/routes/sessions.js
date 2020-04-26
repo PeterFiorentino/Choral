@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
   router.get('/:id', async (req, res)  => {
     try {
-      let singleSession =  await db.any(`SELECT sessions.id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.session_closed, sessions.volume, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE sessions.id = $1;`, req.params.id);
+      let singleSession =  await db.any(`SELECT sessions.id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.art, sessions.session_closed, sessions.volume, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE sessions.id = $1;`, req.params.id);
       res.json({
         message: "Success",
         payload: {
@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
   router.get('/user/:user_id', async (req, res)  => {
     try {
 
-      let usersSessions =  await db.any(`SELECT sessions.id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.session_closed, sessions.volume, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE sessions.owner_id = $1;`, req.params.user_id);
+      let usersSessions =  await db.any(`SELECT sessions.id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.art, sessions.session_closed, sessions.volume, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE sessions.owner_id = $1;`, req.params.user_id);
 
 
       res.json({
@@ -84,7 +84,7 @@ router.get('/', async (req, res) => {
   });
 
   router.post('/', async (req, res) => {
-    let user_id = req.body.user_id
+    let owner_id = req.body.owner_id
     let session_name = req.body.session_name
     let genre = req.body.genre
     let bpm = req.body.bpm
@@ -92,10 +92,12 @@ router.get('/', async (req, res) => {
     let chord_progression = req.body.chord_progression
     let looking_for = req.body.looking_for
     let audio = req.body.audio
+    let art = req.body.art
     let session_closed = req.body.session_closed
+    let volume = req.body.volume
     
     try {
-      let newSession = await db.one(`INSERT INTO sessions(user_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, session_closed) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`, [user_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, session_closed]);
+      let newSession = await db.one(`INSERT INTO sessions(owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, art, session_closed, volume) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`, [owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, art, session_closed, volume]);
       res.json({
         message: "Success",
         payload: {
