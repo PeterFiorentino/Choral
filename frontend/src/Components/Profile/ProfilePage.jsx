@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import NavBar from '../NavBar/NavBar.jsx'
+import Navigation from '../Navigation/Navigation.jsx'
 import Post from '../Post/Post.jsx'
 import axios from 'axios'
 import './Profile.css'
@@ -75,7 +75,7 @@ class ProfilePage extends Component {
         return(
             <>
             <div className='user-info'>
-                <NavBar />
+                <Navigation />
                 <h1 className='title'>Choral</h1>
                 <img src={loggedUser.avatar} height='300px' width= '300px'></img>
                 <h3>{loggedUser.username}</h3>
