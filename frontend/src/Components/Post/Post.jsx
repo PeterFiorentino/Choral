@@ -46,7 +46,7 @@ class Post extends React.Component {
         return (
             <>
             <div className='post'>
-                <img onClick={this.goToSession} className='owner' src={this.props.session.avatar} alt=''></img>
+                <img onClick={this.goToSession} className='owner' src={this.props.session.art} alt=''></img>
                 <button className='control' onClick={this.preview}>PREVIEW</button>
                 <ProgressBar now={this.state.time} max='45' variant='info' style={{width: '100%', height:'5rem', gridRow: '1 / 2', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
                 <div className='collaborators'>
