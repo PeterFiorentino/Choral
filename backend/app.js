@@ -32,12 +32,12 @@ const storageImage = multer.diskStorage({
 
 const uploadAudio = multer(
     {
-        storageAudio: storageAudio
+        storage: storageAudio
     })
 
 const uploadImage = multer(
     {
-        storageImage: storageImage
+        storage: storageImage
     })
 
 const indexRouter = require('./routes/index');
@@ -69,8 +69,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/users', usersRouter);
-app.use('/auth', authRouter);
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
