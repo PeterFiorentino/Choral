@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import NavBar from '../NavBar/NavBar.jsx'
+import Navigation from '../Navigation/Navigation.jsx'
 import MyFeed from '../Feed/MyFeed.jsx'
 import Explore from '../Feed/Explore.jsx'
 import './FeedContainer.css'
@@ -43,7 +43,7 @@ class FeedContainer extends Component {
 
         return(
             <div>
-                <NavBar />
+                <Navigation />
                 <h1>Feed</h1>
                     <button onClick={this.toggleMyFeed}>My Feed</button>
                     {renderMyFeed}

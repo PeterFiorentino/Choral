@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './Collaborators.css'
-import NavBar from '../NavBar/NavBar.jsx'
+import Navigation from '../Navigation/Navigation.jsx'
 
 class Collaborators extends Component {
     constructor(){
@@ -13,7 +13,7 @@ class Collaborators extends Component {
     render(){
         return(
             <div>
-                <NavBar />
+                <Navigation />
                 <h1>Collaborators</h1>
             </div>
         )
