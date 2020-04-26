@@ -28,7 +28,7 @@ class ProfilePage extends Component {
     fetchUserData = async () => {
         const {loggedUser} = this.state
         try{
-            const response = await axios.get(`http://localhost:3001/users/${loggedUser.id}`)
+            const response = await axios.get(`http://localhost:3001/api/users/${loggedUser.id}`)
             const userData = response.data.payload.user
             // console.log(userData)
             this.setState({
@@ -46,7 +46,7 @@ class ProfilePage extends Component {
     fetchUserSessionsAndCollaborators = async () => {
         const {loggedUser} = this.state
         try {
-            let response = await axios.get(`http://localhost:3001/sessions/user/${loggedUser.id}`)
+            let response = await axios.get(`http://localhost:3001/api/sessions/user/${loggedUser.id}`)
             const sessionList = response.data.payload.session
             console.log(sessionList)
             for (let sesh of sessionList){
@@ -63,7 +63,7 @@ class ProfilePage extends Component {
     }
 
     fetchCollaborators = async (id) => {
-        let response2 = await axios.get(`http://localhost:3001/collaborations/${id}`)
+        let response2 = await axios.get(`http://localhost:3001/api/collaborations/${id}`)
         console.log(response2)
         return response2.data.payload.collabs
     }
