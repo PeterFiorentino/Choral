@@ -10,7 +10,7 @@ class ProfilePage extends Component {
         this.state = {
            loggedUser: {
 
-               id: 1,
+               id: 2,
 
                username: '',
                email: '',

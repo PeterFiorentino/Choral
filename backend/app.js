@@ -29,12 +29,12 @@ const storageImage = multer.diskStorage({
 
 const uploadAudio = multer(
     {
-        storageAudio: storageAudio
+        storage: storageAudio
     })
 
 const uploadImage = multer(
     {
-        storageImage: storageImage
+        storage: storageImage
     })
 
 const indexRouter = require('./routes/index');
