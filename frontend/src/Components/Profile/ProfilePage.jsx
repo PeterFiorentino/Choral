@@ -48,7 +48,7 @@ class ProfilePage extends Component {
         try {
             let response = await axios.get(`http://localhost:3001/sessions/user/${loggedUser.id}`)
             const sessionList = response.data.payload.session
-            console.log(sessionList)
+            // console.log(sessionList)
             for (let sesh of sessionList){
                sesh.collaborations = await this.fetchCollaborators(sesh.id)   
             }
@@ -56,7 +56,7 @@ class ProfilePage extends Component {
             this.setState({
                 sessionData: sessionList
             })
-            console.log(this.state.sessionData)
+            // console.log(this.state.sessionData)
         } catch(error){
             console.log('err =>', error)
         }  
@@ -64,7 +64,7 @@ class ProfilePage extends Component {
 
     fetchCollaborators = async (id) => {
         let response2 = await axios.get(`http://localhost:3001/collaborations/${id}`)
-        console.log(response2)
+        // console.log(response2)
         return response2.data.payload.collabs
     }
  
@@ -77,7 +77,7 @@ class ProfilePage extends Component {
             <div className='user-info'>
                 <Navigation />
                 <h1 className='title'>Choral</h1>
-                <img src={loggedUser.avatar} height='300px' width= '300px'></img>
+                <img src={loggedUser.avatar} height='300px' width= '300px' alt=''></img>
                 <h3>{loggedUser.username}</h3>
             </div>
             

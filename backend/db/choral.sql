@@ -24,7 +24,8 @@ CREATE TABLE sessions (
     audio VARCHAR,
     art VARCHAR,
     session_closed BOOLEAN,
-    volume INT
+    volume INT,
+    stereo_position INT
 );
 
 CREATE TABLE collaborations (
@@ -34,7 +35,8 @@ CREATE TABLE collaborations (
     audio VARCHAR,
     comment VARCHAR,
     approved BOOLEAN,
-    volume INT
+    volume INT,
+    stereo_position INT
 );
 
 INSERT INTO users (username, email, password, avatar)
@@ -44,14 +46,14 @@ INSERT INTO users (username, email, password, avatar)
 
 
 
-INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, art, session_closed, volume)
-    VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', 'http://localhost:3001/audios/drums.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80),
-           (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80);
+INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, art, session_closed, volume, stereo_position)
+    VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', 'http://localhost:3001/audios/drums.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50),
+           (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50);
 
-INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approved, volume)
-    VALUES (1, 1, 'http://localhost:3001/audios/bassguitar.mp3', '', false, 80),
-           (2, 1, 'http://localhost:3001/audios/leadguitar.mp3', '', false, 80),
-           (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80),
-           (1, 2, 'http://localhost:3001/audios/beat.mp3', '', false, 80);
+INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approved, volume, stereo_position)
+    VALUES (1, 1, 'http://localhost:3001/audios/bassguitar.mp3', '', false, 80, 50),
+           (2, 1, 'http://localhost:3001/audios/leadguitar.mp3', '', false, 80, 50),
+           (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80, 50),
+           (1, 2, 'http://localhost:3001/audios/beat.mp3', '', false, 80, 50);
 
 

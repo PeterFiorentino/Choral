@@ -15,7 +15,7 @@ class Explore extends Component {
     fetchFeedData = async () => {
         try{
             let response = await axios.get(`http://localhost:3001/sessions`)
-            console.log(response.data.payload.sessions)
+            // console.log(response.data.payload.sessions)
             const sessionList = response.data.payload.sessions
             for(let sesh of sessionList){
                 sesh.collaborations = await this.fetchCollaborators(sesh.id)
@@ -30,7 +30,7 @@ class Explore extends Component {
     fetchCollaborators = async (id) => {
         try{
             let response2 = await axios.get(`http://localhost:3001/collaborations/${id}`)
-            console.log(response2)
+            // console.log(response2)
             return response2.data.payload.collabs
         }catch(error){
             console.log('err =>', error)

@@ -7,11 +7,11 @@ import axios from 'axios'
 
 
 class Session extends Component {
-    constructor(){
+    constructor(props){
         super()
         this.state = {
             loggedUser: 2,
-            sessionId: 2,
+            sessionId: props.match.params.id,
             saved: false,
             context: new window.AudioContext()
         }
@@ -36,15 +36,16 @@ class Session extends Component {
     }
 
     connectSources = async () => {
-        const { context } = this.state
+        const { context, sessionData, collabsData } = this.state
         const audioElements = this.getAudioElements()
-        let connectSession = this.state.sessionData
-        let connectCollab = this.state.collabsData
+        let connectSession = sessionData
+        let connectCollab = collabsData
         for (let index = 0; index < audioElements.length; index ++) {
             let source = await context.createMediaElementSource(audioElements[index])
             let panner = await context.createStereoPanner()
             source.connect(panner).connect(context.destination)
             if (index === 0) {
+                panner.pan.value = sessionData.stereo_position * 2 / 100 - 1
                 connectSession.source = source
                 connectSession.panner = panner
                 this.setState({
@@ -52,6 +53,7 @@ class Session extends Component {
                 })
             } else {
                 const collabIndex = index - 1
+                panner.pan.value = collabsData[collabIndex].stereo_position * 2 / 100 - 1
                 connectCollab[collabIndex].source = source
                 connectCollab[collabIndex].panner = panner
             }
@@ -64,17 +66,18 @@ class Session extends Component {
     completeState = () => {
         const audioElements = this.getAudioElements()
         let completeSessionData = this.state.sessionData
+        audioElements[0].volume = completeSessionData.volume / 100
         completeSessionData.time = audioElements[0].currentTime
         completeSessionData.duration = audioElements[0].duration
-        // completeSessionData.color = colors[0]
         this.setState({
             sessionData: completeSessionData
         })
         let completeCollabsData = this.state.collabsData
         for (let index = 0; index < completeCollabsData.length; index++) {
             let audioIndex = index + 1
+            audioElements[audioIndex].volume = completeCollabsData[index].volume / 100
             if (completeCollabsData[index].approved === false) {
-                // newStateElement.color = 'gray'
+                completeCollabsData[index].filter = 'grayscale(100%)'
                 audioElements[audioIndex].muted = true
             }
         }
@@ -107,22 +110,22 @@ class Session extends Component {
     muteTrack = (index) => {
         const audioIndex = index + 1
         const audioElements = this.getAudioElements()
-        // const collabsData = this.state.collabsData
-        // const collabIndex = audioIndex - 1
+        const collabsData = this.state.collabsData
+        const collabIndex = audioIndex - 1
         if (audioElements[audioIndex].muted === false) {
             audioElements[audioIndex].muted = true
-            // let updatedCollabs = collabsData
-            // updatedCollabs[collabIndex].color = 'gray' 
-            // this.setState({
-            //     collabsData: updatedCollabs
-            // })
+            let updatedCollabs = collabsData
+            updatedCollabs[collabIndex].filter = 'grayscale(100%)' 
+            this.setState({
+                collabsData: updatedCollabs
+            })
         } else {
             audioElements[audioIndex].muted = false
-            // let updatedCollabs = collabsData
-            // updatedCollabs[collabIndex].color = colors[audioIndex]
-            // this.setState({
-            //     collabsData: updatedCollabs
-            // })
+            let updatedCollabs = collabsData
+            updatedCollabs[collabIndex].filter = 'grayscale(0%)'
+            this.setState({
+                collabsData: updatedCollabs
+            })
         }
     }
 
@@ -134,7 +137,7 @@ class Session extends Component {
                 const audioIndex = i + 1
                 audioElements[audioIndex].muted = true
                 let updatedCollabs = this.state.collabsData
-                // updatedCollabs.color = 'gray'
+                updatedCollabs.filter = 'grayscale(100%)'
                 updatedCollabs[i].checking = false
                 this.setState({
                     collabsData: updatedCollabs
@@ -145,7 +148,7 @@ class Session extends Component {
         if (audioElements[audioIndex].muted === true) {
             audioElements[audioIndex].muted = false
             let updatedCollabs = this.state.collabsData
-            // updatedCollabs[collabIndex].color = colors[audioIndex]
+            updatedCollabs[collabIndex].filter = 'grayscale(0%)'
             updatedCollabs[collabIndex].checking = true
             this.setState({
                 collabsData: updatedCollabs
@@ -153,7 +156,7 @@ class Session extends Component {
         } else if (audioElements[audioIndex].muted === false) {
             audioElements[audioIndex].muted = true
             let updatedCollabs = this.state.collabsData
-            // updatedCollabs.color = 'gray'
+            updatedCollabs[collabIndex].filter = 'grayscale(100%)'
             updatedCollabs[collabIndex].checking = false
             this.setState({
                 collabsData: updatedCollabs
@@ -177,7 +180,7 @@ class Session extends Component {
         audioElements[audioIndex].muted = true
         let updatedCollabs = this.state.collabsData
         updatedCollabs[index].approved = false
-        // updatedCollabs[index].color = 'gray'
+        updatedCollabs[index].filter = 'grayscale(100%)'
         this.setState({
             collabsData: updatedCollabs,
             saved: false
@@ -240,9 +243,22 @@ class Session extends Component {
     }
 
     saveMix = () => {
-        const { collabsData } = this.state
-        for (let collab of collabsData) {
-            axios.patch(`http://localhost:3001/collaborations/${collab.id}`, { approved: collab.approved })
+        const { collabsData, sessionData } = this.state
+        let audioElements = this.getAudioElements()
+        let sessionBody = {
+            volume: audioElements[0].volume * 100,
+            stereo_position: ((sessionData.panner.pan.value + 1) * 100) / 2
+        }
+        axios.patch(`http://localhost:3001/sessions/${sessionData.id}`, sessionBody)
+        for (let index = 0; index < collabsData.length; index++) {
+            let audioIndex = index + 1
+            let collabBody = {
+                approved: collabsData[index].approved,
+                volume : audioElements[audioIndex].volume * 100,
+                stereo_position: ((collabsData[index].panner.pan.value + 1) * 100) / 2
+            }
+            console.log(collabBody)
+            axios.patch(`http://localhost:3001/collaborations/${collabsData[index].id}`, collabBody)
         }
         this.setState({
             saved: true
@@ -271,9 +287,10 @@ class Session extends Component {
             audio: location,
             comment: '',
             approved: false,
-            volume: 80
+            volume: 80,
+            stereo_position: 50
         }
-        let response2 = await axios.post('http://localhost:3001/collaborations', body)
+        axios.post('http://localhost:3001/collaborations', body)
         window.location.reload()
     }
 
@@ -310,7 +327,7 @@ class Session extends Component {
         }
     }
 
-      record = async () => {
+    record = async () => {
         let audioElements = this.getAudioElements()
         if (audioElements[0].paused && !audioElements[0].ended) {
             let stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false})
@@ -337,48 +354,47 @@ class Session extends Component {
     render(){
         return(
             <div>
+                <Navigation />
                 {this.state.sessionData ? 
                 <div className='session'>
-                    <h1>Session</h1>
-                    <br/>
-                    <h1>Info</h1>
+                    {/* <h1>Info</h1> */}
                     <div className='info'>
-                        <h3>Name: {this.state.sessionData.session_name}</h3>
-                        <h3>Genre: {this.state.sessionData.genre}</h3>
-                        <h3>Bpm: {this.state.sessionData.bpm}</h3>
-                        <h3>Key: {this.state.sessionData.session_key}</h3>
-                        <h3>Chord Progression: {this.state.sessionData.chord_progression}</h3>
-                        <h3>Looking for: {this.state.sessionData.looking_for}</h3>
+                        <h2>{this.state.sessionData.session_name}</h2>
+                        {/* <h3>Name: {this.state.sessionData.session_name}</h3> */}
+                        {/* <h3>Genre: {this.state.sessionData.genre}</h3> */}
+                        <h5>{this.state.sessionData.bpm} BPM</h5>
+                        {/* <h3>Key: {this.state.sessionData.session_key}</h3> */}
+                        {/* <h3>Chord Progression: {this.state.sessionData.chord_progression}</h3> */}
+                        <h5>Looking for {this.state.sessionData.looking_for}</h5>
                     </div>
+                    <h3>Actions</h3>
+                    <button onClick={this.record} style={{borderRadius:'10px'}}>RECORD COLLAB</button><br/>
+                    {this.state.newCollab ? <a download href={this.state.newCollab}>DOWNLOAD</a> : <></>}<br/>
                     <br/>
-                    <h1>Tracks</h1>
-                    <button onClick={this.record}>RECORD COLLAB</button><br/>
-                    {this.state.newCollab ? <a download href={this.state.newCollab}>DOWNLOAD</a> : <a></a>}<br/>
-                    <br/>
-                    <button onClick={this.uploadCollab}>UPLOAD COLLAB</button><br/>
+                    <button onClick={this.uploadCollab} style={{borderRadius:'10px'}}>UPLOAD COLLAB</button><br/>
                     <input type='file' name='audio' onChange={this.fileHandler}></input><br/>
                     <br/>
-                    <button onClick={this.bounce}>BOUNCE</button><br/>
-                    {this.state.newBounce ? <a download href={this.state.newBounce}>DOWNLOAD</a> : <a></a>}
+                    <button onClick={this.bounce} style={{borderRadius:'10px'}}>BOUNCE</button><br/>
+                    {this.state.newBounce ? <a download href={this.state.newBounce}>DOWNLOAD</a> : <></>}<br/>
                     <br/>
-                    <br/>
-                    <button onClick={this.saveMix}>SAVE MIX</button>
-                    {this.state.saved ? <h5>saved</h5> : <><h5></h5><br/></>}
+                    <h3>Tracks</h3>
+                    <button onClick={this.saveMix} style={{borderRadius:'10px'}}>SAVE MIX</button>
+                    {this.state.saved ? <h5>saved</h5> : <><h5>{' '}</h5><br/></>}
                     <div className='tracks' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
-                        <div style={{display:'grid', gridTemplateRows: '25px 110px 30px', gridTemplateColumns: '110px 10px'}}>
-                            <Slider defaultValue={50} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
+                        <div style={{display:'grid', gridTemplateRows: '25px 110px 30px', gridTemplateColumns: '110px 30px'}}>
+                            <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
                             <img src={this.state.sessionData.avatar} alt='' style={{gridRow: '2 / 3', gridColumn: '1 / 2', borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
                             <a download href={this.state.sessionData.audio}style={{gridColumn:'1 / 2'}}>DOWNLOAD</a>
-                            <Slider defaultValue={80} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
+                            <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
                         </div>
                         {this.state.collabsData.map((collab, index) => {
                             if (collab.approved === true) {
                             return (
-                                <div key={index} style={{display:'grid', gridTemplateRows: '25px 110px 30px', gridTemplateColumns:'110px 10px'}}>
-                                    <Slider defaultValue={50} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(index, event)}></Slider>
-                                    <img onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{gridRow: '2 / 3', gridColumn:'1 / 2', borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
+                                <div key={index} style={{display:'grid', gridTemplateRows: '25px 110px 30px', gridTemplateColumns:'110px 30px'}}>
+                                    <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(index, event)}></Slider>
+                                    <img onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{gridRow: '2 / 3', gridColumn:'1 / 2', borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px', filter:`${collab.filter}`}}></img>
                                     <button onClick={() => this.unmerge(index)} style={{gridColumn:'1 / 2', borderRadius:'10px'}}>UNMERGE</button>
-                                    <Slider defaultValue={80} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
+                                    <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
                                 </div>
                             )
                             } return true
@@ -390,24 +406,25 @@ class Session extends Component {
                             <ProgressBar now={this.state.sessionData.time} max={this.state.sessionData.duration} style={{height:'80px', fontSize:'20px'}} variant='info' label={this.secondsToMinutes(this.state.sessionData.time)} onClick={this.changeTime}></ProgressBar>
                         </div>
                         <br/>
-                        <button onClick={this.playAll}>PLAY</button>
-                        <button onClick={this.pauseAll}>PAUSE</button>
-                        <button onClick={this.stopAll}>STOP</button>
+                        <button onClick={this.playAll} style={{borderRadius:'10px'}}>PLAY</button>
+                        <button onClick={this.pauseAll} style={{borderRadius:'10px'}}>PAUSE</button>
+                        <button onClick={this.stopAll} style={{borderRadius:'10px'}}>STOP</button>
                     </div>
                     <br/>
-                    <h1>Pool</h1>
+                    <h3>Pool</h3>
                     <div className='pool' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
                         {this.state.collabsData.map((collab, index) => {
                             if (collab.approved === false) {
                                 return (
                                     <div key={index} style={{display:'grid', gridTemplateRows:'110px 30px'}}>
-                                        <img onClick={() => this.checkPool(index)} src={collab.avatar} alt='' style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
+                                        <img onClick={() => this.checkPool(index)} src={collab.avatar} alt='' style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px', filter:`${collab.filter}`}}></img>
                                         <button onClick={() => this.merge(index)} style={{borderRadius: '10px'}}>MERGE</button>
                                     </div>
                                 )
                             }
                         })}
                     </div>
+                    <br/>
                     <div className='audios'>
                         <audio crossOrigin='anonymous' className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
                             <source src={this.state.sessionData.audio}></source>
