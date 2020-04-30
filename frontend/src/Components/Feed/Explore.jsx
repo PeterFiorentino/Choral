@@ -14,7 +14,7 @@ class Explore extends Component {
 
     fetchFeedData = async () => {
         try{
-            let response = await axios.get(`http://localhost:3001/sessions`)
+            let response = await axios.get(`http://localhost:3001/api/sessions`)
             console.log(response.data.payload.sessions)
             const sessionList = response.data.payload.sessions
             for(let sesh of sessionList){

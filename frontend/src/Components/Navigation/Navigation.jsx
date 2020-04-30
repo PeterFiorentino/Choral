@@ -29,7 +29,7 @@ const Navigation = () => {
                 <Drawer
                     style = {{width:'180px'}} 
                     variant = 'persistent'
-                    anchor =  'left'
+                    anchor = 'left'
                     open = {true}
                     classes={{paper: classes.drawerPaper}}
                 >
