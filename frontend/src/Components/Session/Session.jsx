@@ -17,9 +17,9 @@ class Session extends Component {
     }
 
     async componentDidMount() {
-        let response = await axios.get(`http://localhost:3001/sessions/${this.state.sessionId}`)
+        let response = await axios.get(`http://localhost:3001/api/sessions/${this.state.sessionId}`)
         let sessionData = response.data.payload.session[0]
-        let response2 = await axios.get(`http://localhost:3001/collaborations/${this.state.sessionId}`)
+        let response2 = await axios.get(`http://localhost:3001/api/collaborations/${this.state.sessionId}`)
         let collabsData = response2.data.payload.collabs
         this.setState({
             sessionData: sessionData,
