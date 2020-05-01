@@ -5,8 +5,8 @@ import axios from 'axios'
 import './LandingPage.css';
 
 class LandingPage extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             login: false,
             signup: false,
@@ -25,15 +25,23 @@ class LandingPage extends Component {
         })
         console.log(inputValue)
    }
-   loginUser = () => {
-        console.log('Logging in user')
+   loginUser = async () => {
+    const {username, password} = this.state
+    console.log('Logging in user')
+       try{
+        const response = await axios.post('http://localhost:3001/auth/login',{username: username, password: password})
+        console.log('res =>', response)
+       }catch(error){
+            console.log('err =>', error)
+       } 
+        // this.props.setUser(user)
    }
    signupUser = () => {
         console.log('Signing up user')
    }
     gatherAllUsers = async () => {
         try{
-            let response = await axios.get('http://localhost:3001/users')
+            let response = await axios.get('http://localhost:3001/api/users')
             console.log(response.data.payload)
             return response.data.payload
         }catch(error){
