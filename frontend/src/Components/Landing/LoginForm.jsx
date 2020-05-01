@@ -12,10 +12,10 @@ const LoginForm = (props) => {
         props.loginUser()
         
     }
-    const test = () =>{
-        console.log(props)
-    }
-    test()
+    // const test = () =>{
+    //     console.log(props)
+    // }
+    // test()
     return (
         <>
         <div>
