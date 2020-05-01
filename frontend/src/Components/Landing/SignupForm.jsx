@@ -16,7 +16,7 @@ const SignupForm = (props) => {
         <>
         <div>
             <h2>Signup</h2>
-            <form onSubmit={props.handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <input 
                     type='text'
                     name='email'
@@ -37,6 +37,10 @@ const SignupForm = (props) => {
                     value={props.password}
                     placeholder='password'
                     onChange={props.handleChange}
+                />
+                <input
+                    type='submit'
+                    value='submit'
                 />
             </form>
         </div>
