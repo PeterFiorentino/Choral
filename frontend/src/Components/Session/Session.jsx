@@ -3,6 +3,7 @@ import './Session.css'
 import Navigation from '../Navigation/Navigation.jsx'
 import Slider from '@material-ui/core/Slider'
 import { ProgressBar, Spinner } from 'react-bootstrap'
+import { Howler, Howl } from 'howler'
 import axios from 'axios'
 
 
@@ -13,116 +14,144 @@ class Session extends Component {
             loggedUser: 2,
             sessionId: props.match.params.id,
             saved: false,
-            context: new window.AudioContext()
+            playing: false,
+            time: 0
         }
     }
 
     async componentDidMount() {
-        let response = await axios.get(`http://localhost:3001/sessions/${this.state.sessionId}`)
-        let sessionData = response.data.payload.session[0]
-        let response2 = await axios.get(`http://localhost:3001/collaborations/${this.state.sessionId}`)
-        let collabsData = response2.data.payload.collabs
+        let sessionResponse = await axios.get(`http://localhost:3001/sessions/${this.state.sessionId}`)
+        let sessionData = sessionResponse.data.payload.session[0]
+
+        let collabsResponse = await axios.get(`http://localhost:3001/collaborations/${this.state.sessionId}`)
+        let collabsData = collabsResponse.data.payload.collabs
+
         this.setState({
             sessionData: sessionData,
             collabsData: collabsData
         })
-        this.stopAll()
-        this.connectSources()
+
+        this.createHowls()
+
         setTimeout(() => this.completeState(), 1000)
     }
 
-    getAudioElements = () => {
-        return document.getElementsByClassName('audio-element')
-    }
+    createHowls = () => {
+        const {sessionData, collabsData} = this.state
+    
+        let howl = new Howl({
+            src: sessionData.audio
+        })
 
-    connectSources = async () => {
-        const { context, sessionData, collabsData } = this.state
-        const audioElements = this.getAudioElements()
-        let connectSession = sessionData
-        let connectCollab = collabsData
-        for (let index = 0; index < audioElements.length; index ++) {
-            let source = await context.createMediaElementSource(audioElements[index])
-            let panner = await context.createStereoPanner()
-            source.connect(panner).connect(context.destination)
-            if (index === 0) {
-                panner.pan.value = sessionData.stereo_position * 2 / 100 - 1
-                connectSession.source = source
-                connectSession.panner = panner
-                this.setState({
-                    sessionData: connectSession
-                })
-            } else {
-                const collabIndex = index - 1
-                panner.pan.value = collabsData[collabIndex].stereo_position * 2 / 100 - 1
-                connectCollab[collabIndex].source = source
-                connectCollab[collabIndex].panner = panner
-            }
-        }
+        let newSessionData = sessionData
+        newSessionData.howl = howl
+        newSessionData.howl.volume(sessionData.volume / 100)
+        newSessionData.howl.stereo(sessionData.stereo_position * 2 / 100 - 1)
+        newSessionData.howl._html5 = true
+        
+        let newCollabsData = collabsData 
+        collabsData.forEach((collab, index) => {
+            let howl = new Howl({
+                src: collab.audio
+            })
+            newCollabsData[index].howl = howl
+            newCollabsData[index].howl.volume(collab.volume / 100)
+            newCollabsData[index].howl.stereo(collab.stereo_position * 2 / 100 - 1)
+            newCollabsData[index].howl._html5 = true
+        })
+
         this.setState({
-            collabsData: connectCollab
+            sessionData: newSessionData,
+            collabsData: newCollabsData
         })
     }
 
     completeState = () => {
-        const audioElements = this.getAudioElements()
-        let completeSessionData = this.state.sessionData
-        audioElements[0].volume = completeSessionData.volume / 100
-        completeSessionData.time = audioElements[0].currentTime
-        completeSessionData.duration = audioElements[0].duration
-        this.setState({
-            sessionData: completeSessionData
-        })
-        let completeCollabsData = this.state.collabsData
-        for (let index = 0; index < completeCollabsData.length; index++) {
-            let audioIndex = index + 1
-            audioElements[audioIndex].volume = completeCollabsData[index].volume / 100
-            if (completeCollabsData[index].approved === false) {
+        const audioElement = document.getElementsByClassName('audio-element')[0]
+        const { collabsData } = this.state
+
+        let completeCollabsData = collabsData
+        collabsData.forEach((collab, index) => {
+            if (collab.approved === false) {
                 completeCollabsData[index].filter = 'grayscale(100%)'
-                audioElements[audioIndex].muted = true
+                completeCollabsData[index].howl._muted = true
             }
-        }
+        })
+
         this.setState({
-            collabsData: completeCollabsData
+            collabsData: completeCollabsData,
+            guide: audioElement,
+            duration: audioElement.duration
         })
     }
 
-    playAll = async () => {
-        const audioElements = this.getAudioElements()
-        for (let index = 0; index < audioElements.length; index ++) {
-            audioElements[index].play()
+    getHowls = () => {
+        const {sessionData, collabsData} = this.state
+        let howls = []
+
+        howls.push(sessionData.howl)
+        for (let collab of collabsData) {
+            howls.push(collab.howl)
         }
+
+        return howls
+    }
+
+
+    playAll = async () => {
+        const { guide } = this.state
+        const howls = this.getHowls()
+
+        for (let howl of howls) {
+            howl.play()
+        }
+        guide.play()
     }
 
     pauseAll = () => {
-        const audioElements = this.getAudioElements()
-        for (let index = 0; index < audioElements.length; index ++) {
-            audioElements[index].pause()
+        const { guide } = this.state
+        const howls = this.getHowls()
+        
+        guide.pause()
+        for (let howl of howls) {
+            howl.pause()
         }
     }
 
     stopAll = async () => {
-        const audioElements = this.getAudioElements()
-        for (let index = 0; index < audioElements.length; index ++) {
-            audioElements[index].load()
+        const { guide } = this.state
+        const howls = this.getHowls()
+        
+        guide.load()
+        for (let howl of howls) {
+            howl.stop()
         }
+
+        this.setState({
+            time: 0
+        })
     }
 
     muteTrack = (index) => {
-        const audioIndex = index + 1
-        const audioElements = this.getAudioElements()
-        const collabsData = this.state.collabsData
-        const collabIndex = audioIndex - 1
-        if (audioElements[audioIndex].muted === false) {
-            audioElements[audioIndex].muted = true
+        const {collabsData} = this.state
+        let collab = collabsData[index]
+
+        if (collab.howl._muted === false) {
+            collab.howl.mute(true)
+
             let updatedCollabs = collabsData
-            updatedCollabs[collabIndex].filter = 'grayscale(100%)' 
+            updatedCollabs[index].filter = 'grayscale(100%)' 
+            
             this.setState({
                 collabsData: updatedCollabs
             })
+
         } else {
-            audioElements[audioIndex].muted = false
+            collab.howl.mute(false)
+            
             let updatedCollabs = collabsData
-            updatedCollabs[collabIndex].filter = 'grayscale(0%)'
+            updatedCollabs[index].filter = 'grayscale(0%)'
+
             this.setState({
                 collabsData: updatedCollabs
             })
@@ -130,34 +159,42 @@ class Session extends Component {
     }
 
     checkPool = (index) => {
-        const audioElements = this.getAudioElements()
-        const collabIndex = index
-        for (let i = 0; i < this.state.collabsData.length; i++) {
-            if (this.state.collabsData[i].checking === true && i !== collabIndex) {
-                const audioIndex = i + 1
-                audioElements[audioIndex].muted = true
-                let updatedCollabs = this.state.collabsData
-                updatedCollabs.filter = 'grayscale(100%)'
+        const {collabsData} = this.state
+    
+        collabsData.forEach((collab, i) => {
+            if (collab.checking === true && i !== index) {
+                collab.howl.mute(true)
+                
+                let updatedCollabs = collabsData
+                updatedCollabs[i].filter = 'grayscale(100%)'
                 updatedCollabs[i].checking = false
+
                 this.setState({
                     collabsData: updatedCollabs
                 })
             }
-        }
-        const audioIndex = index + 1
-        if (audioElements[audioIndex].muted === true) {
-            audioElements[audioIndex].muted = false
+        })
+
+        let collab = collabsData[index]
+
+        if (collab.howl._muted === true) {
+            collab.howl.mute(false)
+
             let updatedCollabs = this.state.collabsData
-            updatedCollabs[collabIndex].filter = 'grayscale(0%)'
-            updatedCollabs[collabIndex].checking = true
+            updatedCollabs[index].filter = 'grayscale(0%)'
+            updatedCollabs[index].checking = true
+
             this.setState({
                 collabsData: updatedCollabs
             })
-        } else if (audioElements[audioIndex].muted === false) {
-            audioElements[audioIndex].muted = true
+
+        } else if (collab.howl._muted === false) {
+            collab.howl.mute(true)
+
             let updatedCollabs = this.state.collabsData
-            updatedCollabs[collabIndex].filter = 'grayscale(100%)'
-            updatedCollabs[collabIndex].checking = false
+            updatedCollabs[index].filter = 'grayscale(100%)'
+            updatedCollabs[index].checking = false
+
             this.setState({
                 collabsData: updatedCollabs
             })
@@ -165,9 +202,12 @@ class Session extends Component {
     }
 
     merge = (index) => {
-        let updatedCollabs = this.state.collabsData
+        const { collabsData } = this.state
+        
+        let updatedCollabs = collabsData
         updatedCollabs[index].checking = false
         updatedCollabs[index].approved = true
+
         this.setState({
             collabsData: updatedCollabs,
             saved: false
@@ -175,12 +215,13 @@ class Session extends Component {
     }
 
     unmerge = (index) => {
-        const audioElements = this.getAudioElements()
-        const audioIndex = index + 1
-        audioElements[audioIndex].muted = true
-        let updatedCollabs = this.state.collabsData
+        const { collabsData } = this.state
+        
+        collabsData[index].howl.mute(true)
+        let updatedCollabs = collabsData
         updatedCollabs[index].approved = false
         updatedCollabs[index].filter = 'grayscale(100%)'
+        
         this.setState({
             collabsData: updatedCollabs,
             saved: false
@@ -190,76 +231,84 @@ class Session extends Component {
     secondsToMinutes = (seconds) => Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2)
 
     handleTime = () => {
-        let audioElements = this.getAudioElements()
-        let updatedSession = this.state.sessionData
-        updatedSession.time = audioElements[0].currentTime
+        const { guide } = this.state
+
+        let currentTime = guide.currentTime
+
         this.setState({
-            sessionData: updatedSession
+            time: currentTime
         })
     }
 
     changeTime = async (event) => {
+        const { duration, guide } = this.state
+
         let clickX = event.pageX + 1 - window.innerWidth * 0.1
         let totalX = window.innerWidth * 0.8
+        
         let percentage = clickX / totalX
-        const audioElements = this.getAudioElements()
-        for (let index = 0; index < audioElements.length; index++) {
-            audioElements[index].currentTime = audioElements[0].duration * percentage
+        const newPosition = duration * percentage
+
+        guide.currentTime = newPosition
+ 
+        const howls = this.getHowls()
+        for (let howl of howls) {
+            howl.seek(newPosition)
         }
-        let updatedSession = this.state.sessionData
-        updatedSession.time = updatedSession.duration * percentage
+    
         this.setState({
-            sessionData: updatedSession
+            time: newPosition
         })
     }
 
     changeVolume = (index, event) => {
-        const audioIndex = index + 1
+        const { sessionData, collabsData } = this.state
         let currentValue = event.target.getAttribute('aria-valuenow')
+        
         if (currentValue !== 'NaN' && currentValue !== null) {
-            const audioElements = this.getAudioElements()
-            audioElements[audioIndex].volume = currentValue / 100
+            const newValue = currentValue / 100
+
+            if (index === -1) {
+            sessionData.howl.volume(newValue)
+            } else {
+                collabsData[index].howl.volume(newValue)
+            }
         }
     }
 
     changePanning = (index, event) => {
+        const { sessionData, collabsData } = this.state
         let currentValue = event.target.getAttribute('aria-valuenow')
+        
         if (currentValue !== 'NaN' && currentValue !== null) {
             const newValue = currentValue * 2 / 100 - 1
+            
             if (index === -1) {
-                const newSessionData = this.state.sessionData
-                newSessionData.panner.pan.value = newValue 
-                this.setState({
-                    sessionData: newSessionData
-                })
+                sessionData.howl.stereo(newValue)           
             } else {
-                const newCollabsData = this.state.collabsData
-                newCollabsData[index].panner.pan.value = newValue
-                this.setState({
-                    collabsData: newCollabsData
-                })
+                collabsData[index].howl.stereo(newValue)
             }
         }
     }
 
     saveMix = () => {
         const { collabsData, sessionData } = this.state
-        let audioElements = this.getAudioElements()
+
         let sessionBody = {
-            volume: audioElements[0].volume * 100,
-            stereo_position: ((sessionData.panner.pan.value + 1) * 100) / 2
+            volume: sessionData.howl._volume * 100,
+            stereo_position: ((sessionData.howl._stereo + 1) * 100) / 2
         }
         axios.patch(`http://localhost:3001/sessions/${sessionData.id}`, sessionBody)
-        for (let index = 0; index < collabsData.length; index++) {
-            let audioIndex = index + 1
+        
+        collabsData.forEach((collab) => {
             let collabBody = {
-                approved: collabsData[index].approved,
-                volume : audioElements[audioIndex].volume * 100,
-                stereo_position: ((collabsData[index].panner.pan.value + 1) * 100) / 2
+                approved: collab.approved,
+                volume : collab.howl._volume * 100,
+                stereo_position: ((collab.howl._stereo + 1) * 100) / 2
             }
-            console.log(collabBody)
-            axios.patch(`http://localhost:3001/collaborations/${collabsData[index].id}`, collabBody)
-        }
+            axios.patch(`http://localhost:3001/collaborations/${collab.id}`, collabBody)
+        })
+        
         this.setState({
             saved: true
         })
@@ -274,42 +323,47 @@ class Session extends Component {
     uploadCollab = async () => {
         const data = new FormData()
         data.append('audio', this.state.selectedAudio)
+        
         const config = {
             headers: {
                 'content-type': 'multipart/form-data'
             }
         }
+        
         let response = await axios.post('http://localhost:3001/upload/audio', data, config)
-        let location = response.data.audioUrl
+        
         let body = {
             session_id: this.state.sessionData.id,
             collaborator_id: this.state.loggedUser,
-            audio: location,
+            audio: response.data.audioUrl,
             comment: '',
             approved: false,
             volume: 80,
             stereo_position: 50
         }
+        
         axios.post('http://localhost:3001/collaborations', body)
+        
         window.location.reload()
     }
 
     bounce = () => {
-        const { context, sessionData, collabsData } = this.state
-        let audioElements = this.getAudioElements()
-        if (audioElements[0].paused && !audioElements[0].ended) {
-            let recordingstream = context.createMediaStreamDestination()
+        const { guide } = this.state
+
+        if (guide.paused && !guide.ended) {
+            let recordingstream = Howler.ctx.createMediaStreamDestination()
             const options = {
                 audioBitsPerSecond: 128000,
                 mimeType: 'audio/webm'
             }
             let recorder = new MediaRecorder(recordingstream.stream, options)
-            sessionData.source.connect(sessionData.panner).connect(recordingstream)
-            collabsData.forEach((collab) => {
-                collab.source.connect(collab.panner).connect(recordingstream)
-            })
+            
+            Howler.masterGain.connect(recordingstream)
+            
             recorder.start()
+            
             this.playAll()
+            
             recorder.addEventListener('dataavailable', (e) => {
                 this.setState({
                     newBounce: URL.createObjectURL(e.data)
@@ -317,23 +371,30 @@ class Session extends Component {
                 recorder = false
                 recordingstream = false
             })
+            
             this.setState({
                 recorder: recorder
             })
         } else {
             const { recorder } = this.state
+            
             recorder.stop()
+            
             this.pauseAll()
         }
     }
 
     record = async () => {
-        let audioElements = this.getAudioElements()
-        if (audioElements[0].paused && !audioElements[0].ended) {
+        const { guide } = this.state
+
+        if (guide.paused && !guide.ended) {
             let stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false})
             let recorder = new MediaRecorder(stream)
+            
             recorder.start()
+            
             this.playAll()
+            
             recorder.addEventListener('dataavailable', (e) => {
                 this.setState({
                     newCollab: URL.createObjectURL(e.data),
@@ -341,12 +402,15 @@ class Session extends Component {
                 recorder = false
                 stream = false
             })
+            
             this.setState({
                 recorder: recorder
             })
         } else {
             const { recorder } = this.state
+            
             recorder.stop()
+            
             this.pauseAll()
         }
     }
@@ -403,7 +467,7 @@ class Session extends Component {
                     <br/>
                     <div className='transport'>
                         <div style={{paddingLeft:'10%', width:'90%'}}>
-                            <ProgressBar now={this.state.sessionData.time} max={this.state.sessionData.duration} style={{height:'80px', fontSize:'20px'}} variant='info' label={this.secondsToMinutes(this.state.sessionData.time)} onClick={this.changeTime}></ProgressBar>
+                            <ProgressBar now={this.state.time} max={this.state.duration} style={{height:'80px', fontSize:'20px'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
                         </div>
                         <br/>
                         <button onClick={this.playAll} style={{borderRadius:'10px'}}>PLAY</button>
@@ -422,20 +486,14 @@ class Session extends Component {
                                     </div>
                                 )
                             }
+                            return true
                         })}
                     </div>
                     <br/>
                     <div className='audios'>
-                        <audio crossOrigin='anonymous' className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
+                        <audio crossOrigin='anonymous' muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
                             <source src={this.state.sessionData.audio}></source>
                         </audio>
-                        {this.state.collabsData.map((collab, index) => {
-                            return (
-                                <audio crossOrigin='anonymous' className='audio-element' onTimeUpdate={this.handleTime} key={index}>
-                                    <source src={collab.audio}></source>
-                                </audio>
-                            )
-                        })}
                     </div>
                 </div>
                 : <Spinner animation='border' />}

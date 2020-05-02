@@ -81,6 +81,7 @@ const Post = (props) => {
                         </audio>
                     )
                 }
+                return true 
             })}
         </div>
         </>
