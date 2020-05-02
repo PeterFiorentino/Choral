@@ -14,9 +14,9 @@ class App extends Component {
     isUserLoggedIn: false
   }
 
-  setUser = () => {
+  setUser = (user) => {
     this.setState({
-      // user: user,
+      user: user,
       isUserLoggedIn: true
     })
   }
@@ -29,7 +29,7 @@ class App extends Component {
         <div>
           <Switch>
             <Route exact path = "/landing" render= {() => <LandingPage setUser={this.setUser}/>} />
-            <Route path = "/profile" render = {() => <ProfilePage /> } />
+            <Route path = "/profile" render = {() => <ProfilePage user={this.user} isUserLoggedIn={this.isUserLoggedIn}/>} />
             <Route path = "/collaborators" render = {() => <Collaborators />} />
             <Route path = "/feed" render = {() => <FeedContainer />} />
             <Route path = "/session" render = {() => <Session />} />

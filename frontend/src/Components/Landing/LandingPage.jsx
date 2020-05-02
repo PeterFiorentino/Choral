@@ -26,6 +26,7 @@ class LandingPage extends Component {
         })
         console.log(inputValue)
    }
+
    loginUser = async () => {
     const {username, password} = this.state
     console.log('Logging in user')
@@ -35,10 +36,13 @@ class LandingPage extends Component {
             password: password
         })
         console.log('res =>', response)
+        const user = response.data.payload
+        this.props.setUser(user)
+        window.location.replace(`http://localhost:3000/profile/${user.id}`)
        }catch(error){
             console.log('err =>', error)
        } 
-        // this.props.setUser(user)
+        
    }
    signupUser = async () => {
         console.log('Signing up user')
@@ -51,31 +55,26 @@ class LandingPage extends Component {
                 avatar: avatar
             })
             console.log('res =>',response)
+            this.loginUser()
         }catch(error){
             console.log('err =>', error)
         }
    }
-    gatherAllUsers = async () => {
-        try{
-            let response = await axios.get('http://localhost:3001/api/users')
-            console.log(response.data.payload)
-            return response.data.payload
-        }catch(error){
-            console.log('err =>', error)
-        }
-    }
+   
     displayLoginForm = () => {
         this.setState({
             login: !this.state.login,
             signup: false
         })
     }
+
     displaySignupForm = () => {
         this.setState({
             signup: !this.state.signup,
             login: false
         })
     }
+
     render(){
         const {login,signup, username, email, password} = this.state
 
