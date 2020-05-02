@@ -12,7 +12,8 @@ class LandingPage extends Component {
             signup: false,
             username: '',
             email: '',
-            password: '',   
+            password: '',
+            avatar: '',  
         }
 
     }
@@ -29,15 +30,30 @@ class LandingPage extends Component {
     const {username, password} = this.state
     console.log('Logging in user')
        try{
-        const response = await axios.post('http://localhost:3001/auth/login',{username: username, password: password})
+        const response = await axios.post('http://localhost:3001/api/auth/login',{
+            username: username, 
+            password: password
+        })
         console.log('res =>', response)
        }catch(error){
             console.log('err =>', error)
        } 
         // this.props.setUser(user)
    }
-   signupUser = () => {
+   signupUser = async () => {
         console.log('Signing up user')
+        const {username, email, password, avatar} = this.state
+        try{
+            const response = await axios.post('http://localhost:3001/api/auth/signup',{
+                username: username,
+                email: email,
+                password: password,
+                avatar: avatar
+            })
+            console.log('res =>',response)
+        }catch(error){
+            console.log('err =>', error)
+        }
    }
     gatherAllUsers = async () => {
         try{
