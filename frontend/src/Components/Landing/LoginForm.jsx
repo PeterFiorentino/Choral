@@ -1,21 +1,13 @@
 import React from 'react'
-import {useHistory} from 'react-router-dom'
+
 
 const LoginForm = (props) => {
-    const history = useHistory()
-    
-    const handleClick = () => {
-        history.push(`/profile/${props.userId}`)
-    }
+   
     const handleSubmit = (e) => {
         e.preventDefault()
-        props.loginUser()
-        
+        props.loginUser()    
     }
-    // const test = () =>{
-    //     console.log(props)
-    // }
-    // test()
+
     return (
         <>
         <div>
