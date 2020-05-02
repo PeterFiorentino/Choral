@@ -1,12 +1,6 @@
 import React from 'react'
-import {useHistory} from 'react-router-dom'
 
 const SignupForm = (props) => {
-    const history = useHistory()
-
-    const handleClick = () => {
-        history.push("/profile")
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault()

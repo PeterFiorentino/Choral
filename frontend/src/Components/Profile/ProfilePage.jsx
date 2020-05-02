@@ -10,8 +10,7 @@ class ProfilePage extends Component {
         this.state = {
            loggedUser: {
 
-               id: 1,
-
+               id: '',
                username: '',
                email: '',
                avatar: '',
@@ -30,7 +29,7 @@ class ProfilePage extends Component {
         try{
             const response = await axios.get(`http://localhost:3001/api/users/${loggedUser.id}`)
             const userData = response.data.payload.user
-            // console.log(userData)
+            console.log(userData)
             this.setState({
                 loggedUser: {
                     username: userData.username,
