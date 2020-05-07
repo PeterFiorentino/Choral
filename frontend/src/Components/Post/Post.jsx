@@ -39,7 +39,7 @@ class Post extends React.Component {
     }
  
     goToSession = () => {
-        window.location.href = 'http://localhost:3000/session'
+        window.location.href = `http://localhost:3000/session/${this.props.session.id}`
     }
 
     render() {

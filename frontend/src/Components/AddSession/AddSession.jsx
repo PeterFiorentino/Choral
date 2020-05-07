@@ -4,10 +4,10 @@ import Navigation from '../Navigation/Navigation.jsx'
 import './AddSession.css'
 
 class AddSession extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
-            loggedUser: 2
+            loggedUser: props.user
         }
     }
 
