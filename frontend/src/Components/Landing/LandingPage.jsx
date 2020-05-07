@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 import axios from 'axios'
+import {Route, Redirect} from 'react-router-dom'
 import './LandingPage.css';
 
 class LandingPage extends Component {
@@ -24,31 +25,37 @@ class LandingPage extends Component {
         this.setState({
             [inputName]: inputValue
         })
-        console.log(inputValue)
+        // console.log(inputValue)
    }
 
    loginUser = async () => {
     const {username, password} = this.state
+    const {history} = this.props
     console.log('Logging in user')
        try{
-        const response = await axios.post('http://localhost:3001/api/auth/login',{
+        const response = await axios.post('/api/auth/login',{
             username: username, 
             password: password
         })
         console.log('res =>', response)
         const user = response.data.payload
+        console.log(user)
+
         this.props.setUser(user)
-        window.location.replace(`http://localhost:3000/profile/${user.id}`)
-       }catch(error){
+        console.log(user)
+
+        history.push(`/profile/${user.id}`)       
+    }   catch(error){
             console.log('err =>', error)
        } 
         
    }
+   
    signupUser = async () => {
         console.log('Signing up user')
         const {username, email, password, avatar} = this.state
         try{
-            const response = await axios.post('http://localhost:3001/api/auth/signup',{
+            const response = await axios.post('/api/auth/signup',{
                 username: username,
                 email: email,
                 password: password,
@@ -56,11 +63,11 @@ class LandingPage extends Component {
             })
             console.log('res =>',response)
             this.loginUser()
-        }catch(error){
+        } catch(error){
             console.log('err =>', error)
         }
    }
-   
+
     displayLoginForm = () => {
         this.setState({
             login: !this.state.login,
@@ -77,15 +84,15 @@ class LandingPage extends Component {
 
     render(){
         const {login,signup, username, email, password} = this.state
-
+        const user = this.props.user
         let renderLoginForm = login ? (
-            <LoginForm handleChange={this.handleChange} username={username} password={password} loginUser= {this.loginUser}/>
+            <LoginForm handleChange={this.handleChange} username={username} password={password} loginUser= {this.loginUser} />
         ) :null
 
         let renderSignupForm = signup ? (
             <SignupForm handleChange={this.handleChange} username={username} email={email} password={password} signupUser={this.signupUser}/>
         ) :null
-
+        
         return(
             <div className='main-page'>
                 <h1 id='main-title'>Choral</h1>
