@@ -7,11 +7,11 @@ import axios from 'axios'
 
 
 class Session extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
-            loggedUser: 1,
-            sessionId: 1,
+            loggedUser: props.user,
+            sessionId: props.match.params.id,
             saved: false,
         }
     }
@@ -27,6 +27,7 @@ class Session extends Component {
         })
         this.stopAll()
         setTimeout(() => this.completeState(), 1000)
+        console.log(this.props)
     }
 
     getAudioElements = () => {

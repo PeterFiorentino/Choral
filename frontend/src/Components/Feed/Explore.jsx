@@ -4,10 +4,10 @@ import axios from 'axios'
 
 
 class Explore extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
-            userId: 1,
+            userId: props.user,
             feedData: []
         }
     }
@@ -29,7 +29,7 @@ class Explore extends Component {
     }
     fetchCollaborators = async (id) => {
         try{
-            let response2 = await axios.get(`http://localhost:3001/collaborations/${id}`)
+            let response2 = await axios.get(`http://localhost:3001/api/collaborations/${id}`)
             console.log(response2)
             return response2.data.payload.collabs
         }catch(error){
