@@ -29,7 +29,7 @@ class Explore extends Component {
     }
     fetchCollaborators = async (id) => {
         try{
-            let response2 = await axios.get(`http://localhost:3001/api/collaborations/${id}`)
+            let response2 = await axios.get(`/api/collaborations/${id}`)
             console.log(response2)
             return response2.data.payload.collabs
         }catch(error){
