@@ -1,11 +1,10 @@
 import React from 'react'
 
-
 const LoginForm = (props) => {
-   
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        props.loginUser()    
+        props.loginUser()
     }
 
     return (
