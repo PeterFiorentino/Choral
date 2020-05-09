@@ -53,7 +53,7 @@ const Navigation = ({user, logOutUser, isUserLoggedIn}) => {
                         
                         <List>
     
-                           <Link to={`/profile/${user.id}`}>
+                           <Link to={`/profile/${user}`}>
                             <ListItem >
                                 <ListItemIcon button='true' >
                                     <AccountCircleSharpIcon />
