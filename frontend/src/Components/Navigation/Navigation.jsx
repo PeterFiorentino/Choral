@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Link, withRouter} from 'react-router-dom'
-import {Drawer, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core/"
+import {Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton} from "@material-ui/core/"
 import {makeStyles} from "@material-ui/core/styles"
 import HomeSharpIcon from '@material-ui/icons/HomeSharp';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
@@ -11,6 +11,11 @@ import ExitToAppSharpIcon from '@material-ui/icons/ExitToAppSharp';
 import './Navigation.css'
 
 const useStyles = makeStyles((theme) => ({
+
+    // root: {
+    //     display: 'flex'
+    // },
+
     drawerPaper : { 
         width: 'inherit',
         
@@ -24,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Navigation = ({user, logOutUser, isUserLoggedIn}) => {
     const classes = useStyles()
+    // const [mobileOpen, setMobileOpen] = useState(false);
+
+//     const handleDrawerToggle = () => {
+//     setMobileOpen(!mobileOpen);
+//   };
 
     if (isUserLoggedIn){
         return(
@@ -31,16 +41,21 @@ const Navigation = ({user, logOutUser, isUserLoggedIn}) => {
                 <nav id='links'>
                     <Drawer
                         style = {{width:'180px'}} 
-                        variant = 'persistent'
+                        variant = 'permanent'
                         anchor = 'left'
                         open = {true}
+                        // onClose = {handleDrawerToggle}
                         classes={{paper: classes.drawerPaper}}
+                        // ModalProps = {{
+                        //     keepMounted: true
+                        // }}
                     >
+                        
                         <List>
     
                            <Link to={`/profile/${user.id}`}>
                             <ListItem >
-                                <ListItemIcon button='true'>
+                                <ListItemIcon button='true' >
                                     <AccountCircleSharpIcon />
                                 </ListItemIcon> 
                                 <ListItemText primary={"Profile"}/>
