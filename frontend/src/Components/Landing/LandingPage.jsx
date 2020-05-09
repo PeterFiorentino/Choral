@@ -45,7 +45,8 @@ class LandingPage extends Component {
         this.props.setUser(user)
         console.log(user)
 
-        history.push(`/profile/${user.id}`)       
+        // history.push(`/profile/${user.id}`)
+        history.push(`/feed`)       
     }   catch(error){
             console.log('err =>', error)
        } 
