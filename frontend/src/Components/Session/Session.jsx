@@ -20,10 +20,10 @@ class Session extends Component {
     }
 
     async componentDidMount() {
-        let sessionResponse = await axios.get(`http://localhost:3001/sessions/${this.state.sessionId}`)
+        let sessionResponse = await axios.get(`api/sessions/${this.state.sessionId}`)
         let sessionData = sessionResponse.data.payload.session[0]
 
-        let collabsResponse = await axios.get(`http://localhost:3001/collaborations/${this.state.sessionId}`)
+        let collabsResponse = await axios.get(`api/collaborations/${this.state.sessionId}`)
         let collabsData = collabsResponse.data.payload.collabs
 
         this.setState({
@@ -302,7 +302,7 @@ class Session extends Component {
             volume: sessionData.howl._volume * 100,
             stereo_position: ((sessionData.howl._stereo + 1) * 100) / 2
         }
-        axios.patch(`http://localhost:3001/sessions/${sessionData.id}`, sessionBody)
+        axios.patch(`api/sessions/${sessionData.id}`, sessionBody)
         
         collabsData.forEach((collab) => {
             let collabBody = {
@@ -310,7 +310,7 @@ class Session extends Component {
                 volume : collab.howl._volume * 100,
                 stereo_position: ((collab.howl._stereo + 1) * 100) / 2
             }
-            axios.patch(`http://localhost:3001/collaborations/${collab.id}`, collabBody)
+            axios.patch(`api/collaborations/${collab.id}`, collabBody)
         })
         
         this.setState({
@@ -346,9 +346,11 @@ class Session extends Component {
             stereo_position: 50
         }
         
-        axios.post('http://localhost:3001/collaborations', body)
+        axios.post('api/collaborations', body)
         
-        window.location.reload()
+        this.setState({
+            added: true
+        })
     }
 
     bounce = () => {
@@ -379,6 +381,7 @@ class Session extends Component {
             this.setState({
                 recorder: recorder
             })
+
         } else {
             const { recorder } = this.state
             
@@ -410,6 +413,7 @@ class Session extends Component {
             this.setState({
                 recorder: recorder
             })
+            
         } else {
             const { recorder } = this.state
             
@@ -439,6 +443,7 @@ class Session extends Component {
                     <br/>
                     <button onClick={this.uploadCollab} style={{borderRadius:'10px'}}>UPLOAD COLLAB</button><br/>
                     <input type='file' name='audio' onChange={this.fileHandler}></input><br/>
+                    {this.state.added ? <h5>Added!</h5> : <></>}<br/>
                     <br/>
                     <button onClick={this.bounce} style={{borderRadius:'10px'}}>BOUNCE</button><br/>
                     {this.state.newBounce ? <a download href={this.state.newBounce}>DOWNLOAD</a> : <></>}<br/>
