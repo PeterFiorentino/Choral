@@ -4,6 +4,7 @@ import Navigation from '../Navigation/Navigation.jsx'
 import Slider from '@material-ui/core/Slider'
 import { ProgressBar, Spinner } from 'react-bootstrap'
 import { Howler, Howl } from 'howler'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 
@@ -431,6 +432,7 @@ class Session extends Component {
                 <div className='session'>
                     <div className='info'>
                         <h2>{this.state.sessionData.session_name}</h2>
+                        <h3>by <Link to={`/profile/${this.state.sessionData.id}`}><h3 id='profile-link'>{this.state.sessionData.username}</h3></Link></h3>
                         <h5>Genre: {this.state.sessionData.genre}</h5>
                         <h5>{this.state.sessionData.bpm} BPM</h5>
                         <h5>Key: {this.state.sessionData.session_key}</h5>
@@ -438,58 +440,58 @@ class Session extends Component {
                         <h5>Looking for {this.state.sessionData.looking_for}</h5>
                     </div>
                     <h3>Actions</h3>
-                    <button onClick={this.record} style={{borderRadius:'10px'}}>RECORD COLLAB</button><br/>
+                    <button className='round-button' onClick={this.record}>RECORD COLLAB</button><br/>
                     {this.state.newCollab ? <a download href={this.state.newCollab}>DOWNLOAD</a> : <></>}<br/>
                     <br/>
-                    <button onClick={this.uploadCollab} style={{borderRadius:'10px'}}>UPLOAD COLLAB</button><br/>
+                    <button className='round-button' onClick={this.uploadCollab}>UPLOAD COLLAB</button><br/>
                     <input type='file' name='audio' onChange={this.fileHandler}></input><br/>
                     {this.state.added ? <h5>Added!</h5> : <></>}<br/>
                     <br/>
-                    <button onClick={this.bounce} style={{borderRadius:'10px'}}>BOUNCE</button><br/>
+                    <button className='round-button' onClick={this.bounce}>BOUNCE</button><br/>
                     {this.state.newBounce ? <a download href={this.state.newBounce}>DOWNLOAD</a> : <></>}<br/>
                     <br/>
                     <h3>Tracks</h3>
-                    <button onClick={this.saveMix} style={{borderRadius:'10px'}}>SAVE MIX</button>
+                    <button className='round-button' onClick={this.saveMix}>SAVE MIX</button>
                     {this.state.saved ? <h5>saved</h5> : <><h5>{' '}</h5><br/></>}
-                    <div className='tracks' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
-                        <div style={{display:'grid', gridTemplateRows: '25px 110px 30px', gridTemplateColumns: '110px 30px'}}>
+                    <div className='tracks'>
+                        <div className='merged-track'>
                             <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
-                            <img src={this.state.sessionData.avatar} alt='' style={{gridRow: '2 / 3', gridColumn: '1 / 2', borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px'}}></img>
-                            <a download href={this.state.sessionData.audio}style={{gridColumn:'1 / 2'}}>DOWNLOAD</a>
+                            <img className='track-pic' src={this.state.sessionData.avatar} alt=''></img>
+                            <a id='download-track' download href={this.state.sessionData.audio}>DOWNLOAD</a>
                             <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
                         </div>
                         {this.state.collabsData.map((collab, index) => {
                             if (collab.approved === true) {
-                            return (
-                                <div key={index} style={{display:'grid', gridTemplateRows: '25px 110px 30px', gridTemplateColumns:'110px 30px'}}>
-                                    <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(index, event)}></Slider>
-                                    <img onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{gridRow: '2 / 3', gridColumn:'1 / 2', borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px', filter:`${collab.filter}`}}></img>
-                                    <button onClick={() => this.unmerge(index)} style={{gridColumn:'1 / 2', borderRadius:'10px'}}>UNMERGE</button>
-                                    <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
-                                </div>
-                            )
+                                return (
+                                    <div className='merged-track' key={index}>
+                                        <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(index, event)}></Slider>
+                                        <img className='track-pic' onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
+                                        <button className='track-button' onClick={() => this.unmerge(index)}>UNMERGE</button>
+                                        <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
+                                    </div>
+                                )
                             } return true
                         })}
                     </div>
                     <br/>
                     <div className='transport'>
-                        <div style={{paddingLeft:'10%', width:'90%'}}>
+                        <div className='progress-bar-container'>
                             <ProgressBar now={this.state.time} max={this.state.duration} style={{height:'80px', fontSize:'20px'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
                         </div>
                         <br/>
-                        <button onClick={this.playAll} style={{borderRadius:'10px'}}>PLAY</button>
-                        <button onClick={this.pauseAll} style={{borderRadius:'10px'}}>PAUSE</button>
-                        <button onClick={this.stopAll} style={{borderRadius:'10px'}}>STOP</button>
+                        <button className='round-button' onClick={this.playAll}>PLAY</button>
+                        <button className='round-button' onClick={this.pauseAll}>PAUSE</button>
+                        <button className='round-button' onClick={this.stopAll}>STOP</button>
                     </div>
                     <br/>
                     <h3>Pool</h3>
-                    <div className='pool' style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
+                    <div className='tracks'>
                         {this.state.collabsData.map((collab, index) => {
                             if (collab.approved === false) {
                                 return (
-                                    <div key={index} style={{display:'grid', gridTemplateRows:'110px 30px'}}>
-                                        <img onClick={() => this.checkPool(index)} src={collab.avatar} alt='' style={{borderRadius:'50px', borderColor:'white', width:'100px', height:'100px', margin:'5px', filter:`${collab.filter}`}}></img>
-                                        <button onClick={() => this.merge(index)} style={{borderRadius: '10px'}}>MERGE</button>
+                                    <div className='pool-track' key={index} style={{}}>
+                                        <img className='pool-pic' onClick={() => this.checkPool(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
+                                        <button className='pool-button' onClick={() => this.merge(index)}>MERGE</button>
                                     </div>
                                 )
                             }
