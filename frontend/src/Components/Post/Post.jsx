@@ -1,32 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ProgressBar } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import './Post.css'
 
-class Post extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-             time: 0
-        }
+const Post = (props) => {
+    const [ time, setTime ] = useState(0)
+    let history = useHistory()
+
+    const getAudioElements = () => {
+        return document.getElementsByName(`session${props.session.id}`)
     }
 
-    getAudioElements = () => {
-        return document.getElementsByName(`session${this.props.session.id}`)
-    }
-
-    handleTime = () => {
-        let audioElements = this.getAudioElements()
-        this.setState({
-            time: audioElements[0].currentTime
+    const setVolumes = () => {
+        let audioElements = getAudioElements()
+        audioElements.forEach((audio, index) => {
+            if (index === 0) {
+                audio.volume = props.session.volume / 100
+            } else {
+                let collabIndex = index - 1
+                audio.volume = props.session.collaborations[collabIndex].volume / 100
+            }
         })
+    }
+
+    const handleTime = () => {
+        let audioElements = getAudioElements()
+        setTime(audioElements[0].currentTime)
         if (audioElements[0].currentTime >= 45) {
-            this.preview()
+            preview()
         }
     }
 
-    preview = () => {
-        let audioElements = this.getAudioElements()
+    const preview = () => {
+        let audioElements = getAudioElements()
+        setVolumes()
         if (audioElements[0].currentTime === 0) { 
             for (let index = 0; index < audioElements.length; index ++) {
                 audioElements[index].play()
@@ -38,48 +45,47 @@ class Post extends React.Component {
         }
     }
  
-    goToSession = () => {
-        window.location.href = 'http://localhost:3000/session'
+    const goToSession = (id) => {
+        history.push(`/session/${id}`)
     }
 
-    render() {
-        return (
-            <>
-            <div className='post'>
-                <img onClick={this.goToSession} className='owner' src={this.props.session.art} alt=''></img>
-                <button className='control' onClick={this.preview}>PREVIEW</button>
-                <ProgressBar now={this.state.time} max='45' variant='info' style={{width: '100%', height:'5rem', gridRow: '1 / 2', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
-                <div className='collaborators'>
-                    {this.props.session.collaborations.map((collaboration) => {
-                        if (collaboration.approved) {
-                            return (
-                                <img className='merged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
-                            )
-                        } else {
-                            return (
-                                <img className='unmerged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
-                            )
-                        }
-                    })}
-                </div>
-            </div>
-            <div className='audios'>
-                <audio className='audio-element' name={`session${this.props.session.id}`} volume={this.props.session.volume / 100} onTimeUpdate={this.handleTime}>
-                    <source src={this.props.session.audio}></source>
-                </audio>
-                {this.props.session.collaborations.map((collaboration) => {
+    return (
+        <>
+        <div className='post'>
+            <img onClick={() => goToSession(props.session.id)} className='owner' src={props.session.art} alt=''></img>
+            <button className='control' onClick={preview}>PREVIEW</button>
+            <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'3.5em', gridRow: '1 / 2', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
+            <div className='collaborators'>
+                {props.session.collaborations.map((collaboration) => {
                     if (collaboration.approved) {
-                        return (   
-                            <audio className='audio-element' name={`session${this.props.session.id}`} volume={collaboration.volume / 100} key={collaboration.id}>
-                                <source src={collaboration.audio}></source>
-                            </audio>
+                        return (
+                            <img className='merged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
+                        )
+                    } else {
+                        return (
+                            <img className='unmerged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
                         )
                     }
                 })}
             </div>
-            </>
-        )
-    }
+        </div>
+        <div className='audios'>
+            <audio className='audio-element' name={`session${props.session.id}`} volume={props.session.volume / 100} onTimeUpdate={handleTime}>
+                <source src={props.session.audio}></source>
+            </audio>
+            {props.session.collaborations.map((collaboration) => {
+                if (collaboration.approved) {
+                    return (   
+                        <audio className='audio-element' name={`session${props.session.id}`} volume={collaboration.volume / 100} key={collaboration.id}>
+                            <source src={collaboration.audio}></source>
+                        </audio>
+                    )
+                }
+                return true 
+            })}
+        </div>
+        </>
+    )
 }
 
 export default Post

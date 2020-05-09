@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
-import Navigation from '../Navigation/Navigation.jsx'
 import Post from '../Post/Post.jsx'
 import axios from 'axios'
+import ProfilePic from '../Profile/ProfilePic.jsx'
 import './Profile.css'
 
 class ProfilePage extends Component {
@@ -9,25 +9,24 @@ class ProfilePage extends Component {
         super(props)
         this.state = {
            loggedUser: {
-
-               id: '',
+               id: props.user,
                username: '',
                email: '',
                avatar: '',
            },
-
-        //    sessionData: [],
-
         }
     }
     componentDidMount = () => {
         this.fetchUserData()
         this.fetchUserSessionsAndCollaborators()
+        // console.log(this.props)
     }
+   
     fetchUserData = async () => {
         const {loggedUser} = this.state
+        console.log(loggedUser)
         try{
-            const response = await axios.get(`http://localhost:3001/api/users/${loggedUser.id}`)
+            const response = await axios.get(`/api/users/${loggedUser.id}`)
             const userData = response.data.payload.user
             console.log(userData)
             this.setState({
@@ -44,8 +43,9 @@ class ProfilePage extends Component {
 
     fetchUserSessionsAndCollaborators = async () => {
         const {loggedUser} = this.state
+        console.log(loggedUser)
         try {
-            let response = await axios.get(`http://localhost:3001/api/sessions/user/${loggedUser.id}`)
+            let response = await axios.get(`/api/sessions/user/${loggedUser.id}`)
             const sessionList = response.data.payload.session
             console.log(sessionList)
             for (let sesh of sessionList){
@@ -55,31 +55,28 @@ class ProfilePage extends Component {
             this.setState({
                 sessionData: sessionList
             })
-            console.log(this.state.sessionData)
+            // console.log(this.state.sessionData)
         } catch(error){
             console.log('err =>', error)
         }  
     }
 
     fetchCollaborators = async (id) => {
-        let response2 = await axios.get(`http://localhost:3001/api/collaborations/${id}`)
+        let response2 = await axios.get(`/api/collaborations/${id}`)
         console.log(response2)
         return response2.data.payload.collabs
     }
- 
+    
     render(){
         const {loggedUser} = this.state
-
-        // console.log(loggedUser)
         return(
             <>
             <div className='user-info'>
-                <Navigation />
                 <h1 className='title'>Choral</h1>
-                <img src={loggedUser.avatar} height='300px' width= '300px'></img>
+                <ProfilePic loggedUser = {loggedUser}/>  
                 <h3>{loggedUser.username}</h3>
             </div>
-            
+
             <div className='session-info'>
                 {this.state.sessionData ? 
                 this.state.sessionData.map((session) =>

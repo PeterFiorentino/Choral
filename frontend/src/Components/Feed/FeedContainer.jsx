@@ -8,7 +8,7 @@ class FeedContainer extends Component {
     constructor(props){
         super(props)
         this.state = {
-            userId : '',
+            user : props.user,
             myFeed: false,
             explore: false,
         }
@@ -16,18 +16,21 @@ class FeedContainer extends Component {
     
    toggleMyFeed = () => {
         this.setState({
-            myFeed: !this.state.myFeed
+            myFeed: !this.state.myFeed,
+            explore: false
         })
    }
 
    toggleExplore = () => {
         this.setState({
-            explore: !this.state.explore
+            explore: !this.state.explore,
+            myFeed: false
         })
    }
 
     render(){
-        const {myFeed, explore} = this.state 
+        const {myFeed, explore, user} = this.state 
+        // console.log(userId)
         let renderMyFeed = myFeed ? (
             <div>
                 <h2>My Feed</h2>
@@ -37,13 +40,12 @@ class FeedContainer extends Component {
         let renderExplorePage = explore ? (
             <div>
                 <h2>Explore</h2>
-                <Explore />
+                <Explore user={user}/>
             </div>
         ):null
 
         return(
             <div>
-                <Navigation />
                 <h1>Feed</h1>
                     <button onClick={this.toggleMyFeed}>My Feed</button>
                     {renderMyFeed}
