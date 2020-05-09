@@ -56,13 +56,13 @@ class AddSession extends React.Component {
             stereo_position: 50
         }
     
-        let response = await axios.post('http://localhost:3001/sessions', body)
+        let response = await axios.post('api/sessions', body)
         console.log(response)
 
         this.setState({
             added: true
         })
-        setTimeout(() => window.location.reload(), 1500)
+        setTimeout(() => window.location.href = `http://localhost:3000/profile/${this.state.loggedUser.id}`, 1500)
     }
 
     record = async () => {
@@ -84,7 +84,7 @@ class AddSession extends React.Component {
                 recorder: recorder,
                 recording: true
             })
-            
+
         } else if (this.state.recording) {
             const { recorder } = this.state
 
