@@ -3,18 +3,19 @@ import Post from '../Post/Post.jsx'
 import axios from 'axios'
 
 class MyFeed extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
-            userId: '',
+            userId: props.user,
             feedData: []
         }
     }
-    
+    fetchFeedData = async () => {
+    }
     render(){
         return(
             <div>
-                <p>My Feed</p>
+                
             </div>
         )
     }
