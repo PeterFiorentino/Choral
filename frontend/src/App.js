@@ -16,14 +16,21 @@ class App extends Component {
     super()
     this.state = {
       user: null,
-      isUserLoggedIn: false
+      isUserLoggedIn: false,
+      wasInitialized: false
     }
   }
   
-  componentDidMount = () => {
-    this.checkLoginStatus()
+  componentDidMount = async () => {
+    await this.checkLoginStatus()
+    this.initialize()
   }
 
+  initialize = () => {
+    this.setState({
+      wasInitialized: true 
+    })
+  }
   setUser = (user) => {
     console.log('setting user to =>', user.id)
     this.setState({
@@ -81,7 +88,7 @@ class App extends Component {
   }
 
   render(){
-    const {isUserLoggedIn, user} = this.state
+    const {isUserLoggedIn, wasInitialized} = this.state
     // console.log('user =>', user)
     return (
       <div className="App">
@@ -91,11 +98,11 @@ class App extends Component {
         <div>
           <Switch>
             <Route path = "/landing" render= {this.renderLandingPage}/>
-            <PrivateRoute path = '/profile/:id' render = {this.renderProfilePage} isUserLoggedIn= {isUserLoggedIn}/>
-            <PrivateRoute path = "/collaborators" render = {this.renderCollaboratorsPage} isUserLoggedIn={isUserLoggedIn} />
-            <PrivateRoute path = "/feed" render = {this.renderFeedPage } isUserLoggedIn={isUserLoggedIn} />
+            <PrivateRoute path = '/profile/:id' render = {this.renderProfilePage} isUserLoggedIn= {isUserLoggedIn} wasInitialized= {wasInitialized}/>
+            <PrivateRoute path = "/collaborators" render = {this.renderCollaboratorsPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
+            <PrivateRoute path = "/feed" render = {this.renderFeedPage } isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
             <Route path = "/session/:id" render = {this.renderSessionPageById} isUserLoggedIn={isUserLoggedIn}/>
-            <PrivateRoute path = "/add" render = {this.renderAddSessionPage} isUserLoggedIn={isUserLoggedIn} />
+            <PrivateRoute path = "/add" render = {this.renderAddSessionPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
           </Switch>
         </div>
         
