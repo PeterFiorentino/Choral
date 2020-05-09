@@ -22,6 +22,23 @@ router.get('/', async (req, res) => {
     }  
   });
 
+router.get('/localfeed/:user_id', async (req, res) => {
+  try {
+    let localFeed = await db.any(`SELECT sessions.id, sessions.session_name, sessions.audio, sessions.art, users.username, users.avatar FROM follow JOIN sessions ON sessions.owner_id = follow.being_followed JOIN users ON users.id = follow.being_followed WHERE is_following = $1`, req.params.user_id)
+    res.json({
+      message: "Success",
+      payload: localFeed,
+      error: null
+    })
+  } catch (error) {
+    res.json({
+      message: "Had an issue retrieving the local feed",
+      payload: null,
+      error: error
+    })
+  }
+});
+
   router.get('/:id', async (req, res)  => {
     try {
       let singleSession =  await db.any(`SELECT sessions.id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.art, sessions.session_closed, sessions.volume, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE sessions.id = $1;`, req.params.id);
