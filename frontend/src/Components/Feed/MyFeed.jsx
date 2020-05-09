@@ -15,7 +15,7 @@ class MyFeed extends Component {
     render(){
         return(
             <div>
-                <p>My Feed</p>
+                
             </div>
         )
     }
