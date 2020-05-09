@@ -20,10 +20,10 @@ class Session extends Component {
     }
 
     async componentDidMount() {
-        let sessionResponse = await axios.get(`api/sessions/${this.state.sessionId}`)
+        let sessionResponse = await axios.get(`http://localhost:3001/api/sessions/${this.state.sessionId}`)
         let sessionData = sessionResponse.data.payload.session[0]
 
-        let collabsResponse = await axios.get(`api/collaborations/${this.state.sessionId}`)
+        let collabsResponse = await axios.get(`http://localhost:3001/api/collaborations/${this.state.sessionId}`)
         let collabsData = collabsResponse.data.payload.collabs
 
         this.setState({
@@ -302,7 +302,7 @@ class Session extends Component {
             volume: sessionData.howl._volume * 100,
             stereo_position: ((sessionData.howl._stereo + 1) * 100) / 2
         }
-        axios.patch(`api/sessions/${sessionData.id}`, sessionBody)
+        axios.patch(`http://localhost:3001/api/sessions/${sessionData.id}`, sessionBody)
         
         collabsData.forEach((collab) => {
             let collabBody = {
@@ -310,7 +310,7 @@ class Session extends Component {
                 volume : collab.howl._volume * 100,
                 stereo_position: ((collab.howl._stereo + 1) * 100) / 2
             }
-            axios.patch(`api/collaborations/${collab.id}`, collabBody)
+            axios.patch(`http://localhost:3001/api/collaborations/${collab.id}`, collabBody)
         })
         
         this.setState({
@@ -346,7 +346,7 @@ class Session extends Component {
             stereo_position: 50
         }
         
-        axios.post('api/collaborations', body)
+        axios.post('http://localhost:3001/api/collaborations', body)
         
         this.setState({
             added: true
@@ -413,7 +413,7 @@ class Session extends Component {
             this.setState({
                 recorder: recorder
             })
-            
+
         } else {
             const { recorder } = this.state
             
