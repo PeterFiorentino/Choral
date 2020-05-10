@@ -9,7 +9,7 @@ class ProfilePage extends Component {
         super(props)
         this.state = {
            loggedUser: {
-               id: props.user,
+               id: props.match.params.id,
                username: '',
                email: '',
                avatar: '',
@@ -19,7 +19,7 @@ class ProfilePage extends Component {
     componentDidMount = () => {
         this.fetchUserData()
         this.fetchUserSessionsAndCollaborators()
-        // console.log(this.props)
+        console.log(this.props)
     }
    
     fetchUserData = async () => {
