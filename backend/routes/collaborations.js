@@ -69,6 +69,25 @@ const multer = require('multer');
     }
   });
 
+  router.patch('/clear_pool/:session_id', async (req, res)  => {
+    let session_id = req.params.session_id
+    
+    try {
+      let clear_pool =  await db.none(`UPDATE collaborations SET is_deleted = true WHERE session_id=$1`, [session_id]);
+      res.json({
+        message: "Success",
+        payload: clear_pool, 
+        error: null
+      })
+    } catch (error) {
+      res.json({
+        message: "Cannot clear that pool",
+        payload: null,
+        error: error
+      })
+    }
+  });
+
   router.patch('/delete/:id', async (req, res)  => {
     let id = req.params.id
     
