@@ -1,0 +1,62 @@
+#profile-link {
+    display: inline;
+}
+
+.round-button {
+    border-radius: 10px;
+}
+
+.tracks {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-around;
+}
+
+.merged-track {
+    display: grid;
+    grid-template-rows: 25px 110px 30px; 
+    grid-template-columns: 110px 30px;
+}
+
+.track-pic {
+    grid-row: 2 / 3; 
+    grid-column: 1 / 2; 
+    border-radius: 50px; 
+    border-color: white; 
+    width: 100px; 
+    height: 100px; 
+    margin: 5px;
+}
+
+#download-session-track {
+    grid-column: 1 / 2;
+}
+
+.track-button {
+    grid-column: 1 / 2; 
+    border-radius: 10px;
+}
+
+.progress-bar-container {
+    padding-left: 10%;
+    width: 90%;
+}
+
+.pool-track {
+    display: grid; 
+    grid-template-rows: 110px 30px;
+}
+
+.pool-pic {
+    grid-row: 1 / 2;
+    border-radius: 50px; 
+    border-color: white; 
+    width: 100px; 
+    height: 100px; 
+    margin: 5px;
+}
+
+.pool-button {
+    grid-row: 2 / 3;
+    border-radius: 10px;
+}
