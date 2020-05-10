@@ -34,7 +34,7 @@ class Session extends Component {
 
         this.createHowls()
 
-        setTimeout(() => this.completeState(), 1000)
+        this.completeState()
     }
 
     componentWillUnmount() {
@@ -457,7 +457,7 @@ class Session extends Component {
                         <div className='merged-track'>
                             <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
                             <img className='track-pic' src={this.state.sessionData.avatar} alt=''></img>
-                            <a id='download-track' download href={this.state.sessionData.audio}>DOWNLOAD</a>
+                            <a id='download-session-track' download href={this.state.sessionData.audio}>DOWNLOAD</a>
                             <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
                         </div>
                         {this.state.collabsData.map((collab, index) => {
