@@ -25,7 +25,8 @@ CREATE TABLE sessions (
     art VARCHAR,
     session_closed BOOLEAN,
     volume INT,
-    stereo_position INT
+    stereo_position INT,
+    is_deleted BOOLEAN
 );
 
 CREATE TABLE collaborations (
@@ -36,12 +37,13 @@ CREATE TABLE collaborations (
     comment VARCHAR,
     approved BOOLEAN,
     volume INT,
-    stereo_position INT
+    stereo_position INT,
+    is_deleted BOOLEAN
 );
 
 CREATE TABLE follow (
-    is_following INT REFERENCES users.id,
-    being_followed INT REFERENCES users.id
+    is_following INT REFERENCES users(id),
+    being_followed INT REFERENCES users(id)
 );
 
 
@@ -51,16 +53,16 @@ INSERT INTO users (username, email, password, avatar)
            ('Owen', 'owenjones@pursuit.org', 'abc123', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/68651886_3598543233505261_6173724632814714880_o.jpg?_nc_cat=108&_nc_sid=85a577&_nc_oc=AQngpc5LQJWLalKfc4YVDei2AcYDZ1Q_Bv4-Jb0WNenPJg3G2Qi6P_Py5NuCvUzX2tD3LXHHz_U94s7iUFR7wliU&_nc_ht=scontent-lga3-1.xx&oh=c683d319bb8ce8d2681d06a977a6b5e5&oe=5EBF55A3');
 
 
-INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, art, session_closed, volume, stereo_position)
-    VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', 'http://localhost:3001/audios/drums.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50),
-           (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50);
+INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, art, session_closed, volume, stereo_position, is_deleted)
+    VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', 'http://localhost:3001/audios/drums.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50, false),
+           (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50, false);
            
 
-INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approved, volume, stereo_position)
-    VALUES (1, 1, 'http://localhost:3001/audios/bassguitar.mp3', '', false, 80, 50),
-           (2, 1, 'http://localhost:3001/audios/leadguitar.mp3', '', false, 80, 50),
-           (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80, 50),
-           (1, 2, 'http://localhost:3001/audios/beat.mp3', '', false, 80, 50);
+INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approved, volume, stereo_position, is_deleted)
+    VALUES (1, 1, 'http://localhost:3001/audios/bassguitar.mp3', '', false, 80, 50, false),
+           (2, 1, 'http://localhost:3001/audios/leadguitar.mp3', '', false, 80, 50, false),
+           (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80, 50, false),
+           (1, 2, 'http://localhost:3001/audios/beat.mp3', '', false, 80, 50, false);
 
 
 INSERT INTO follow (is_following, being_followed)

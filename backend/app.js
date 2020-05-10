@@ -45,6 +45,7 @@ const usersRouter = require('./routes/users');
 const sessionsRouter = require('./routes/sessions');
 const collaborationsRouter = require('./routes/collaborations');
 const authRouter = require('./routes/auth');
+const followRouter = require('./routes/following')
 
 var app = express();
 
@@ -75,6 +76,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/collaborations', collaborationsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/follow', followRouter);
 
 app.post('/upload/audio',uploadAudio.single("audio"),(req,res,next) =>{
     console.log("file",req.file) 
