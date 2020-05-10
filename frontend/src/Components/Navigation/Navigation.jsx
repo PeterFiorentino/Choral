@@ -104,3 +104,5 @@ const Navigation = ({user, logOutUser, isUserLoggedIn}) => {
 }
 
 export default Navigation
+
+//From Material UI

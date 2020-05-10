@@ -10,7 +10,7 @@ class FeedContainer extends Component {
         this.state = {
             user : props.user,
             myFeed: false,
-            explore: false,
+            explore: true,
         }
     }
     
