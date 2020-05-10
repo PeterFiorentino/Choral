@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ProgressBar } from 'react-bootstrap'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import './Post.css'
 
 const Post = (props) => {
@@ -54,7 +54,12 @@ const Post = (props) => {
         <div className='post'>
             <img onClick={() => goToSession(props.session.id)} className='owner' src={props.session.art} alt=''></img>
             <button className='control' onClick={preview}>PREVIEW</button>
-            <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'3.5em', gridRow: '1 / 2', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
+            <div id='info-link'>
+                <Link to={`session/${props.session.id}`}><p className='link-content'>{`${props.session.session_name} `}</p></Link>
+                <p className='link-content'>by </p>
+                <Link to={`/profile/${props.session.owner_id}`}><p className='link-content'>{props.session.owner_id}</p></Link>
+            </div>
+            <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'3.5rem', gridRow: '2 / 3', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
             <div className='collaborators'>
                 {props.session.collaborations.map((collaboration) => {
                     if (collaboration.approved) {
