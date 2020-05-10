@@ -5,7 +5,7 @@ const multer = require('multer');
 
   router.get('/:session_id', async (req, res)  => {
     try {
-      let collabs =  await db.any(`SELECT c.id, c.collaborator_id, c.session_id, c.audio, c.approved, c.volume, c.stereo_position, u.avatar, u.username FROM collaborations c LEFT JOIN users u ON u.id = c.collaborator_id WHERE c.session_id=$1`, req.params.session_id);
+      let collabs =  await db.any(`SELECT c.id, c.collaborator_id, c.session_id, c.audio, c.approved, c.volume, c.stereo_position, u.avatar, u.username FROM collaborations c LEFT JOIN users u ON u.id = c.collaborator_id WHERE (c.session_id=$1 AND c.is_deleted = false)`, req.params.session_id);
       res.json({
         message: "Success",
         payload: {
@@ -32,7 +32,7 @@ const multer = require('multer');
     let stereo_position = req.body.stereo_position
   
     try {
-      let newCollab = await db.one(`INSERT INTO collaborations(session_id, collaborator_id, audio, comment, approved, volume, stereo_position) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [session_id, collaborator_id, audio, comment, approved, volume, stereo_position]);
+      let newCollab = await db.one(`INSERT INTO collaborations(session_id, collaborator_id, audio, comment, approved, volume, stereo_position, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`, [session_id, collaborator_id, audio, comment, approved, volume, stereo_position, false]);
       res.json({
         message: "Success",
         payload: {
@@ -63,6 +63,25 @@ const multer = require('multer');
     } catch (error) {
       res.json({
         message: "There is no collabs for that session",
+        payload: null,
+        error: error
+      })
+    }
+  });
+
+  router.patch('/delete/:id', async (req, res)  => {
+    let id = req.params.id
+    
+    try {
+      let deleteCollab =  await db.none(`UPDATE collaborations SET is_deleted = true WHERE id=$1`, [id]);
+      res.json({
+        message: "Success",
+        payload: deleteCollab, 
+        error: null
+      })
+    } catch (error) {
+      res.json({
+        message: "Cannot delete that collaboration",
         payload: null,
         error: error
       })
