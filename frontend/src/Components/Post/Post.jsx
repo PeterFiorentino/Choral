@@ -57,7 +57,7 @@ const Post = (props) => {
             <div id='info-link'>
                 <Link to={`session/${props.session.id}`}><p className='link-content'>{`${props.session.session_name} `}</p></Link>
                 <p className='link-content'>by </p>
-                <Link to={`/profile/${props.session.owner_id}`}><p className='link-content'>{props.session.owner_id}</p></Link>
+                <Link to={`/profile/${props.session.owner_id}`}><p className='link-content'>{props.session.username}</p></Link>
             </div>
             <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'3.5rem', gridRow: '2 / 3', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
             <div className='collaborators'>
