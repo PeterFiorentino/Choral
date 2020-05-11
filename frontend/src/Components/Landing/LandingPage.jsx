@@ -15,7 +15,7 @@ class LandingPage extends Component {
             username: '',
             email: '',
             password: '',
-            avatar: '',  
+            avatar: 'https://cdn.clipart.email/60dc0ace75203466caef979a0a5c4e24_17685-earphones-icon-cliparts-stock-vector-and-royalty-free-_450-450.jpeg',  
         }
 
     }

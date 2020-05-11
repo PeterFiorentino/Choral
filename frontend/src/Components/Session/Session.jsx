@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import './Session.css'
 import Navigation from '../Navigation/Navigation.jsx'
 import Slider from '@material-ui/core/Slider'
+import VolumeDownIcon from '@material-ui/icons/VolumeDown'
 import { ProgressBar, Spinner } from 'react-bootstrap'
 import { Howler, Howl } from 'howler'
 import { Link } from 'react-router-dom'
@@ -21,16 +22,7 @@ class Session extends Component {
     }
 
     async componentDidMount() {
-        let sessionResponse = await axios.get(`http://localhost:3001/api/sessions/${this.state.sessionId}`)
-        let sessionData = sessionResponse.data.payload.session[0]
-
-        let collabsResponse = await axios.get(`http://localhost:3001/api/collaborations/${this.state.sessionId}`)
-        let collabsData = collabsResponse.data.payload.collabs
-
-        this.setState({
-            sessionData: sessionData,
-            collabsData: collabsData
-        })
+        await this.getData()
 
         this.createHowls()
 
@@ -39,6 +31,20 @@ class Session extends Component {
 
     componentWillUnmount() {
         this.stopAll()
+    }
+
+    getData = async () => {
+        let sessionResponse = await axios.get(`http://localhost:3001/api/sessions/${this.state.sessionId}`)
+        let sessionData = sessionResponse.data.payload.session[0]
+
+        let collabsResponse = await axios.get(`http://localhost:3001/api/collaborations/${this.state.sessionId}`)
+        let collabsData = collabsResponse.data.payload.collabs
+
+        this.setState({
+            sessionData: sessionData,
+            collabsData: collabsData,
+            isOwner: (this.state.loggedUser === sessionData.owner_id)
+        })
     }
 
     createHowls = () => {
@@ -206,9 +212,25 @@ class Session extends Component {
         }
     }
 
+    clearPool = async () => {
+        const { sessionData } = this.state
+        
+        await this.saveMix()
+
+        await axios.patch(`http://localhost:3001/api/collaborations/clear_pool/${sessionData.id}`)
+        
+        await this.getData()
+
+        this.createHowls()
+
+        this.completeState()
+    }
+
     merge = (index) => {
         const { collabsData } = this.state
         
+        this.setState({saved:false})
+
         let updatedCollabs = collabsData
         updatedCollabs[index].checking = false
         updatedCollabs[index].approved = true
@@ -222,6 +244,8 @@ class Session extends Component {
     unmerge = (index) => {
         const { collabsData } = this.state
         
+        this.setState({saved:false})
+
         collabsData[index].howl.mute(true)
         let updatedCollabs = collabsData
         updatedCollabs[index].approved = false
@@ -269,6 +293,8 @@ class Session extends Component {
     changeVolume = (index, event) => {
         const { sessionData, collabsData } = this.state
         let currentValue = event.target.getAttribute('aria-valuenow')
+
+        this.setState({saved: false})
         
         if (currentValue !== 'NaN' && currentValue !== null) {
             const newValue = currentValue / 100
@@ -284,6 +310,8 @@ class Session extends Component {
     changePanning = (index, event) => {
         const { sessionData, collabsData } = this.state
         let currentValue = event.target.getAttribute('aria-valuenow')
+
+        this.setState({saved: false})
         
         if (currentValue !== 'NaN' && currentValue !== null) {
             const newValue = currentValue * 2 / 100 - 1
@@ -296,7 +324,7 @@ class Session extends Component {
         }
     }
 
-    saveMix = () => {
+    saveMix = async () => {
         const { collabsData, sessionData } = this.state
 
         let sessionBody = {
@@ -305,7 +333,7 @@ class Session extends Component {
         }
         axios.patch(`http://localhost:3001/api/sessions/${sessionData.id}`, sessionBody)
         
-        collabsData.forEach((collab) => {
+        await collabsData.forEach((collab) => {
             let collabBody = {
                 approved: collab.approved,
                 volume : collab.howl._volume * 100,
@@ -347,11 +375,23 @@ class Session extends Component {
             stereo_position: 50
         }
         
-        axios.post('http://localhost:3001/api/collaborations', body)
+        await axios.post('http://localhost:3001/api/collaborations', body)
         
         this.setState({
             added: true
         })
+
+        if (this.state.isOwner) {
+            await this.saveMix()
+
+            await this.getData()
+
+            this.createHowls()
+
+            this.completeState()
+
+            setTimeout(() => this.setState({added: false}), 1500)
+        }
     }
 
     bounce = () => {
@@ -380,7 +420,8 @@ class Session extends Component {
             })
             
             this.setState({
-                recorder: recorder
+                recorder: recorder,
+                bouncing: true
             })
 
         } else {
@@ -389,6 +430,8 @@ class Session extends Component {
             recorder.stop()
             
             this.pauseAll()
+
+            this.setState({bouncing:false})
         }
     }
 
@@ -412,7 +455,8 @@ class Session extends Component {
             })
             
             this.setState({
-                recorder: recorder
+                recorder: recorder,
+                recording: true
             })
 
         } else {
@@ -421,6 +465,8 @@ class Session extends Component {
             recorder.stop()
             
             this.pauseAll()
+
+            this.setState({recording:false})
         }
     }
 
@@ -440,25 +486,37 @@ class Session extends Component {
                         <h5>Looking for {this.state.sessionData.looking_for}</h5>
                     </div>
                     <h3>Actions</h3>
-                    <button className='round-button' onClick={this.record}>RECORD COLLAB</button><br/>
-                    {this.state.newCollab ? <a download href={this.state.newCollab}>DOWNLOAD</a> : <></>}<br/>
-                    <br/>
+                    <button className='round-button' onClick={this.record}>RECORD COLLAB</button>
+                    {this.state.recording ? <h5>recording...</h5> : <><h5>{' '}</h5></>}
+                    {this.state.newCollab && !this.state.recording ? <><a download href={this.state.newCollab}>DOWNLOAD</a><br/><br/></> : <br/>}
+                    {!this.state.newCollab && !this.state.recording ? <br/> : <></>}
                     <button className='round-button' onClick={this.uploadCollab}>UPLOAD COLLAB</button><br/>
                     <input type='file' name='audio' onChange={this.fileHandler}></input><br/>
-                    {this.state.added ? <h5>Added!</h5> : <></>}<br/>
-                    <br/>
+                    {this.state.added ? <h5>added!</h5> : <><h5>{' '}</h5><br/></>}
+                    {this.state.isOwner ?
+                    <>
                     <button className='round-button' onClick={this.bounce}>BOUNCE</button><br/>
-                    {this.state.newBounce ? <a download href={this.state.newBounce}>DOWNLOAD</a> : <></>}<br/>
-                    <br/>
+                    {this.state.bouncing ? <h5>bouncing...</h5> : <><h5>{' '}</h5></>}
+                    {this.state.newBounce && !this.state.bouncing ? <><a download href={this.state.newBounce}>DOWNLOAD</a><br/><br/></> : <br/>}
+                    {!this.state.newBounce && !this.state.bouncing ? <br/> : <></>}
+                    </>
+                    : <></>}
                     <h3>Tracks</h3>
+                    {this.state.isOwner ?
+                    <>
                     <button className='round-button' onClick={this.saveMix}>SAVE MIX</button>
                     {this.state.saved ? <h5>saved</h5> : <><h5>{' '}</h5><br/></>}
+                    </>
+                    : <></>}
                     <div className='tracks'>
                         <div className='merged-track'>
-                            <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
+                            <p className='left-pan'>L</p>
+                            <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
+                            <p className='right-pan'>R</p>
                             <img className='track-pic' src={this.state.sessionData.avatar} alt=''></img>
                             <a id='download-session-track' download href={this.state.sessionData.audio}>DOWNLOAD</a>
-                            <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
+                            <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
+                            <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
                         </div>
                         {this.state.collabsData.map((collab, index) => {
                             if (collab.approved === true) {
@@ -466,7 +524,9 @@ class Session extends Component {
                                     <div className='merged-track' key={index}>
                                         <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(index, event)}></Slider>
                                         <img className='track-pic' onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
+                                        {this.state.isOwner ?
                                         <button className='track-button' onClick={() => this.unmerge(index)}>UNMERGE</button>
+                                        : <></>}
                                         <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
                                     </div>
                                 )
@@ -484,7 +544,10 @@ class Session extends Component {
                         <button className='round-button' onClick={this.stopAll}>STOP</button>
                     </div>
                     <br/>
+                    {this.state.isOwner ?
+                    <>
                     <h3>Pool</h3>
+                    <button className='round-button' onClick={this.clearPool}>CLEAR POOL</button>
                     <div className='tracks'>
                         {this.state.collabsData.map((collab, index) => {
                             if (collab.approved === false) {
@@ -499,6 +562,8 @@ class Session extends Component {
                         })}
                     </div>
                     <br/>
+                    </>
+                    : <></>}
                     <div className='audios'>
                         <audio crossOrigin='anonymous' muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
                             <source src={this.state.sessionData.audio}></source>
