@@ -522,12 +522,15 @@ class Session extends Component {
                             if (collab.approved === true) {
                                 return (
                                     <div className='merged-track' key={index}>
-                                        <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2'}} onChange={(event) => this.changePanning(index, event)}></Slider>
+                                        <p className='left-pan'>L</p>
+                                        <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3'}} onChange={(event) => this.changePanning(index, event)}></Slider>
+                                        <p className='right-pan'>R</p>
                                         <img className='track-pic' onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
                                         {this.state.isOwner ?
                                         <button className='track-button' onClick={() => this.unmerge(index)}>UNMERGE</button>
                                         : <></>}
-                                        <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'2 / 2', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
+                                        <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
+                                        <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
                                     </div>
                                 )
                             } return true
