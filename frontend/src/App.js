@@ -101,7 +101,7 @@ class App extends Component {
             <PrivateRoute path = '/profile/:id' render = {this.renderProfilePage} isUserLoggedIn= {isUserLoggedIn} wasInitialized= {wasInitialized}/>
             <PrivateRoute path = "/collaborators" render = {this.renderCollaboratorsPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
             <PrivateRoute path = "/feed" render = {this.renderFeedPage } isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
-            <Route path = "/session/:id" render = {this.renderSessionPageById} isUserLoggedIn={isUserLoggedIn}/>
+            <PrivateRoute path = "/session/:id" render = {this.renderSessionPageById} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
             <PrivateRoute path = "/add" render = {this.renderAddSessionPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
           </Switch>
         </div>

@@ -5,7 +5,7 @@ const multer = require('multer');
 
 router.get('/', async (req, res) => {
     try{
-      let allSessions = await db.any(`SELECT sessions.id, sessions.session_name, sessions.audio, sessions.art, sessions.volume, sessions.stereo_position, users.username, users.avatar FROM sessions JOIN users ON sessions.owner_id = users.id WHERE sessions.is_deleted = false`);
+      let allSessions = await db.any(`SELECT sessions.id, sessions.owner_id, sessions.session_name, sessions.audio, sessions.art, sessions.volume, sessions.stereo_position, users.username, users.avatar FROM sessions JOIN users ON sessions.owner_id = users.id WHERE sessions.is_deleted = false`);
       res.json({
         message: "Success",
         payload: {
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
 router.get('/localfeed/:user_id', async (req, res) => {
   try {
-    let localFeed = await db.any(`SELECT sessions.id, sessions.session_name, sessions.audio, sessions.art, sessions.is_deleted, users.username, users.avatar FROM follow JOIN sessions ON sessions.owner_id = follow.being_followed JOIN users ON users.id = follow.being_followed WHERE (is_following = $1 AND sessions.is_deleted = false)`, req.params.user_id)
+    let localFeed = await db.any(`SELECT sessions.id, sessions.owner_id, sessions.session_name, sessions.audio, sessions.art, sessions.is_deleted, users.username, users.avatar FROM follow JOIN sessions ON sessions.owner_id = follow.being_followed JOIN users ON users.id = follow.being_followed WHERE (is_following = $1 AND sessions.is_deleted = false)`, req.params.user_id)
     res.json({
       message: "Success",
       payload: localFeed,
@@ -41,7 +41,7 @@ router.get('/localfeed/:user_id', async (req, res) => {
 
   router.get('/:id', async (req, res)  => {
     try {
-      let singleSession =  await db.any(`SELECT sessions.id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.art, sessions.session_closed, sessions.volume, sessions.stereo_position, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE (sessions.id = $1 AND sessions.is_deleted = false);`, req.params.id);
+      let singleSession =  await db.any(`SELECT sessions.id, sessions.owner_id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.art, sessions.session_closed, sessions.volume, sessions.stereo_position, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE (sessions.id = $1 AND sessions.is_deleted = false);`, req.params.id);
       res.json({
         message: "Success",
         payload: {
@@ -61,7 +61,7 @@ router.get('/localfeed/:user_id', async (req, res) => {
   router.get('/user/:user_id', async (req, res)  => {
     try {
 
-      let usersSessions =  await db.any(`SELECT sessions.id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.art, sessions.session_closed, sessions.volume, sessions.stereo_position, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE (sessions.owner_id = $1 AND sessions.is_deleted = false);`, req.params.user_id);
+      let usersSessions =  await db.any(`SELECT sessions.id, sessions.owner_id, sessions.session_name, sessions.genre, sessions.bpm, sessions.session_key, sessions.chord_progression, sessions.looking_for, sessions.audio, sessions.art, sessions.session_closed, sessions.volume, sessions.stereo_position, users.avatar, users.username FROM sessions LEFT JOIN users ON sessions.owner_id = users.id WHERE (sessions.owner_id = $1 AND sessions.is_deleted = false);`, req.params.user_id);
 
 
       res.json({

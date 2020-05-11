@@ -73,7 +73,7 @@ const multer = require('multer');
     let session_id = req.params.session_id
     
     try {
-      let clear_pool =  await db.none(`UPDATE collaborations SET is_deleted = true WHERE session_id=$1`, [session_id]);
+      let clear_pool =  await db.none(`UPDATE collaborations SET is_deleted = true WHERE session_id=$1 AND approved=false`, [session_id]);
       res.json({
         message: "Success",
         payload: clear_pool, 
