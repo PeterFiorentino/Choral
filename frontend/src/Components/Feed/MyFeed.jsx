@@ -11,6 +11,7 @@ class MyFeed extends Component {
         }
     }
     fetchFeedData = async () => {
+        
     }
     render(){
         return(
