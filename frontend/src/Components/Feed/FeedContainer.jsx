@@ -34,7 +34,7 @@ class FeedContainer extends Component {
         let renderMyFeed = myFeed ? (
             <div>
                 <h2>My Feed</h2>
-                <MyFeed />
+                <MyFeed user={user}/>
             </div>
         ): null
         let renderExplorePage = explore ? (
