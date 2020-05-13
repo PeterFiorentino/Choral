@@ -79,7 +79,7 @@ class Session extends Component {
 
     completeState = () => {
         const audioElement = document.getElementsByClassName('audio-element')[0]
-        const { sessionData, collabsData } = this.state
+        const { collabsData } = this.state
 
         let completeCollabsData = collabsData
         collabsData.forEach((collab, index) => {
