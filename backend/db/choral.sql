@@ -9,7 +9,11 @@ CREATE TABLE users (
     username VARCHAR UNIQUE,
     email VARCHAR UNIQUE,
     password VARCHAR,
-    avatar VARCHAR
+    avatar VARCHAR,
+    location VARCHAR,
+    instrument VARCHAR,
+    fav_genre VARCHAR,
+    anthem VARCHAR
 );
 
 CREATE TABLE sessions (
