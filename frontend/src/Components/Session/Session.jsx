@@ -26,7 +26,7 @@ class Session extends Component {
 
         this.createHowls()
 
-        this.completeState()
+        setTimeout(() => this.completeState(), 500)
     }
 
     componentWillUnmount() {
@@ -79,7 +79,7 @@ class Session extends Component {
 
     completeState = () => {
         const audioElement = document.getElementsByClassName('audio-element')[0]
-        const { collabsData } = this.state
+        const { sessionData, collabsData } = this.state
 
         let completeCollabsData = collabsData
         collabsData.forEach((collab, index) => {
