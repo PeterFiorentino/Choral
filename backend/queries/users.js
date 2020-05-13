@@ -5,8 +5,8 @@ const createUser = async (user) => {
   const passwordDigest = await authHelpers.hashPassword(user.password);
 
   const insertUserQuery = `
-      INSERT INTO users (username, password, email, avatar) 
-        VALUES ($/username/, $/password/, $/email/, $/avatar/)
+      INSERT INTO users (username, password, email, avatar, location, instrument, fav_genre, anthem) 
+        VALUES ($/username/, $/password/, $/email/, $/avatar/, $/location/, $/instrument/, $/fav_genre/, $/anthem/)
         RETURNING *
     `
 
@@ -14,7 +14,11 @@ const createUser = async (user) => {
     username: user.username,
     password: passwordDigest,
     email: user.email,
-    avatar: user.avatar
+    avatar: user.avatar,
+    location: user.location,
+    instrument: user.instrument,
+    fav_genre: user.fav_genre,
+    anthem: user.anthem
   })
 
   delete newUser.password_digest // Do not return the password_digest and accidentally expose it
