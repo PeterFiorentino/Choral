@@ -26,7 +26,7 @@ class Session extends Component {
 
         this.createHowls()
 
-        this.completeState()
+        setTimeout(() => this.completeState(), 500)
     }
 
     componentWillUnmount() {
