@@ -8,11 +8,11 @@ class Explore extends Component {
         super(props)
         this.state = {
             userId: props.user,
-            feedData: []
+            exploreFeedData: []
         }
     }
 
-    fetchFeedData = async () => {
+    fetchExploreFeedData = async () => {
         try{
             let response = await axios.get(`http://localhost:3001/api/sessions`)
             console.log(response.data.payload.sessions)
@@ -21,7 +21,7 @@ class Explore extends Component {
                 sesh.collaborations = await this.fetchCollaborators(sesh.id)
             }
             this.setState({
-                feedData: sessionList
+                exploreFeedData: sessionList
             })
         }catch(error){
             console.log('err =>', error)
@@ -37,14 +37,14 @@ class Explore extends Component {
         }  
     }
     componentDidMount = () => {
-        this.fetchFeedData()
+        this.fetchExploreFeedData()
     }
     render(){
         return(
             <>
                 <div className='session-info2'>
-                    {this.state.feedData ? 
-                    this.state.feedData.map((session) =>
+                    {this.state.exploreFeedData ? 
+                    this.state.exploreFeedData.map((session) =>
                     <Post session={session} key={session.id}></Post>) : <></>}
                 </div>
             </>
