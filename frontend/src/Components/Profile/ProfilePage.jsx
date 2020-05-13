@@ -66,14 +66,18 @@ class ProfilePage extends Component {
         console.log(response2)
         return response2.data.payload.collabs
     }
-    
+    followUser = async () => {
+        console.log('This button follows the user')
+    }
     render(){
         const {loggedUser} = this.state
         return(
             <>
             <div className='user-info'>
                 <h1 className='title'>Choral</h1>
-                <ProfilePic loggedUser = {loggedUser}/>  
+                <ProfilePic loggedUser = {loggedUser}/>
+                <br></br>
+                <button onClick={this.followUser}>Follow</button>
                 <h3>{loggedUser.username}</h3>
             </div>
 
