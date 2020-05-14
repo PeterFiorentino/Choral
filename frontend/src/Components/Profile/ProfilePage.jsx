@@ -2,7 +2,6 @@ import React,{Component} from 'react'
 import Post from '../Post/Post.jsx'
 import FollowButton from '../Profile/FollowButton.jsx'
 import axios from 'axios'
-import ProfilePic from '../Profile/ProfilePic.jsx'
 import './Profile.css'
  
 // Logged User Id is taken from params id and User Signed In is taken 
@@ -105,18 +104,13 @@ class ProfilePage extends Component {
         // const response = await axios.
     }
 
-    deleteSession = async (id) => {
-        await axios.patch(`http://localhost:3001/api/sessions/delete/${id}`)
-        this.fetchUserSessionsAndCollaborators()
-    }
-
     render(){
         const {displayedUser, loggedUser, isUserLoggedIn, isFollowingUser} = this.state
         return(
             <>
             <div className='user-info'>
                 <h1 className='title'>Choral</h1>
-                <ProfilePic displayedUser = {displayedUser}/>
+                <img src={displayedUser.avatar} height='300px' width= '300px'></img>
                 <br></br>
                 <FollowButton
                     displayedUser= {displayedUser}
@@ -132,7 +126,7 @@ class ProfilePage extends Component {
             <div className='session-info'>
                 {this.state.sessionData ? 
                 this.state.sessionData.map((session) =>
-                    <Post session={session} key={session.id} canDelete={this.state.isOwner} deleteSession={this.deleteSession}></Post>
+                    <Post session={session} key={session.id} canDelete={this.state.isOwner}></Post>
                 ) : <></>}
             </div>
             </>
