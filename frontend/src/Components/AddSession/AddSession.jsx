@@ -1,6 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 import Navigation from '../Navigation/Navigation.jsx'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import Input from '@material-ui/core/Input'
 import './AddSession.css'
 
 class AddSession extends React.Component {
@@ -23,7 +26,10 @@ class AddSession extends React.Component {
         })
     }
 
-    uploadSession = async () => {
+    uploadSession = async (event) => {
+        const form = event.currentTarget
+        event.preventDefault()
+        console.log('click')
         const audioData = new FormData()
         const imageData = new FormData()
 
@@ -62,7 +68,8 @@ class AddSession extends React.Component {
         this.setState({
             added: true
         })
-        
+
+        setTimeout(() => window.location.href = `http://localhost:3000/profile/${this.state.loggedUser}`, 1500)
     }
 
     record = async () => {
@@ -100,32 +107,48 @@ class AddSession extends React.Component {
         return (
             <>
             <Navigation />
-            <h1>Add New Session</h1>
+            <h3>New Reef</h3>
             <div className='form' style={{width:'100%'}}>
-                <label htmlFor='session_name'>Name:</label>
-                <input onChange={this.inputHandler} type='text' name='session_name'></input><br/>
-                <label htmlFor='genre'>Genre:</label>
-                <input onChange={this.inputHandler} type='text' name='genre'></input><br/>
-                <label htmlFor='bpm'>BPM:</label>
-                <input onChange={this.inputHandler} type='number' name='bpm'></input><br/>
-                <label htmlFor='session_key'>Key:</label>
-                <input onChange={this.inputHandler} type='text' name='session_key'></input><br/>
-                <label htmlFor='chord_progression'>Chord Progression:</label>
-                <input onChange={this.inputHandler} type='text' name='chord_progression'></input><br/>
-                <label htmlFor='looking_for'>Looking for:</label>
-                <input onChange={this.inputHandler} type='text' name='looking_for'></input><br/>
-                <br/>
-                <button onClick={this.record}>RECORD AUDIO</button><br/>
-                {this.state.newSession ? <a download href={this.state.newSession}>DOWNLOAD</a> : <></>}<br/>
-                <br/>
-                <label htmlFor='image'>Cover Art</label><br/>
-                <input onChange={this.fileHandler} type='file' name='image'></input><br/>
-                <br/>
-                <label htmlFor='audio'>Audio Upload</label><br/>
-                <input onChange={this.fileHandler} type='file' name='audio'></input><br/>
-                <br/>
-                <button onClick={this.uploadSession}>ADD SESSION</button>
-                {this.state.added ? <h5>Added!</h5> : <></>}
+                <form className='form' onSubmit={this.uploadSession}>
+                    <FormControl style={{width:'70%'}}>
+                        <InputLabel htmlFor='session_name'>Name</InputLabel>
+                        <Input required onChange={this.inputHandler} type='text' name='session_name'></Input><br/>
+                    </FormControl>
+                    <FormControl style={{width:'36%', marginLeft:'2%', marginRight:'2%'}}>
+                        <InputLabel htmlFor='genre'>Genre</InputLabel>
+                        <Input onChange={this.InputHandler} type='text' name='genre'></Input><br/>
+                    </FormControl>
+                    <FormControl style={{width:'10%', marginLeft:'2%', marginRight:'2%'}}>
+                        <InputLabel htmlFor='bpm'>BPM</InputLabel>
+                        <Input onChange={this.InputHandler} type='number' name='bpm'></Input><br/>
+                    </FormControl>
+                    <FormControl style={{width:'16%', marginLeft:'2%', marginRight:'2%'}}>
+                        <InputLabel htmlFor='session_key'>Key</InputLabel>
+                        <Input onChange={this.InputHandler} type='text' name='session_key'></Input><br/>
+                    </FormControl>
+                    <FormControl style={{width:'70%'}}>
+                        <InputLabel htmlFor='chord_progression'>Chord Progression</InputLabel>
+                        <Input onChange={this.InputHandler} type='text' name='chord_progression'></Input><br/>
+                    </FormControl>
+                    <FormControl style={{width:'50%'}}>
+                        <InputLabel htmlFor='looking_for'>Looking for</InputLabel>
+                        <Input required onChange={this.InputHandler} type='text' name='looking_for'></Input><br/>
+                    </FormControl>
+                    <br/>
+                    <button className='round-button' type='button' onClick={this.record}>RECORD LIVE</button><br/>
+                    {this.state.recording ? <h5>recording...</h5> : <><h5>{' '}</h5></>}
+                    {this.state.newSession ? <><a download='newsession' href={this.state.newSession}>DOWNLOAD</a><br/></> : <></>}
+                    {!this.state.newSession && !this.state.recording ? <br/> : <></>}
+                    <br/>
+                    <InputLabel htmlFor='audio'>Upload Audio</InputLabel>
+                    <input required onChange={this.fileHandler} type='file' name='audio' accept='audio/*'></input><br/>
+                    <br/>
+                    <InputLabel htmlFor='image'>Cover Art</InputLabel>
+                    <input required onChange={this.fileHandler} type='file' name='image' accept='image/*'></input><br/>
+                    <br/>
+                    <button className='round-button' type='submit'>ADD REEF</button>
+                    {this.state.added ? <h5>Added!</h5> : <></>}
+                </form>
             </div>
             </>
         )
