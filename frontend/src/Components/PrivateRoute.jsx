@@ -15,7 +15,7 @@ const PrivateRoute = (props) => {
         return <Route {...otherProps} component={Component}/>
     }
     else if(!isUserLoggedIn && wasInitialized){
-        return <Redirect to='/add'/>
+        return <Redirect to='/landing'/>
     }
     else {
         return <> </>
