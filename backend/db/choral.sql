@@ -38,6 +38,7 @@ CREATE TABLE collaborations (
     collaborator_id INT REFERENCES users(id),
     session_id INT REFERENCES sessions(id),
     audio VARCHAR,
+    instrument_name VARCHAR,
     comment VARCHAR,
     approved BOOLEAN,
     volume INT,
