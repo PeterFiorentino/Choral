@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ProgressBar } from 'react-bootstrap'
 import { useHistory, Link } from 'react-router-dom'
+import axios from 'axios'
 import './Post.css'
 
 const Post = (props) => {
@@ -49,6 +50,13 @@ const Post = (props) => {
         history.push(`/session/${id}`)
     }
 
+    const deleteSession = async () => {
+        if (window.confirm('Are you sure that you want to delete this Reef?')) {
+            let response = await axios.patch(`http://localhost:3001/api/sessions/delete/${props.session.id}`)
+            window.location.reload()
+        }
+    }
+
     return (
         <>
         <div className='post'>
@@ -59,7 +67,10 @@ const Post = (props) => {
                 <p className='link-content'>by </p>
                 <Link to={`/profile/${props.session.owner_id}`}><p className='link-content'>{props.session.username}</p></Link>
             </div>
-            <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'3.5rem', gridRow: '2 / 3', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
+            {props.canDelete ?
+            <button className='delete-button' onClick={deleteSession}>X</button>
+            : <></>}
+            <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'4rem', gridRow: '2 / 3', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
             <div className='collaborators'>
                 {props.session.collaborations.map((collaboration) => {
                     if (collaboration.approved) {

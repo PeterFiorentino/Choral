@@ -2,7 +2,6 @@ import React,{Component} from 'react'
 import Post from '../Post/Post.jsx'
 import FollowButton from '../Profile/FollowButton.jsx'
 import axios from 'axios'
-import ProfilePic from '../Profile/ProfilePic.jsx'
 import './Profile.css'
  
 // Logged User Id is taken from params id and User Signed In is taken 
@@ -18,7 +17,7 @@ class ProfilePage extends Component {
            },
            loggedUser: props.user,
            isUserLoggedIn: props.isUserLoggedIn,
-           isFollowingUser: false
+           isFollowingUser: false,
         }
     }
     componentDidMount = () => {
@@ -39,8 +38,9 @@ class ProfilePage extends Component {
                     id: this.state.displayedUser.id,
                     username: userData.username,
                     email: userData.email,
-                    avatar: userData.avatar
-                }  
+                    avatar: userData.avatar,
+                },
+                isOwner: (this.state.loggedUser.toString() === displayedUser.id)  
             })
         }catch(error){
             console.log('err =>', error)
@@ -110,7 +110,7 @@ class ProfilePage extends Component {
             <>
             <div className='user-info'>
                 <h1 className='title'>Choral</h1>
-                <ProfilePic displayedUser = {displayedUser}/>
+                <img src={displayedUser.avatar} height='300px' width= '300px'></img>
                 <br></br>
                 <FollowButton
                     displayedUser= {displayedUser}
@@ -126,7 +126,8 @@ class ProfilePage extends Component {
             <div className='session-info'>
                 {this.state.sessionData ? 
                 this.state.sessionData.map((session) =>
-                <Post session={session} key={session.id}></Post>) : <></>}
+                    <Post session={session} key={session.id} canDelete={this.state.isOwner}></Post>
+                ) : <></>}
             </div>
             </>
         )
