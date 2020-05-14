@@ -244,6 +244,8 @@ class Session extends Component {
             collabsData: updatedCollabs,
             saved: false
         })
+
+        this.completeState()
     }
 
     unmerge = (index) => {
@@ -260,6 +262,8 @@ class Session extends Component {
             collabsData: updatedCollabs,
             saved: false
         })
+
+        this.completeState()
     }
 
     secondsToMinutes = (seconds) => Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2)
@@ -276,11 +280,12 @@ class Session extends Component {
 
     changeTime = (event) => {
         const { duration, guide } = this.state
-        console.log(event)
 
-        let clickX = event.pageX - window.innerWidth * 0.22
-        let totalX = window.innerWidth * 0.56
+        let clickX = event.pageX + 0.5 - window.innerWidth * 0.10
+        let totalX = window.innerWidth * 0.80
+
         let percentage = clickX / totalX
+    
         const newPosition = duration * percentage
 
         guide.currentTime = newPosition
@@ -526,7 +531,6 @@ class Session extends Component {
                                 return true
                             })}
                         </div>
-                        <br/>
                     </div>
                     : <></>}
                     <div className='tracks'>
@@ -576,7 +580,7 @@ class Session extends Component {
                     </div>
                     <div className='transport'>
                         <div className='progress-bar-container'>
-                            <ProgressBar now={this.state.time} max={this.state.duration} style={{height:'80px', fontSize:'20px'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
+                            <ProgressBar now={this.state.time} max={this.state.duration} style={{height:'5rem'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
                         </div>
                         <br/>
                         <button className='round-button' onClick={this.playAll}>PLAY</button>

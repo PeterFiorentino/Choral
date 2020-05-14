@@ -4,16 +4,18 @@
 
 .round-button {
     border-radius: 1rem;
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .collaborate {
     background-color: seashell;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
 }
 
 .collab-actions {
-    justify-content: space-between;
+    padding-top: 1rem;
 }
 
 .mix-actions {
@@ -31,6 +33,8 @@
 
 .pool {
     background-color: lightseagreen;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
 }
 
 .pool-track {
@@ -53,7 +57,9 @@
 }
 
 .tracks {
-    background-color: lightcoral
+    background-color: lightcoral;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
 }
 
 .tracks-container {
@@ -104,11 +110,11 @@
 
 .transport {
     background-color: sandybrown;
-    padding: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 .progress-bar-container {
-    padding-left: 20%;
-    padding-right: 20%;
-    width: 100%;
+    padding-left: 10%;
+    width: 90%;
 }
