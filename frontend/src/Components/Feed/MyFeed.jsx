@@ -18,9 +18,10 @@ class MyFeed extends Component {
     fetchMyFeedData = async () => {
         const {userId} = this.state
         try{
-            const response = await axios.get(`/api/sessions/localfeed/${userId}`)
-            console.log(response.data.payload.sessions)
-            const sessionList = response.data.payload.sessions
+            const response = await axios.get(`api/sessions/localfeed/${userId}`)
+            // const response = await axios.get(`api/sessions/localfeed/2`) 
+            console.log(response)
+            const sessionList = response.data.payload
             for(let sesh of sessionList){
                 sesh.collaborations = await this.fetchCollaborators(sesh.id)
             }
