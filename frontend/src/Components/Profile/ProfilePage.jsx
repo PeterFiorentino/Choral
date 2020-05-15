@@ -24,6 +24,7 @@ class ProfilePage extends Component {
         this.fetchUserData()
         this.fetchUserSessionsAndCollaborators()
         console.log(this.props)
+        // Adding a callback to check if user is following the displayed User
     }
    
     fetchUserData = async () => {
@@ -102,6 +103,10 @@ class ProfilePage extends Component {
         })
         console.log(`Are still following ${this.state.displayedUser.username}`, this.state.isFollowingUser)
         // const response = await axios.
+    }
+
+    checkFollowState = async () => {
+        console.log('Am I following this person ?', this.state.isFollowingUser)
     }
 
     render(){
