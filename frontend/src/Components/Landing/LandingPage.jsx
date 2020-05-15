@@ -99,9 +99,9 @@ class LandingPage extends Component {
             <div className='main-page'>
                 <h1 id='main-title'>Choral</h1>
                 <div className='login-signup'>
-                    <button onClick={this.displayLoginForm}>Login</button>
+                    <button className='round-button' onClick={this.displayLoginForm}>Login</button>
+                    <button className='round-button' onClick={this.displaySignupForm}>Sign up</button>
                     {renderLoginForm}
-                    <button onClick={this.displaySignupForm}>Sign up</button>
                     {renderSignupForm}
                 </div>
             </div>

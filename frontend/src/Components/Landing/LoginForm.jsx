@@ -10,7 +10,7 @@ const LoginForm = (props) => {
     return (
         <>
         <div>
-            <h2>Log In</h2>
+            <h3>Log In</h3>
             <form onSubmit ={handleSubmit}>
                 <input
                     type='text'
@@ -19,6 +19,7 @@ const LoginForm = (props) => {
                     placeholder='username'
                     onChange={props.handleChange}
                 />
+                <br></br>
                 <input
                     type='password'
                     name='password'
@@ -26,6 +27,7 @@ const LoginForm = (props) => {
                     placeholder='password'
                     onChange={props.handleChange}
                 />
+                <br></br>
                 <input 
                     type='submit' value='Submit'
                 />
