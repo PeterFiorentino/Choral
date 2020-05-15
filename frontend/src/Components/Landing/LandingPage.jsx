@@ -29,6 +29,12 @@ class LandingPage extends Component {
         // console.log(inputValue)
    }
 
+   handleFile = (e) => {
+       this.setState({
+           [e.target.name]: e.target.files[0]
+       })
+   }
+
    loginUser = async () => {
     const {username, password} = this.state
     const {history} = this.props
@@ -56,12 +62,25 @@ class LandingPage extends Component {
    signupUser = async () => {
         console.log('Signing up user')
         const {username, email, password, avatar} = this.state
+
         try{
+            const avatarData = new FormData()
+            avatarData.append('image', avatar)
+            
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+
+            let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData, config)
+            let avatarLocation = avatarResponse.data.imageUrl
+
             const response = await axios.post('/api/auth/signup',{
                 username: username,
                 email: email,
                 password: password,
-                avatar: avatar
+                avatar: avatarLocation
             })
             console.log('res =>',response)
             this.loginUser()
@@ -92,7 +111,7 @@ class LandingPage extends Component {
         ) :null
 
         let renderSignupForm = signup ? (
-            <SignupForm handleChange={this.handleChange} username={username} email={email} password={password} signupUser={this.signupUser}/>
+            <SignupForm handleChange={this.handleChange} handleFile={this.handleFile} username={username} email={email} password={password} signupUser={this.signupUser}/>
         ) :null
         
         return(
