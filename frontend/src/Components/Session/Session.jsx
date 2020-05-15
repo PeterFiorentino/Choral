@@ -18,7 +18,8 @@ class Session extends Component {
             sessionId: props.match.params.id,
             saved: false,
             playing: false,
-            time: 0
+            time: 0,
+            hideInfo: false
         }
     }
 
@@ -479,8 +480,24 @@ class Session extends Component {
             this.setState({recording:false})
         }
     }
+    // toggles between a display that shows session info and one that doesn't  
+    hideInfo = () => {
+       console.log('this will toggle the specific info div')
+       this.setState({
+           hideInfo: !this.state.hideInfo
+       })
+    }
 
     render(){
+        let specificInfo = this.state.hideInfo ? (
+            <div>
+                <h5>Genre: {this.state.sessionData.genre} </h5>
+                <h5>{this.state.sessionData.bpm} BPM</h5>
+                <h5>Key: {this.state.sessionData.session_key}</h5>
+                <h5>Chord Progression: {this.state.sessionData.chord_progression}</h5>
+                <h5>Looking for {this.state.sessionData.looking_for}</h5>
+            </div>
+        ): <> </>
         return(
             <div>
                 <Navigation />
@@ -489,11 +506,10 @@ class Session extends Component {
                     <div className='info'>
                         <h2>{this.state.sessionData.session_name}</h2>
                         <h3>by <Link to={`/profile/${this.state.sessionData.owner_id}`}><h3 id='profile-link'>{this.state.sessionData.username}</h3></Link></h3>
-                        <h5>Genre: {this.state.sessionData.genre}</h5>
-                        <h5>{this.state.sessionData.bpm} BPM</h5>
-                        <h5>Key: {this.state.sessionData.session_key}</h5>
-                        <h5>Chord Progression: {this.state.sessionData.chord_progression}</h5>
-                        <h5>Looking for {this.state.sessionData.looking_for}</h5>
+                        <div id='specific-info'>
+                            {specificInfo}
+                            <button className='round-button' onClick={this.hideInfo}>Toggle Info</button>
+                        </div>
                     </div>
                     <div className='collaborate'>
                         <h3>Collaborate</h3>
