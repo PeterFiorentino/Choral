@@ -504,6 +504,7 @@ class Session extends Component {
                 {this.state.sessionData ? 
                 <div className='session'>
                     <div className='info'>
+                        <img src={this.state.sessionData.art} style={{width: '500px', height: '350px'}}></img>
                         <h2>{this.state.sessionData.session_name}</h2>
                         <h3>by <Link to={`/profile/${this.state.sessionData.owner_id}`}><h3 id='profile-link'>{this.state.sessionData.username}</h3></Link></h3>
                         <div id='specific-info'>
