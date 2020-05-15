@@ -46,8 +46,8 @@ class FeedContainer extends Component {
             <div>
                 <h1>Choral</h1>
                 <button onClick={this.toggleMyFeed}>My Feed</button>
-                {renderMyFeed}
                 <button onClick={this.toggleExplore}>Explore</button>
+                {renderMyFeed}
                 {renderExplorePage}
             </div>
         )
