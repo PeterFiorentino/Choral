@@ -76,7 +76,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/collaborations', collaborationsRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/follow', followRouter);
+app.use('/api/follows', followRouter);
 
 app.post('/upload/audio',uploadAudio.single("audio"),(req,res,next) =>{
     console.log("file",req.file) 
