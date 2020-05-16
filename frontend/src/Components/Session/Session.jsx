@@ -23,7 +23,8 @@ class Session extends Component {
             time: 0,
             hideInfo: false,
             collabInstrument: '',
-            session_owner_id : null
+            session_owner_id : null,
+            toggle: 'Show'
         }
     }
 
@@ -488,12 +489,19 @@ class Session extends Component {
             this.setState({recording:false})
         }
     }
-    // toggles between a display that shows session info and one that doesn't  
-    hideInfo = () => {
-       console.log('this will toggle the specific info div')
-       this.setState({
-           hideInfo: !this.state.hideInfo
-       })
+
+    toggleInfo = () => {
+        if (this.state.toggle === 'Show') {
+            this.setState({
+                hideInfo: !this.state.hideInfo,
+                toggle: 'Hide'
+            })
+        } else {
+            this.setState({
+                hideInfo: !this.state.hideInfo,
+                toggle: 'Show'
+            })
+        }
     }
 
     handleInstrument = (event) => {
@@ -504,26 +512,36 @@ class Session extends Component {
 
     render(){
         let specificInfo = this.state.hideInfo ? (
-            <div>
-                <h5>Genre: {this.state.sessionData.genre} </h5>
-                <h5>{this.state.sessionData.bpm} BPM</h5>
-                <h5>Key: {this.state.sessionData.session_key}</h5>
-                <h5>Chord Progression: {this.state.sessionData.chord_progression}</h5>
-                <h5>Looking for {this.state.sessionData.looking_for}</h5>
+            <div className='specific-info'>
+                <div id='genre'>
+                    <label htmlFor='genre'><b>Genre</b></label>
+                    <p name='genre'>{this.state.sessionData.genre}</p>
+                </div>
+                <p id='bpm'><b>{this.state.sessionData.bpm} BPM</b></p>
+                <div id='key'>
+                    <label htmlFor='key'><b>Key</b></label>
+                    <p name='key'>{this.state.sessionData.session_key}</p>
+                </div>
+                <div id='chords'>
+                    <label htmlFor='chords'><b>Chord Progression</b></label>
+                    <p name='chords'>{this.state.sessionData.chord_progression}</p>
+                </div>
             </div>
         ): <> </>
-        return(
+
+        return (
             <div>
                 <Navigation />
                 {this.state.sessionData ? 
                 <div className='session'>
+                    <img className='cover-art' src={this.state.sessionData.art}></img>
                     <div className='info'>
-                        <img src={this.state.sessionData.art} style={{width: '500px', height: '350px'}}></img>
                         <h2>{this.state.sessionData.session_name}</h2>
                         <h3>by <Link to={`/profile/${this.state.sessionData.owner_id}`}><h3 id='profile-link'>{this.state.sessionData.username}</h3></Link></h3>
+                        <h5 id='looking-for'>Looking for {this.state.sessionData.looking_for}</h5>
                         <div id='specific-info'>
                             {specificInfo}
-                            <button className='round-button' onClick={this.hideInfo}>Toggle Info</button>
+                            <p onClick={this.toggleInfo}>{this.state.toggle} Info</p>
                         </div>
                     </div>
                     <div className='collaborate'>
