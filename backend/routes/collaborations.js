@@ -51,7 +51,9 @@ const multer = require('multer');
     let session_owner_id = req.body.session_owner_id
   
     try {
+
       let newCollab = await db.one(`INSERT INTO collaborations(session_id, session_owner_id, collaborator_id, audio, instrument_name, approved, volume, stereo_position, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`, [session_id, session_owner_id, collaborator_id, audio, instrument_name, approved, volume, stereo_position, false]);
+
       res.json({
         message: "Success",
         payload: {
