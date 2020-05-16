@@ -21,7 +21,7 @@ const createUser = async (user) => {
     anthem: user.anthem
   })
 
-  delete newUser.password_digest // Do not return the password_digest and accidentally expose it
+  delete newUser.password_digest 
   return newUser
 }
 

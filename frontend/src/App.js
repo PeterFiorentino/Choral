@@ -72,7 +72,7 @@ class App extends Component {
   }
 
   renderCollaboratorsPage = (routeProps) => {
-    return <Collaborators {...routeProps} />
+    return <Collaborators {...routeProps} user={this.state.user} isUserLoggedIn={this.state.isUserLoggedIn}/>
   }
 
   renderFeedPage = () => {

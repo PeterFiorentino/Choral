@@ -22,6 +22,24 @@ const multer = require('multer');
     }
   });
 
+  router.get('/collaborators/:user_id', async (req, res)  => {
+    let user_id = req.params.user_id
+    try {
+      let collaborators =  await db.any(`SELECT users.avatar, users.username FROM users JOIN collaborations ON users.id = collaborations.collaborator_id WHERE collaborations.session_owner_id = $1;`, [user_id]);
+      res.json({
+        message: "Success",
+        payload: collaborators,
+        error: null
+      })
+    } catch (error) {
+      res.json({
+        message: "There was an error getting this user's collaborators",
+        payload: null,
+        error: error
+      })
+    }
+  });  
+
   router.post('/', async (req, res) => {
     let session_id = req.body.session_id
     let collaborator_id = req.body.collaborator_id
