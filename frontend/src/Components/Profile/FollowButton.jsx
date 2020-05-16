@@ -9,11 +9,11 @@ const FollowButton = (props) => {
         return <> </>
     } else if (isUserLoggedIn && !isFollowingUser){
         return(
-            <button className='round-button' onClick={followButton}>Follow</button>
+            <button className='round-button' onClick={followButton}>follow</button>
         )
     } else if (isUserLoggedIn && isFollowingUser){
         return(
-            <button className='round-button' onClick={followButton}>Unfollow</button>
+            <button className='round-button' onClick={followButton}>unfollow</button>
         )
     } else {
         return <> </>

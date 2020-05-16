@@ -33,13 +33,11 @@ class FeedContainer extends Component {
         // console.log(userId)
         let renderMyFeed = myFeed ? (
             <div>
-                <h4>My Feed</h4>
                 <MyFeed user={user}/>
             </div>
         ): null
         let renderExplorePage = explore ? (
             <div>
-                <h4>Explore Feed</h4>
                 <Explore user={user}/>
             </div>
         ):null

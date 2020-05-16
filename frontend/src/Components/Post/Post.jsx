@@ -71,7 +71,7 @@ const Post = (props) => {
             {props.canDelete ?
             <button className='delete-button' onClick={deleteSession}>X</button>
             : <></>}
-            <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'4rem', gridRow: '2 / 3', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
+            <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'4em', gridRow: '2 / 3', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
             <div className='collaborators'>
                 {props.session.collaborations.map((collaboration) => {
                     if (collaboration.approved) {
