@@ -3,13 +3,9 @@ session-preview {
 }
 
 .user-info {
-    /* display: grid; */
-    /* grid-template-columns: 30% 40% 30%;
-    grid-template-rows: 300px auto;
-    justify-content: center; */
     margin: auto;
     padding: 10px; 
-    width: 40%;
+    width: 75%;
     
 }
 #profile-picture{
@@ -26,31 +22,65 @@ session-preview {
     padding: 15px;
     grid-row: 2/3;
     grid-column: 2/3;
-    grid-template-rows: 35px auto;
-    grid-template-columns: 25% 25% 50%;
+    grid-template-rows: 50px auto;
+    grid-template-columns: 30% 25% 45%;
+    align-items: center;
     text-align: left;
     margin: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    
+    font-size: 9px;
 }
+
+@media only screen and (min-width: 600px) {
+    .user-card-info {
+        font-size: 14px;
+    }
+}
+
+#username{
+    font-size: 15px;
+    align-self: start;
+}
+
+@media only screen and (min-width: 700px) {
+    #username {
+        font-size: 30px;
+        align-self: start;
+    }
+}
+
 .collapse-info{
     grid-column: 1/2;
 }
+
 #contact{
     grid-column: 2/4;
+    justify-self: end;
+    align-self: center;
+    margin: 0px;
 }
-#genre{
-    grid-column: 2/4;
-}
+
 #location{
     grid-column: 2/4;
+    align-self: start;
+    margin: 0px;
 }
 
 #instrument{
     grid-column: 2/4;
+    align-self: start;
+    margin: 0px;
+}
+
+#genre{
+    grid-column: 2/4;
+    align-self: start;
+    margin: 0px;
 }
 
 #anthem {
     grid-column: 2/4;
+    align-self: start;
+    margin: 0px;
 }
