@@ -54,9 +54,9 @@ CREATE TABLE follows (
 
 
 INSERT INTO users (username, email, password, avatar, location, instrument, fav_genre, anthem)
-    VALUES ('Pete', 'peterfiorentino@pursuit.org', 'abc123', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/82291899_2917625578250639_4847832305433051136_o.jpg?_nc_cat=102&_nc_sid=dd9801&_nc_oc=AQn4JLNrAp30D7yg_W_kFhZqDDsvz_2AH-r4wYj_yueD6TK1CRVIJ79ld1dvoADIuAGUccFzCkezP0On6Osbs1ub&_nc_ht=scontent-lga3-1.xx&oh=28941a3440125202e788c74887b1eb2e&oe=5EC1780E', 'Staten Island, NY', 'Piano', 'Hip-Hop', 'I Want You Back by The Jackson 5'),
-           ('Sergio', 'sergiocohensalama@pursuit.org', 'abc123', 'https://f4.bcbits.com/img/0006520542_10.jpg','Philadelphia, PA', 'Guitar', 'Rock', 'Sailors Tale by King Crimson'),
-           ('Owen', 'owenjones@pursuit.org', 'abc123', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/68651886_3598543233505261_6173724632814714880_o.jpg?_nc_cat=108&_nc_sid=85a577&_nc_oc=AQngpc5LQJWLalKfc4YVDei2AcYDZ1Q_Bv4-Jb0WNenPJg3G2Qi6P_Py5NuCvUzX2tD3LXHHz_U94s7iUFR7wliU&_nc_ht=scontent-lga3-1.xx&oh=c683d319bb8ce8d2681d06a977a6b5e5&oe=5EBF55A3', 'Brooklyn, NY', 'Bass', 'Acid Jazz', 'Coronus the Terminator by Flying Lotus');
+    VALUES ('Pete', 'peterfiorentino@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/82291899_2917625578250639_4847832305433051136_o.jpg?_nc_cat=102&_nc_sid=dd9801&_nc_oc=AQn4JLNrAp30D7yg_W_kFhZqDDsvz_2AH-r4wYj_yueD6TK1CRVIJ79ld1dvoADIuAGUccFzCkezP0On6Osbs1ub&_nc_ht=scontent-lga3-1.xx&oh=28941a3440125202e788c74887b1eb2e&oe=5EC1780E', 'Staten Island, NY', 'Piano', 'Hip-Hop', 'I Want You Back by The Jackson 5'),
+           ('Sergio', 'sergiocohensalama@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', 'https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/13909295_10209265229484283_8661418597510466381_o.jpg?_nc_cat=110&_nc_sid=e007fa&_nc_ohc=V2IX486EhwkAX9k5NGJ&_nc_ht=scontent-lga3-1.xx&oh=8e10bb9f9d828aaf9ae8b58beb9d6b4f&oe=5EE605E0','Philadelphia, PA', 'Guitar', 'Rock', 'Sailors Tale by King Crimson'),
+           ('Owen', 'owenjones@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/68545479_3598552950170956_2369962734889467904_n.jpg?_nc_cat=104&_nc_sid=13bebb&_nc_ohc=3Rpomf8HFrQAX_utV5F&_nc_ht=scontent-lga3-1.xx&oh=26a085edc15ae0d711cda1a044510f8d&oe=5EE50B60', 'Brooklyn, NY', 'Bass', 'Acid Jazz', 'Coronus the Terminator by Flying Lotus');
 
 
 INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, art, session_closed, volume, stereo_position, is_deleted)
@@ -65,10 +65,10 @@ INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_pro
            
 
 INSERT INTO collaborations (collaborator_id, session_id, session_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted)
-    VALUES (1, 1, 1, 'http://localhost:3001/audios/bassguitar.mp3', 'Bass', false, 80, 50, false),
-           (2, 1, 1, 'http://localhost:3001/audios/leadguitar.mp3', 'Guitar', false, 80, 50, false),
-           (3, 1, 1, 'http://localhost:3001/audios/horns.mp3', 'Horns', false, 80, 50, false),
-           (1, 2, 2, 'http://localhost:3001/audios/beat.mp3', 'Drums', false, 80, 50, false);
+    VALUES (1, 1, 1, 'http://localhost:3001/audios/bassguitar.mp3', 'bass', false, 80, 50, false),
+           (2, 1, 1, 'http://localhost:3001/audios/leadguitar.mp3', 'guitar', false, 80, 50, false),
+           (3, 1, 1, 'http://localhost:3001/audios/horns.mp3', 'horns', false, 80, 50, false),
+           (1, 2, 2, 'http://localhost:3001/audios/beat.mp3', 'beat', false, 80, 50, false);
 
 
 INSERT INTO follows (user_id, followed_id, active_status)
