@@ -22,7 +22,8 @@ class Session extends Component {
             playing: false,
             time: 0,
             hideInfo: false,
-            collabInstrument: ''
+            collabInstrument: '',
+            session_owner_id : null
         }
     }
 
@@ -48,7 +49,8 @@ class Session extends Component {
         this.setState({
             sessionData: sessionData,
             collabsData: collabsData,
-            isOwner: (this.state.loggedUser === sessionData.owner_id)
+            isOwner: (this.state.loggedUser === sessionData.owner_id),
+            session_owner_id: sessionData.owner_id
         })
     }
 
@@ -383,6 +385,7 @@ class Session extends Component {
         
         let body = {
             session_id: this.state.sessionData.id,
+            session_owner_id: this.state.session_owner_id,
             collaborator_id: this.state.loggedUser,
             audio: response.data.audioUrl,
             instrument_name: this.state.collabInstrument,
