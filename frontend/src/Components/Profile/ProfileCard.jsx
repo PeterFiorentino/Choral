@@ -7,30 +7,30 @@ const ProfileCard = (props) => {
         return(
             <>
                 <div className='user-card-info'>
-                    <h2 id='username'><b>{props.displayedUser.username}</b></h2>
-                    <h5 id='contact'>{props.displayedUser.email}</h5> 
+                    <p id='username'><b>{props.displayedUser.username}</b></p>
+                    <p id='contact'>{props.displayedUser.email}</p> 
 
-                    <b> <label for='location'>Based In</label></b>
-                    <h5 id='location'>{props.displayedUser.location}</h5> 
+                    <label htmlFor='location'><b>Based In</b></label>
+                    <p id='location'>{props.displayedUser.location}</p> 
 
-                    <b> <label for='instrument'>Instrument</label></b>
-                    <h5 id='instrument'> {props.displayedUser.instrument}</h5>
+                    <label htmlFor='instrument'><b>Instrument</b></label>
+                    <p id='instrument'>{props.displayedUser.instrument}</p>
 
-                    <b> <label for='genre'>Genre</label></b> 
-                    <h5 id='genre'>{props.displayedUser.fav_genre}</h5>
+                    <label htmlFor='genre'><b>Genre</b></label>
+                    <p id='genre'>{props.displayedUser.fav_genre}</p>
 
-                    <b> <label for='anthem'>Anthem</label></b> 
-                    <h5 id='anthem'>{props.displayedUser.anthem}</h5>
+                    <label htmlFor='anthem'><b>Anthem</b></label>
+                    <p id='anthem'>{props.displayedUser.anthem}</p>
 
                     <p className='collapse-info' onClick={props.toggleInfo}>Hide Info</p>
                 </div>
-                {/* <button className='info-button' onClick={props.toggleInfo} style={{width: 'auto'}}>Hide Info</button> */}
             </>
         )
     }
     return (
         <div className='user-card-info'>
-            <h2 id='username'><b>{props.displayedUser.username}</b></h2>
+            <p id='username'><b>{props.displayedUser.username}</b></p>
+            <p id='contact'>{props.displayedUser.email}</p>
             <p className='collapse-info' onClick={props.toggleInfo}>Expand Info</p>
         </div>
     )
