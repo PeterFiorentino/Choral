@@ -66,6 +66,7 @@ const Post = (props) => {
                 <Link to={`/session/${props.session.id}`}><p className='link-content'>{`${props.session.session_name} `}</p></Link>
                 <p className='link-content'>by </p>
                 <Link to={`/profile/${props.session.owner_id}`}><p className='link-content'>{props.session.username}</p></Link>
+                <p>  looking for: {props.session.looking_for}</p>
             </div>
             {props.canDelete ?
             <button className='delete-button' onClick={deleteSession}>X</button>
