@@ -26,7 +26,6 @@ const multer = require('multer');
     let session_id = req.body.session_id
     let collaborator_id = req.body.collaborator_id
     let audio = req.body.audio
-    let comment = req.body.comment
     let approved = req.body.approved
     let volume = req.body.volume
     let stereo_position = req.body.stereo_position
