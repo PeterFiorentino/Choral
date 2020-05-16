@@ -17,16 +17,17 @@ class ProfilePage extends Component {
            },
            loggedUser: props.user,
            isUserLoggedIn: props.isUserLoggedIn,
-           isFollowingUser: false,
+           isFollowingUser: null,
         }
     }
     componentDidMount = () => {
         this.fetchUserData()
         this.fetchUserSessionsAndCollaborators()
+        this.getFollowRelation()
         console.log(this.props)
         // Adding a callback to check if user is following the displayed User
     }
-   
+
     fetchUserData = async () => {
         const {displayedUser} = this.state
         console.log(displayedUser)
@@ -46,6 +47,46 @@ class ProfilePage extends Component {
         }catch(error){
             console.log('err =>', error)
         } 
+    }
+
+    getFollowRelation = async () => {
+        const {displayedUser, loggedUser} = this.state
+        try{
+            const response = await axios.get(`/api/follows/${loggedUser}/follows/${displayedUser.id}`)
+            const relation = response.data.payload.active_status
+            this.setState({
+                isFollowingUser: relation
+            })
+        } catch(error) {
+            console.log('err => ', error)
+        }
+    }
+
+    unfollowUser = async () => {
+        const {displayedUser, loggedUser} = this.state
+        try{
+            const response = await axios.patch(`/api/follows/${loggedUser}/unfollow/${displayedUser.id}`)
+            const unfollowed = response.data.payload.active_status
+            this.setState({
+                isFollowingUser: unfollowed
+            })
+        } catch(error) {
+            console.log('err => ', error)
+        }
+
+    }
+
+    refollowUser = async () => {
+        const {displayedUser, loggedUser} = this.state
+        try{
+            const response = await axios.patch(`/api/follows/${loggedUser}/refollow/${displayedUser.id}`)
+            const refollowed = response.data.payload.active_status
+            this.setState({
+                isFollowingUser: refollowed
+            })
+        } catch(error) {
+            console.log('err => ', error)
+        }
     }
 
     fetchUserSessionsAndCollaborators = async () => {
@@ -82,8 +123,8 @@ class ProfilePage extends Component {
 
         try{
             const response = await axios.post(`/api/follow/${loggedUser}/follows/${displayedUser.id}`, {
-                is_following: loggedUser,
-                being_followed: displayedUser.id
+                user_id: loggedUser,
+                followed_id: displayedUser.id
             })
             console.log('response =>', response)
             this.setState({
