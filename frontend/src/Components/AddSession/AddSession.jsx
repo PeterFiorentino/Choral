@@ -27,14 +27,14 @@ class AddSession extends React.Component {
     }
 
     uploadSession = async (event) => {
-        const form = event.currentTarget
         event.preventDefault()
-        console.log('click')
+
         const audioData = new FormData()
         const imageData = new FormData()
 
         audioData.append('audio', this.state.audio)
         imageData.append('image', this.state.image)
+        
         const config = {
             headers: {
                 'content-type': 'multipart/form-data'

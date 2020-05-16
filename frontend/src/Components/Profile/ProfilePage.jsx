@@ -22,17 +22,22 @@ class ProfilePage extends Component {
            },
            loggedUser: props.user,
            isUserLoggedIn: props.isUserLoggedIn,
-           isFollowingUser: false,
-           displayInfo: true
+           isFollowingUser: null
         }
     }
     componentDidMount = () => {
+        this.getFollowRelation()
+        console.log(this.state.isFollowingUser)
         this.fetchUserData()
-        this.fetchUserSessionsAndCollaborators()
+        this.fetchUserSessionsAndCollaborators()       
         console.log(this.props)
         // Adding a callback to check if user is following the displayed User
     }
-   
+
+    // componentDidUpdate = () => {
+    //     this.getFollowRelation()
+    // }
+
     fetchUserData = async () => {
         const {displayedUser} = this.state
         console.log(displayedUser)
@@ -56,6 +61,64 @@ class ProfilePage extends Component {
         }catch(error){
             console.log('err =>', error)
         } 
+    }
+
+    getFollowRelation = async () => {
+        const {displayedUser, loggedUser} = this.state
+        try{
+            const response = await axios.get(`/api/follows/${loggedUser}/follows/${displayedUser.id}`)
+            if(response.data.payload === null){
+                this.setState({
+                    isFollowingUser: false
+                })
+            } else {
+                this.setState({
+                    isFollowingUser: response.data.payload.active_status
+                })
+            }
+           
+        } catch(error) {
+            console.log('err => ', error)
+        }
+    }
+
+    followButton = async () => {
+        const {displayedUser, loggedUser} = this.state
+        const response = await axios.get(`/api/follows/${loggedUser}/follows/${displayedUser.id}`)
+        if(response.data.payload === null) {
+            this.followUser()
+        } else if (response.data.payload.active_status === false) {
+            this.refollowUser()
+        } else if (response.data.payload.active_status === true){
+            this.unfollowUser()
+        }
+    }
+
+    unfollowUser = async () => {
+        const {displayedUser, loggedUser} = this.state
+        try{
+            const response = await axios.patch(`/api/follows/${loggedUser}/unfollow/${displayedUser.id}`)
+            const unfollowed = response.data.payload.active_status
+            this.setState({
+                isFollowingUser: unfollowed
+            })
+        } catch(error) {
+            console.log('err => ', error)
+        }
+
+    }
+
+    refollowUser = async () => {
+        const {displayedUser, loggedUser} = this.state
+        try{
+            const response = await axios.patch(`/api/follows/${loggedUser}/refollow/${displayedUser.id}`)
+            const refollowed = response.data.payload.active_status
+            this.setState({
+                isFollowingUser: refollowed
+            })
+        } catch(error) {
+            console.log('err => ', error)
+        }
     }
 
     fetchUserSessionsAndCollaborators = async () => {
@@ -91,9 +154,9 @@ class ProfilePage extends Component {
         console.log('This button follows the user', displayedUser)
 
         try{
-            const response = await axios.post(`/api/follow/${loggedUser}/follows/${displayedUser.id}`, {
-                is_following: loggedUser,
-                being_followed: displayedUser.id
+            const response = await axios.post(`/api/follows/${loggedUser}/follows/${displayedUser.id}`, {
+                user_id: loggedUser,
+                followed_id: displayedUser.id
             })
             console.log('response =>', response)
             this.setState({
@@ -102,17 +165,6 @@ class ProfilePage extends Component {
         }catch(error){
             console.log('err =>', error)
         }
-    }
-
-    unfollowUser = async () => {
-        console.log('logInState =>', this.state.isUserLoggedIn)
-        console.log('followState =>', this.state.isFollowingUser)
-        console.log('This button unfollows the user')
-        this.setState({
-            isFollowingUser: false
-        })
-        console.log(`Are still following ${this.state.displayedUser.username}`, this.state.isFollowingUser)
-        // const response = await axios.
     }
 
     checkFollowState = async () => {
@@ -145,8 +197,10 @@ class ProfilePage extends Component {
                     loggedUser = {loggedUser}
                     isUserLoggedIn= {isUserLoggedIn} 
                     isFollowingUser= {isFollowingUser}
-                    followUser= {this.followUser}
-                    unfollowUser= {this.unfollowUser}/>
+                    followButton= {this.followButton}/>
+
+                <h3>{displayedUser.username}</h3>
+
             </div>
             <div className='session-info'>
                 {this.state.sessionData ? 
