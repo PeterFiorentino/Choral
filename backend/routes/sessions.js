@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
 router.get('/localfeed/:user_id', async (req, res) => {
   try {
-    let localFeed = await db.any(`SELECT sessions.id, sessions.owner_id, sessions.session_name, sessions.audio, sessions.art, sessions.is_deleted, users.username, users.avatar FROM follow JOIN sessions ON sessions.owner_id = follow.being_followed JOIN users ON users.id = follow.being_followed WHERE (is_following = $1 AND sessions.is_deleted = false)`, req.params.user_id)
+    let localFeed = await db.any(`SELECT sessions.id, sessions.owner_id, sessions.session_name, sessions.audio, sessions.art, sessions.is_deleted, users.username, users.avatar FROM follows JOIN sessions ON sessions.owner_id = follows.followed_id JOIN users ON users.id = follows.followed_id WHERE (user_id = $1 AND active_status = true AND sessions.is_deleted = false)`, req.params.user_id)
     res.json({
       message: "Success",
       payload: localFeed,
