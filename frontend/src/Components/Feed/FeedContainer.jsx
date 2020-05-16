@@ -33,11 +33,13 @@ class FeedContainer extends Component {
         // console.log(userId)
         let renderMyFeed = myFeed ? (
             <div>
+                <h4>My Feed</h4>
                 <MyFeed user={user}/>
             </div>
         ): null
         let renderExplorePage = explore ? (
             <div>
+                <h4>Explore Feed</h4>
                 <Explore user={user}/>
             </div>
         ):null
@@ -45,8 +47,8 @@ class FeedContainer extends Component {
         return(
             <div>
                 <h1>Choral</h1>
-                <button onClick={this.toggleMyFeed}>My Feed</button>
-                <button onClick={this.toggleExplore}>Explore</button>
+                <button className='round-button' onClick={this.toggleMyFeed}>My Feed</button>
+                <button className='round-button' onClick={this.toggleExplore}>Explore</button>
                 {renderMyFeed}
                 {renderExplorePage}
             </div>
