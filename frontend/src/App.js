@@ -92,6 +92,7 @@ class App extends Component {
     // console.log('user =>', user)
     return (
       <div className="App">
+        <br/><br/><br/>
         <div className= "nav">
           <Navigation user={this.state.user} logOutUser= {this.logOutUser} isUserLoggedIn = {isUserLoggedIn}/>
         </div>

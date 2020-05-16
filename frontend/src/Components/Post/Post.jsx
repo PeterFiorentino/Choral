@@ -61,7 +61,7 @@ const Post = (props) => {
         <>
         <div className='post'>
             <img onClick={() => goToSession(props.session.id)} className='owner' src={props.session.art} alt=''></img>
-            <button className='control' onClick={preview}>PREVIEW</button>
+            <button className='round-button' id='control' onClick={preview}>PREVIEW</button>
             <div id='info-link'>
                 <Link to={`/session/${props.session.id}`}><p className='link-content'>{`${props.session.session_name} `}</p></Link>
                 <p className='link-content'>by </p>
