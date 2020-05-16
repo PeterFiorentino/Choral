@@ -77,3 +77,6 @@ INSERT INTO follows (user_id, followed_id, active_status)
           (2,3, true),
           (3,1, true),
           (3,2, true);
+
+
+SELECT * FROM collaborations WHERE 
