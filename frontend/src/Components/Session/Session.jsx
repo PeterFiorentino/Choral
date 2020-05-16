@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import './Session.css'
 import Navigation from '../Navigation/Navigation.jsx'
 import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
 import Slider from '@material-ui/core/Slider'
 import VolumeDownIcon from '@material-ui/icons/VolumeDown'
 import { ProgressBar, Spinner } from 'react-bootstrap'
@@ -19,7 +21,8 @@ class Session extends Component {
             saved: false,
             playing: false,
             time: 0,
-            hideInfo: false
+            hideInfo: false,
+            collabInstrument: ''
         }
     }
 
@@ -364,7 +367,9 @@ class Session extends Component {
         })
     }
 
-    uploadCollab = async () => {
+    uploadCollab = async (event) => {
+        event.preventDefault()
+
         const data = new FormData()
         data.append('audio', this.state.selectedAudio)
         
@@ -380,7 +385,7 @@ class Session extends Component {
             session_id: this.state.sessionData.id,
             collaborator_id: this.state.loggedUser,
             audio: response.data.audioUrl,
-            comment: '',
+            instrument_name: this.state.collabInstrument,
             approved: false,
             volume: 80,
             stereo_position: 50
@@ -488,6 +493,12 @@ class Session extends Component {
        })
     }
 
+    handleInstrument = (event) => {
+        this.setState({
+            collabInstrument: event.target.value
+        })
+    }
+
     render(){
         let specificInfo = this.state.hideInfo ? (
             <div>
@@ -521,26 +532,34 @@ class Session extends Component {
                                 {this.state.newCollab && !this.state.recording ? <><a download='newcollab' href={this.state.newCollab}>DOWNLOAD</a><br/><br/></> : <br/>}
                                 {!this.state.newCollab && !this.state.recording ? <br/> : <></>}
                             </div>
-                            <div className='file-input'>
-                                <Input type='file' name='audio' onChange={this.fileHandler}></Input>
-                            </div>
-                            <br/>
-                            <div className='upload'>
-                                <button className='round-button' onClick={this.uploadCollab}>UPLOAD</button><br/>
-                                {this.state.added ? <h5>added!</h5> : <><h5>{' '}</h5><br/></>}
-                            </div>
+                            <form onSubmit={this.uploadCollab}>
+                                <div className='file-input'>
+                                    <input required type='file' name='audio' accept='audio/*' onChange={this.fileHandler}></input>
+                                </div>
+                                <FormControl>
+                                    <InputLabel htmlFor='instrument'>instrument</InputLabel>
+                                    <Input required type='text' name='instrument' onChange={this.handleInstrument}></Input>
+                                </FormControl>
+                                <br/><br/>
+                                <div className='upload'>
+                                    <button className='round-button'>UPLOAD</button><br/>
+                                    {this.state.added ? <h5>added!</h5> : <><h5>{' '}</h5><br/></>}
+                                </div>
+                            </form>
                         </div>
                     </div>
                     {this.state.isOwner && this.state.poolTracks ?
                     <div className='pool'>
                         <h3>Pool</h3>
                         <button className='round-button' onClick={this.clearPool}>CLEAR POOL</button>
+                        <br/><br/>
                         <div className='tracks-container'>
                             {this.state.collabsData.map((collab, index) => {
                                 if (collab.approved === false) {
                                     return (
                                         <div className='pool-track' key={index} style={{}}>
                                             <img className='pool-pic' onClick={() => this.checkPool(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
+                                            <h5 className='pool-instrument'>{collab.instrument_name}</h5>
                                             <button className='pool-button' onClick={() => this.merge(index)}>MERGE</button>
                                         </div>
                                     )
@@ -572,6 +591,7 @@ class Session extends Component {
                                 <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
                                 <p className='right-pan'>R</p>
                                 <img className='track-pic' src={this.state.sessionData.avatar} alt=''></img>
+                                <h5 className='track-instrument'>original</h5>
                                 <a id='download-session-track' download href={this.state.sessionData.audio}>DOWNLOAD</a>
                                 <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
                                 <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
@@ -584,6 +604,7 @@ class Session extends Component {
                                             <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3'}} onChange={(event) => this.changePanning(index, event)}></Slider>
                                             <p className='right-pan'>R</p>
                                             <img className='track-pic' onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
+                                            <h5 className='track-instrument'>{collab.instrument_name}</h5>
                                             {this.state.isOwner ?
                                             <button className='track-button' onClick={() => this.unmerge(index)}>UNMERGE</button>
                                             : <></>}
