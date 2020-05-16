@@ -8,7 +8,7 @@ router.post('/:user_id/follows/:followed_id', async (req, res) => {
    let followed_id = req.params.followed_id
   
     try {
-      let newFollow = await db.any(`INSERT INTO follows (user_id, followed_id, active_status) VALUES ($1, $2, $3) RETURNING *`, [user_id, followed_id, true]);
+      let newFollow = await db.one(`INSERT INTO follows (user_id, followed_id, active_status) VALUES ($1, $2, $3) RETURNING *`, [user_id, followed_id, true]);
       res.json({
         message: "Success",
         payload: newFollow, 
