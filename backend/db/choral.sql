@@ -39,16 +39,16 @@ CREATE TABLE collaborations (
     session_id INT REFERENCES sessions(id),
     audio VARCHAR,
     instrument_name VARCHAR,
-    comment VARCHAR,
     approved BOOLEAN,
     volume INT,
     stereo_position INT,
     is_deleted BOOLEAN
 );
 
-CREATE TABLE follow (
-    is_following INT REFERENCES users(id),
-    being_followed INT REFERENCES users(id)
+CREATE TABLE follows (
+    user_id INT REFERENCES users(id),
+    followed_id INT REFERENCES users(id),
+    active_status BOOLEAN
 );
 
 
@@ -63,17 +63,17 @@ INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_pro
            (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50, false);
            
 
-INSERT INTO collaborations (collaborator_id, session_id, audio, comment, approved, volume, stereo_position, is_deleted)
-    VALUES (1, 1, 'http://localhost:3001/audios/bassguitar.mp3', '', false, 80, 50, false),
-           (2, 1, 'http://localhost:3001/audios/leadguitar.mp3', '', false, 80, 50, false),
-           (3, 1, 'http://localhost:3001/audios/horns.mp3', '', false, 80, 50, false),
-           (1, 2, 'http://localhost:3001/audios/beat.mp3', '', false, 80, 50, false);
+INSERT INTO collaborations (collaborator_id, session_id, audio, instrument_name, approved, volume, stereo_position, is_deleted)
+    VALUES (1, 1, 'http://localhost:3001/audios/bassguitar.mp3', 'Bass', false, 80, 50, false),
+           (2, 1, 'http://localhost:3001/audios/leadguitar.mp3', 'Guitar', false, 80, 50, false),
+           (3, 1, 'http://localhost:3001/audios/horns.mp3', 'Horns', false, 80, 50, false),
+           (1, 2, 'http://localhost:3001/audios/beat.mp3', 'Drums', false, 80, 50, false);
 
 
-INSERT INTO follow (is_following, being_followed)
-    VALUES(1,2),
-          (1,3),
-          (2,1),
-          (2,3),
-          (3,1),
-          (3,2);
+INSERT INTO follows (user_id, followed_id, active_status)
+    VALUES(1,2, true),
+          (1,3, true),
+          (2,1, true),
+          (2,3, true),
+          (3,1, true),
+          (3,2, true);
