@@ -1,4 +1,5 @@
 import React,{Component} from 'react'
+import ProfileCard from '../Profile/ProfileCard.jsx'
 import Post from '../Post/Post.jsx'
 import FollowButton from '../Profile/FollowButton.jsx'
 import axios from 'axios'
@@ -14,10 +15,14 @@ class ProfilePage extends Component {
                username: '',
                email: '',
                avatar: '',
+               location:'',
+               instrument:'',
+               fav_genre: '',
+               anthem: '',
            },
            loggedUser: props.user,
            isUserLoggedIn: props.isUserLoggedIn,
-           isFollowingUser: null,
+           isFollowingUser: null
         }
     }
     componentDidMount = () => {
@@ -46,6 +51,10 @@ class ProfilePage extends Component {
                     username: userData.username,
                     email: userData.email,
                     avatar: userData.avatar,
+                    location: userData.location,
+                    instrument: userData.instrument,
+                    fav_genre: userData.fav_genre,
+                    anthem: userData.anthem
                 },
                 isOwner: (this.state.loggedUser.toString() === displayedUser.id)  
             })
@@ -162,14 +171,27 @@ class ProfilePage extends Component {
         console.log('Am I following this person ?', this.state.isFollowingUser)
     }
 
+    toggleInfo = () => {
+        this.setState({
+            displayInfo: !this.state.displayInfo
+        })
+    }
+
     render(){
         const {displayedUser, loggedUser, isUserLoggedIn, isFollowingUser} = this.state
         return(
             <>
+            <h1 className='title'>Choral</h1>
             <div className='user-info'>
-                <h1 className='title'>Choral</h1>
-                <img src={displayedUser.avatar} height='300px' width= '300px'></img>
-                <br></br>
+                <img id='profile-picture' src={displayedUser.avatar} ></img>
+                <ProfileCard
+                    displayedUser={displayedUser}
+                    loggedUser={loggedUser}
+                    toggleInfo={this.toggleInfo}
+                    displayInfo={this.state.displayInfo}
+                />
+            </div>
+            <div>
                 <FollowButton
                     displayedUser= {displayedUser}
                     loggedUser = {loggedUser}
@@ -178,8 +200,8 @@ class ProfilePage extends Component {
                     followButton= {this.followButton}/>
 
                 <h3>{displayedUser.username}</h3>
-            </div>
 
+            </div>
             <div className='session-info'>
                 {this.state.sessionData ? 
                 this.state.sessionData.map((session) =>
