@@ -4,10 +4,17 @@
 
 .round-button {
   border-radius: 1rem;
+  box-shadow: 0px 1px 2px 1px;
+  outline: none;
 }
 
 .round-button:hover {
-  color: indigo;
-  box-shadow: 0px 0px 5px 1px;
-  transition: 0.7s;
+  color: darkblue;
+  box-shadow: 0px 1px 3.5px 1.5px;
+  transition: 0.5s;
 }
+
+.round-button:focus {
+  outline: none;
+}
+

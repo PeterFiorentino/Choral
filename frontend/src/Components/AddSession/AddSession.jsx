@@ -116,23 +116,23 @@ class AddSession extends React.Component {
                     </FormControl>
                     <FormControl style={{width:'36%', marginLeft:'2%', marginRight:'2%'}}>
                         <InputLabel htmlFor='genre'>Genre</InputLabel>
-                        <Input onChange={this.InputHandler} type='text' name='genre'></Input><br/>
+                        <Input onChange={this.inputHandler} type='text' name='genre'></Input><br/>
                     </FormControl>
                     <FormControl style={{width:'10%', marginLeft:'2%', marginRight:'2%'}}>
                         <InputLabel htmlFor='bpm'>BPM</InputLabel>
-                        <Input onChange={this.InputHandler} type='number' name='bpm'></Input><br/>
+                        <Input onChange={this.inputHandler} type='number' name='bpm'></Input><br/>
                     </FormControl>
                     <FormControl style={{width:'16%', marginLeft:'2%', marginRight:'2%'}}>
                         <InputLabel htmlFor='session_key'>Key</InputLabel>
-                        <Input onChange={this.InputHandler} type='text' name='session_key'></Input><br/>
+                        <Input onChange={this.inputHandler} type='text' name='session_key'></Input><br/>
                     </FormControl>
                     <FormControl style={{width:'70%'}}>
                         <InputLabel htmlFor='chord_progression'>Chord Progression</InputLabel>
-                        <Input onChange={this.InputHandler} type='text' name='chord_progression'></Input><br/>
+                        <Input onChange={this.inputHandler} type='text' name='chord_progression'></Input><br/>
                     </FormControl>
                     <FormControl style={{width:'50%'}}>
                         <InputLabel htmlFor='looking_for'>Looking for</InputLabel>
-                        <Input required onChange={this.InputHandler} type='text' name='looking_for'></Input><br/>
+                        <Input required onChange={this.inputHandler} type='text' name='looking_for'></Input><br/>
                     </FormControl>
                     <br/>
                     <button className='round-button' type='button' onClick={this.record}>RECORD LIVE</button><br/>

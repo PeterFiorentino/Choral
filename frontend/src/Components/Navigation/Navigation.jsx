@@ -15,6 +15,9 @@ import AccountCircleSharpIcon from '@material-ui/icons/AccountCircleSharp';
 import GroupWorkSharpIcon from '@material-ui/icons/GroupWorkSharp';
 import ListSharpIcon from '@material-ui/icons/ListSharp';
 import ExitToAppSharpIcon from '@material-ui/icons/ExitToAppSharp';
+import AppBar from '@material-ui/core/AppBar'
+import ToolBar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles({
   list: {
@@ -43,62 +46,66 @@ const Navigation = ({user, logOutUser, isUserLoggedIn }) => {
         return (
             <div>
             {['NAV BAR'].map((anchor) => (
-                <React.Fragment key={anchor}>
-                <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-                <Drawer anchor={anchor} 
-                    open={state[anchor]} 
-                    onClose={toggleDrawer(anchor, false)}
-                    style = {{width:'100px'}} >
-                    <div
-                        className={clsx(classes.list, {
-                            [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-                        })}
-                        role="presentation"
-                        onClick={toggleDrawer(anchor, false)}
-                        onKeyDown={toggleDrawer(anchor, false)}
-                        >
-                         <List>
-                            <Link to={`/profile/${user}`}>
-                             <ListItem >
-                                 <ListItemIcon button='true' >
-                                     <AccountCircleSharpIcon />
-                                 </ListItemIcon> 
-                                 <ListItemText primary={"Profile"}/>
-                             </ListItem>
-                             </Link>{" "} 
-                        <Divider />
-                             <Link to= {`/add`}>
-                                 <ListItem >
-                                     <ListItemIcon  button='true'>
-                                         <PlaylistAddIcon />
-                                     </ListItemIcon>
-                                     <ListItemText primary={"New Session"} />
-                                 </ListItem>
-                             </Link>{" "}
-                        <Divider />
-                             <Link to= "/collaborators">
-                             <ListItem >
-                                 <ListItemIcon button='true'>
-                                     <GroupWorkSharpIcon />
-                                 </ListItemIcon>
-                                 <ListItemText primary={"Collaborators"}  />
-                             </ListItem>
-                             </Link>{" "}
-                        <Divider />
-                             <Link to= "/feed">
-                             <ListItem>
-                                 <ListItemIcon button='true'>
-                                     <ListSharpIcon />
-                                 </ListItemIcon>
-                                 <ListItemText primary={"Feed"}  />
-                             </ListItem>
-                             </Link>{" "}
-                        <Divider />
-                             <Button onClick={logOutUser}>{'Log Out'}</Button>
-                         </List>
-                        </div>
-                </Drawer>
-                </React.Fragment>
+                <AppBar color='inherit'>
+                    <ToolBar>
+                        <React.Fragment key={anchor}>
+                        <Button id='nav-button' onClick={toggleDrawer(anchor, true)}>NAVBAR</Button>
+                        <Drawer anchor={anchor} 
+                            open={state[anchor]} 
+                            onClose={toggleDrawer(anchor, false)}
+                            style = {{width:'100px'}} >
+                            <div
+                                className={clsx(classes.list, {
+                                    [classes.fullList]: anchor === 'top' || anchor === 'bottom',
+                                })}
+                                role="presentation"
+                                onClick={toggleDrawer(anchor, false)}
+                                onKeyDown={toggleDrawer(anchor, false)}
+                                >
+                                <List>
+                                    <Link to={`/profile/${user}`}>
+                                    <ListItem >
+                                        <ListItemIcon button='true' >
+                                            <AccountCircleSharpIcon />
+                                        </ListItemIcon> 
+                                        <ListItemText primary={"Profile"}/>
+                                    </ListItem>
+                                    </Link>{" "} 
+                                <Divider />
+                                    <Link to= {`/add`}>
+                                        <ListItem >
+                                            <ListItemIcon  button='true'>
+                                                <PlaylistAddIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={"New Session"} />
+                                        </ListItem>
+                                    </Link>{" "}
+                                <Divider />
+                                    <Link to= "/collaborators">
+                                    <ListItem >
+                                        <ListItemIcon button='true'>
+                                            <GroupWorkSharpIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={"Collaborators"}  />
+                                    </ListItem>
+                                    </Link>{" "}
+                                <Divider />
+                                    <Link to= "/feed">
+                                    <ListItem>
+                                        <ListItemIcon button='true'>
+                                            <ListSharpIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={"Feed"}  />
+                                    </ListItem>
+                                    </Link>{" "}
+                                <Divider />
+                                    <Button onClick={logOutUser}>{'Log Out'}</Button>
+                                </List>
+                                </div>
+                        </Drawer>
+                        </React.Fragment>
+                    </ToolBar>
+                </AppBar>
             ))}
             </div>
         );

@@ -24,7 +24,7 @@ class Session extends Component {
             hideInfo: false,
             collabInstrument: '',
             session_owner_id : null,
-            toggle: 'Show'
+            toggle: 'show'
         }
     }
 
@@ -491,15 +491,15 @@ class Session extends Component {
     }
 
     toggleInfo = () => {
-        if (this.state.toggle === 'Show') {
+        if (this.state.toggle === 'show') {
             this.setState({
                 hideInfo: !this.state.hideInfo,
-                toggle: 'Hide'
+                toggle: 'hide'
             })
         } else {
             this.setState({
                 hideInfo: !this.state.hideInfo,
-                toggle: 'Show'
+                toggle: 'show'
             })
         }
     }
@@ -531,7 +531,6 @@ class Session extends Component {
 
         return (
             <div>
-                <Navigation />
                 {this.state.sessionData ? 
                 <div className='session'>
                     <img className='cover-art' src={this.state.sessionData.art}></img>
@@ -541,7 +540,7 @@ class Session extends Component {
                         <h5 id='looking-for'>Looking for {this.state.sessionData.looking_for}</h5>
                         <div id='specific-info'>
                             {specificInfo}
-                            <p onClick={this.toggleInfo}>{this.state.toggle} Info</p>
+                            <p onClick={this.toggleInfo}>{this.state.toggle} info</p>
                         </div>
                     </div>
                     <div className='collaborate'>
@@ -609,12 +608,12 @@ class Session extends Component {
                         <div className='tracks-container'>
                             <div className='merged-track'>
                                 <p className='left-pan'>L</p>
-                                <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
+                                <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3', alignSelf:'center'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
                                 <p className='right-pan'>R</p>
                                 <img className='track-pic' src={this.state.sessionData.avatar} alt=''></img>
                                 <h5 className='track-instrument'>original</h5>
                                 <a id='download-session-track' download href={this.state.sessionData.audio}>DOWNLOAD</a>
-                                <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
+                                <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'97px', justifySelf:'center'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
                                 <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
                             </div>
                             {this.state.collabsData.map((collab, index) => {
@@ -622,15 +621,15 @@ class Session extends Component {
                                     return (
                                         <div className='merged-track' key={index}>
                                             <p className='left-pan'>L</p>
-                                            <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3'}} onChange={(event) => this.changePanning(index, event)}></Slider>
+                                            <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3', alignSelf:'center'}} onChange={(event) => this.changePanning(index, event)}></Slider>
                                             <p className='right-pan'>R</p>
                                             <img className='track-pic' onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
                                             <h5 className='track-instrument'>{collab.instrument_name}</h5>
                                             {this.state.isOwner ?
                                             <button className='track-button' onClick={() => this.unmerge(index)}>UNMERGE</button>
                                             : <></>}
-                                            <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
-                                            <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
+                                            <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'95px', justifySelf:'center'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
+                                            <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', alignSelf:'end', color:'indigo', margin:'0px'}}/>
                                         </div>
                                     )
                                 } return true
