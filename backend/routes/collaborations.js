@@ -25,7 +25,7 @@ const multer = require('multer');
   router.get('/collaborators/:user_id', async (req, res)  => {
     let user_id = req.params.user_id
     try {
-      let collaborators =  await db.any(`SELECT users.avatar, users.username FROM users JOIN collaborations ON users.id = collaborations.collaborator_id WHERE collaborations.session_owner_id = $1;`, [user_id]);
+      let collaborators =  await db.any(`SELECT users.avatar, users.username, users.id FROM users JOIN collaborations ON users.id = collaborations.collaborator_id WHERE (collaborations.session_owner_id = $1 AND approved = true);`, [user_id]);
       res.json({
         message: "Success",
         payload: collaborators,
@@ -48,9 +48,10 @@ const multer = require('multer');
     let volume = req.body.volume
     let stereo_position = req.body.stereo_position
     let instrument_name = req.body.instrument_name
+    let session_owner_id = req.body.session_owner_id
   
     try {
-      let newCollab = await db.one(`INSERT INTO collaborations(session_id, collaborator_id, audio, instrument_name, approved, volume, stereo_position, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`, [session_id, collaborator_id, audio, instrument_name, approved, volume, stereo_position, false]);
+      let newCollab = await db.one(`INSERT INTO collaborations(session_id, session_owner_id, collaborator_id, audio, instrument_name, approved, volume, stereo_position, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`, [session_id, session_owner_id, collaborator_id, audio, instrument_name, approved, volume, stereo_position, false]);
       res.json({
         message: "Success",
         payload: {
