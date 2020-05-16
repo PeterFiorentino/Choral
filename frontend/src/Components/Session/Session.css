@@ -8,6 +8,33 @@
     margin-right: 0.5rem;
 }
 
+.cover-art {
+    width: 100%;
+}
+
+.specific-info {
+    display: grid;
+    grid-template-rows: 4.5rem auto;
+    grid-template-columns: 15% 25% 20% 25% 15%;
+}
+
+#bpm {
+    grid-column: 3 / 4;
+    align-self: center;
+}
+
+#genre {
+    grid-column: 2 / 3;
+}
+
+#key {
+    grid-column: 4 / 5;
+}
+
+#chords {
+    grid-column: 2 / 5;
+}
+
 .collaborate {
     background-color: seashell;
     padding-top: 1rem;
