@@ -46,10 +46,10 @@ const Navigation = ({user, logOutUser, isUserLoggedIn }) => {
         return (
             <div>
             {['NAV BAR'].map((anchor) => (
-                <AppBar color='inherit'>
+                <AppBar style={{minHeight: '66px'}} color='inherit'>
                     <ToolBar style={{justifyContent:'space-between'}}>
                         <React.Fragment key={anchor}>
-                        <Button id='nav-button' onClick={toggleDrawer(anchor, true)}>NAVBAR</Button>
+                        <Button id='nav-button' onClick={toggleDrawer(anchor, true)}>NAVIGATE</Button>
                         <Typography style={{fontFamily:'Boogaloo', fontSize:'35px', fontWeight:'550', letterSpacing:'0.1 em', color:'#FF7B67'}}>Choral</Typography>
                         <Drawer anchor={anchor} 
                             open={state[anchor]} 
@@ -100,7 +100,7 @@ const Navigation = ({user, logOutUser, isUserLoggedIn }) => {
                                     </ListItem>
                                     </Link>{" "}
                                 <Divider />
-                                    <Button onClick={logOutUser}>{'Log Out'}</Button>
+                                    <Button style={{marginLeft:'10px'}} onClick={logOutUser}>{'Log Out'}</Button>
                                 </List>
                                 </div>
                         </Drawer>
