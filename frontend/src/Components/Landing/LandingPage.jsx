@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 import axios from 'axios'
-import {Route, Redirect} from 'react-router-dom'
 import './LandingPage.css';
 
 class LandingPage extends Component {
@@ -116,15 +115,15 @@ class LandingPage extends Component {
         
         return(
             <div className='main-page'>
-                <h1 id='main-title'>Choral</h1>
+                <h1 className='main-title'>Choral</h1>
                 <div className='login-signup'>
                     <button className='round-button' onClick={this.displayLoginForm}>Login</button>
                     <button className='round-button' onClick={this.displaySignupForm}>Sign up</button>
                     {renderLoginForm}
                     {renderSignupForm}
                 </div>
-            </div>
-        )
+                </div>
+        )  
     }
 }
 

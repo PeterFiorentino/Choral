@@ -1,5 +1,5 @@
 import React from 'react'
-
+import './Profile.css'
 
 const FollowButton = (props) => {
     const {displayedUser, isUserLoggedIn, loggedUser, isFollowingUser, followButton} = props
@@ -9,11 +9,11 @@ const FollowButton = (props) => {
         return <> </>
     } else if (isUserLoggedIn && !isFollowingUser){
         return(
-            <button className='round-button' onClick={followButton}>Follow</button>
+            <button id='follow' className='round-button' onClick={followButton}>Follow</button>
         )
     } else if (isUserLoggedIn && isFollowingUser){
         return(
-            <button className='round-button' onClick={followButton}>Unfollow</button>
+            <button id='unfollow' className='round-button' onClick={followButton}>Unfollow</button>
         )
     } else {
         return <> </>
