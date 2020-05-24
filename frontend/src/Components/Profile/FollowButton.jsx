@@ -3,7 +3,6 @@ import './Profile.css'
 
 const FollowButton = (props) => {
     const {displayedUser, isUserLoggedIn, loggedUser, isFollowingUser, followButton} = props
-    console.log(loggedUser,'follows', displayedUser.id)
 
     if(loggedUser == displayedUser.id){
         return <> </>

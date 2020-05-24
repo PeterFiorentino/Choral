@@ -52,7 +52,7 @@ const Post = (props) => {
 
     const deleteSession = async () => {
         if (window.confirm('Are you sure that you want to delete this Reef?')) {
-            let response = await axios.patch(`http://localhost:3001/api/sessions/delete/${props.session.id}`)
+            await axios.patch(`http://localhost:3001/api/sessions/delete/${props.session.id}`)
             window.location.reload()
         }
     }

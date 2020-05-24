@@ -10,8 +10,9 @@ const SignupForm = (props) => {
         e.preventDefault()
         props.signupUser()
     }
+    
     return (
-        <div className='signup-form'>
+        <div>
             <br/>
             <h3>create your user</h3>
             <form className='signup-form' onSubmit={handleSubmit}>
@@ -53,6 +54,16 @@ const SignupForm = (props) => {
                             />
                         </FormControl>
                         <br/>
+                        <FormControl>
+                            <InputLabel htmlFor='location'>homebase</InputLabel>                        
+                            <Input
+                            type='text'
+                            name='location'
+                            value={props.location}
+                            placeholder='your homebase'
+                            onChange={props.handleChange}
+                            />
+                         </FormControl>
                     </div>
                     <div className='more-info'>
                         <FormControl>
@@ -85,15 +96,14 @@ const SignupForm = (props) => {
                                 required
                                 type='text'
                                 name='anthem'
-                                value={props.email}
+                                value={props.anthem}
                                 placeholder='your anthem'
                                 onChange={props.handleChange}
                             />
-                    </FormControl>
-                    <br/>
+                        </FormControl>
+                        <br/>
                     </div>
                 </div>
-                <br/>
                 <InputLabel htmlFor='avatar' style={{fontWeight:'800', color:'indigo'}}>avatar</InputLabel>
                 <input
                     type='file'
