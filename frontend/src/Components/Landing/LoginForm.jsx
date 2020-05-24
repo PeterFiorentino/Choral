@@ -2,6 +2,7 @@ import React from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
+import './LandingPage.css'
 
 const LoginForm = (props) => {
 
@@ -11,7 +12,7 @@ const LoginForm = (props) => {
     }
 
     return (
-        <div>
+        <div className='login-form'>
             <br/>
             <h3>enter choral</h3>
             <form onSubmit ={handleSubmit}>

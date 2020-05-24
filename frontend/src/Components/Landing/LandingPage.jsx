@@ -117,15 +117,22 @@ class LandingPage extends Component {
         ) :null
         
         return(
+    
             <div className='main-page'>
                 <h1 className='main-title'>Choral</h1>
+                <h4 className='tag-line'>A remote musical playground</h4>
+                <p id='landing-text' >Collaborate with strangers and friends alike to make the music you enjoy. Contribute to other musicians songs and create a new sound for people to add to.</p>
                 <div className='login-signup'>
                     <button className='round-button' onClick={this.displayLoginForm}>Login</button>
                     <button className='round-button' onClick={this.displaySignupForm}>Sign up</button>
                     {renderLoginForm}
                     {renderSignupForm}
                 </div>
+                <div className='background-image'>
+                    <img id='img' src='https://cdn.wallpapersafari.com/24/86/2y6oVT.png'></img>
                 </div>
+            </div>
+           
         )  
     }
 }
