@@ -44,6 +44,7 @@ class Collaborators extends Component {
         return(
             <div>
                 <Navigation />
+
                 <h1>Collaborators</h1>
                 <div id="allCollabs">
                     {Object.keys(collaborators).map(collab => {

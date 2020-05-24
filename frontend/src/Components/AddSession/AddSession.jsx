@@ -107,6 +107,7 @@ class AddSession extends React.Component {
         return (
             <>
             <Navigation />
+            <h1 className='main-title'>Choral</h1>
             <h3>New Reef</h3>
             <div className='form' style={{width:'100%'}}>
                 <form className='form' onSubmit={this.uploadSession}>
