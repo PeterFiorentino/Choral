@@ -14,7 +14,8 @@ class Collaborators extends Component {
         return(
             <div>
                 <Navigation />
-                <h1>Collaborators</h1>
+                <h1 className='main-title'>Choral</h1>
+                <h3>Collaborators</h3>
             </div>
         )
     }
