@@ -13,7 +13,7 @@ const LoginForm = (props) => {
     return (
         <div>
             <br/>
-            <h3>enter the choral</h3>
+            <h3>enter choral</h3>
             <form onSubmit ={handleSubmit}>
                 <FormControl>
                     <InputLabel htmlFor='username'>username</InputLabel>

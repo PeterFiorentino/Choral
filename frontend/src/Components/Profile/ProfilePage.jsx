@@ -198,9 +198,6 @@ class ProfilePage extends Component {
                     isUserLoggedIn= {isUserLoggedIn} 
                     isFollowingUser= {isFollowingUser}
                     followButton= {this.followButton}/>
-
-                <h3>{displayedUser.username}</h3>
-
             </div>
             <div className='session-info'>
                 {this.state.sessionData ? 

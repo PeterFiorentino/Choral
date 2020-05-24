@@ -72,7 +72,7 @@ class App extends Component {
   }
 
   renderCollaboratorsPage = (routeProps) => {
-    return <Collaborators {...routeProps} />
+    return <Collaborators {...routeProps} user={this.state.user} isUserLoggedIn={this.state.isUserLoggedIn}/>
   }
 
   renderFeedPage = () => {
@@ -92,11 +92,13 @@ class App extends Component {
     // console.log('user =>', user)
     return (
       <div className="App">
+        <br/><br/><br/>
         <div className= "nav">
           <Navigation user={this.state.user} logOutUser= {this.logOutUser} isUserLoggedIn = {isUserLoggedIn}/>
         </div>
         <div>
           <Switch>
+            <Route exact path = "/" render= {this.renderLandingPage}/>
             <Route path = "/landing" render= {this.renderLandingPage}/>
             <PrivateRoute path = '/profile/:id' render = {this.renderProfilePage} isUserLoggedIn= {isUserLoggedIn} wasInitialized= {wasInitialized}/>
             <PrivateRoute path = "/collaborators" render = {this.renderCollaboratorsPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>

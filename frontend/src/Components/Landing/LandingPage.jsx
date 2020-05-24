@@ -63,17 +63,20 @@ class LandingPage extends Component {
         const {username, email, password, avatar} = this.state
 
         try{
-            const avatarData = new FormData()
-            avatarData.append('image', avatar)
+            let avatarLocation = avatar
+            if (avatar !== 'https://cdn.clipart.email/60dc0ace75203466caef979a0a5c4e24_17685-earphones-icon-cliparts-stock-vector-and-royalty-free-_450-450.jpeg') {
+                const avatarData = new FormData()
+                avatarData.append('image', avatar)
             
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
                 }
-            }
 
-            let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData, config)
-            let avatarLocation = avatarResponse.data.imageUrl
+                let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData, config)
+                avatarLocation = avatarResponse.data.imageUrl
+            }
 
             const response = await axios.post('/api/auth/signup',{
                 username: username,

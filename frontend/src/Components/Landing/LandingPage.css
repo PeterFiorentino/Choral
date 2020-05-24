@@ -42,3 +42,7 @@ body {
 .round-button {
     border-radius: 1rem;
 }
+
+.landing-form {
+    width: 100%;
+}
