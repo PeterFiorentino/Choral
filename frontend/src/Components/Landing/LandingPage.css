@@ -1,4 +1,7 @@
-html, body{
+/* @import url('https://fonts.googleapis.com/css2?family=Boogaloo&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Open+Sans+Condensed:wght@300&family=Roboto&display=swap');
+
+html, body {
     margin: 0;
     height: 100%;
 }
@@ -6,7 +9,7 @@ html, body{
 body {
     height: 100%;
     background-color: rgb(254, 255, 241) ; 
-    /* background-image: url('/sound-bars.jpg'); */
+    /* background-image: url('https://cdn.wallpapersafari.com/24/86/2y6oVT.png'); */
 }
 
 .main-page {
@@ -14,6 +17,9 @@ body {
     margin: 0;
     display: grid;
     grid-template-columns: 33% 33% 33%;
+    grid-template-rows: .5fr 1.5fr 1fr .25fr;
+    border-bottom-style: inset;
+    border-bottom-color: whitesmoke;
 }
 
 .main-title {
@@ -24,20 +30,52 @@ body {
     text-align: center;
     letter-spacing: 0.1em;
     color: #FF7B67;
-
-    grid-column: 2/2;
+    grid-column: 1/4;
     grid-row: 1/2;
+    background-color: lightcyan;
 }
+.tag-line {
+    font-family: Roboto ;
+    text-align: center;
+    font-size: 30px;
+    letter-spacing: 0.1 em;
+    grid-column: 1/4;
+    grid-row: 2/3;
+    color: #3A86FF;
+}
+#landing-text {
+    margin-top: 20px;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.1 em;
+    grid-column: 2/3;
+    grid-row: 3/4;
+    color: #FF7B67;
+}
+
 .login-signup{
-    grid-column: 2/2;
-    grid-row: 3/3
+    z-index: 1;
+    grid-column: 2/3;
+    grid-row: 2/2;
+    margin-top: 50px
+    /* align-self: center; */
+    /* background-color: lightcyan; */
 }
-  .background-image{
-    background-image: url('/sound-bars.jpg'); 
-    mix-blend-mode: difference;
-    opacity: 0.1;
-    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25); 
+.login-form, .signup-form {
+    background-color: lightcyan;
+    grid-row: 2/2;
+}
+
+.background-image{
+    opacity: 0.05;
+    grid-column: 1/4;
+    grid-row: 1/5
 } 
+#img {
+    width: 100%;
+}
 
 .round-button {
     border-radius: 1rem;
@@ -45,4 +83,13 @@ body {
 
 .landing-form {
     width: 100%;
+}
+
+@media only screen and (max-width: 600px ){
+
+    #landing-text {
+        grid-column: 1/4;
+        grid-row: 3/4;
+    }
+
 }

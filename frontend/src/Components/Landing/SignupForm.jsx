@@ -2,6 +2,7 @@ import React from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
+import './LandingPage.css'
 
 const SignupForm = (props) => {
 
@@ -10,7 +11,7 @@ const SignupForm = (props) => {
         props.signupUser()
     }
     return (
-        <div>
+        <div className='signup-form'>
             <br/>
             <h3>create your user</h3>
             <form onSubmit={handleSubmit}>
