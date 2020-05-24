@@ -35,4 +35,24 @@ router.get('/', authHelpers.loginRequired, async (req, res, next) => {
   }
 });
 
+router.patch('/:id', authHelpers.loginRequired, async (req, res)  => {
+  let avatar = req.body.avatar
+  let id = req.params.id
+  
+  try {
+    let updateAvatar =  await db.none(`UPDATE users SET avatar = $1 WHERE id=$2`, [avatar, id]);
+    res.json({
+      message: "Success",
+      payload: updateAvatar, 
+      error: null
+    })
+  } catch (error) {
+    res.json({
+      message: "Cannot change that user's avatar",
+      payload: null,
+      error: error
+    })
+  }
+});
+
 module.exports = router;
