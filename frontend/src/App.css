@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Open+Sans+Condensed:wght@300&family=Roboto&display=swap');
+
 .App {
   text-align: center;
+  height: 100%;
 }
 
 .round-button {

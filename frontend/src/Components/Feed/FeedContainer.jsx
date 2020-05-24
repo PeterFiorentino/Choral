@@ -44,7 +44,7 @@ class FeedContainer extends Component {
 
         return(
             <div>
-                <h1 className='main-title'>Choral</h1>
+                {/* <h1 className='main-title'>Choral</h1> */}
                 <button className='round-button' onClick={this.toggleMyFeed}>My Feed</button>
                 <button className='round-button' onClick={this.toggleExplore}>Explore</button>
                 {renderMyFeed}

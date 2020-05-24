@@ -181,7 +181,7 @@ class ProfilePage extends Component {
         const {displayedUser, loggedUser, isUserLoggedIn, isFollowingUser} = this.state
         return(
             <>
-            <h1 className='main-title'>Choral</h1>
+            {/* <h1 className='main-title'>Choral</h1> */}
             <div className='user-info'>
                 <img id='profile-picture' src={displayedUser.avatar} ></img>
                 <ProfileCard
