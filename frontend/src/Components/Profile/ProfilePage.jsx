@@ -42,11 +42,11 @@ class ProfilePage extends Component {
 
     fetchUserData = async () => {
         const {displayedUser} = this.state
-        console.log(displayedUser)
+     
         try{
             const response = await axios.get(`/api/users/${displayedUser.id}`)
             const userData = response.data.payload.user
-            console.log(userData)
+
             this.setState({
                 displayedUser: {
                     id: this.state.displayedUser.id,
@@ -126,11 +126,11 @@ class ProfilePage extends Component {
 
     fetchUserSessionsAndCollaborators = async () => {
         const {displayedUser} = this.state
-        console.log(displayedUser)
+
         try {
             let response = await axios.get(`/api/sessions/user/${displayedUser.id}`)
             const sessionList = response.data.payload.session
-            console.log(sessionList)
+    
             for (let sesh of sessionList){
                sesh.collaborations = await this.fetchCollaborators(sesh.id)   
             }
@@ -152,16 +152,12 @@ class ProfilePage extends Component {
 
     followUser = async () => {
         const {displayedUser, loggedUser} = this.state
-        console.log('logInState =>', this.state.isUserLoggedIn)
-        console.log('followState =>', this.state.isFollowingUser)
-        console.log('This button follows the user', displayedUser)
 
         try{
-            const response = await axios.post(`/api/follows/${loggedUser}/follows/${displayedUser.id}`, {
+            await axios.post(`/api/follows/${loggedUser}/follows/${displayedUser.id}`, {
                 user_id: loggedUser,
                 followed_id: displayedUser.id
             })
-            console.log('response =>', response)
             this.setState({
                 isFollowingUser: true 
             })
@@ -187,7 +183,6 @@ class ProfilePage extends Component {
     }
 
     handleNewPic = (event) => {
-        console.log(event.target.files[0])
         this.setState({
             newAvatar: event.target.files[0]
         })
@@ -209,13 +204,12 @@ class ProfilePage extends Component {
 
         let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData, config)
         let avatarLocation = avatarResponse.data.imageUrl
-        console.log(avatarLocation)
 
-        let patchResponse = await axios.patch(`/api/users/${loggedUser}`, {avatar: avatarLocation})
-        console.log(patchResponse)
+        await axios.patch(`/api/users/${loggedUser}`, {avatar: avatarLocation})
 
         this.setState({
-            avatar: avatarLocation
+            avatar: avatarLocation,
+            changePic: false
         })
     }
 
@@ -232,12 +226,12 @@ class ProfilePage extends Component {
                         <form onSubmit={this.uploadNewPic}> 
                             <br/>
                             <input
-                            required
-                            type='file'
-                            accept='image/*'
-                            name='avatar'
-                            placeholder='new avatar'
-                            onChange={this.handleNewPic}
+                                required
+                                type='file'
+                                accept='image/*'
+                                name='avatar'
+                                placeholder='new avatar'
+                                onChange={this.handleNewPic}
                             />
                             <br/><br/>
                             <button className='round-button'>change</button>

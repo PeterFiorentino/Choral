@@ -13,13 +13,23 @@ body {
 }
 
 .main-page {
+    top: 0px;
+    position: absolute;
     height: 100%;
+    width: 100%;
     margin: 0;
     display: grid;
-    grid-template-columns: 33% 33% 33%;
-    grid-template-rows: .5fr 1.5fr 1fr .25fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 120px 500px 100px;
     border-bottom-style: inset;
     border-bottom-color: whitesmoke;
+}
+
+@media only screen and (max-width: 800px ){
+    .main-page {
+        grid-template-columns: 9% 82% 9%;
+        grid-template-rows: 120px 480px 100px;
+    }
 }
 
 .main-title {
@@ -30,49 +40,65 @@ body {
     text-align: center;
     letter-spacing: 0.1em;
     color: #FF7B67;
-    grid-column: 1/4;
-    grid-row: 1/2;
+    grid-column: 1 / 4;
+    grid-row: 1 / 2;
     background-color: lightcyan;
 }
+
 .tag-line {
     font-family: Roboto ;
     text-align: center;
     font-size: 30px;
     letter-spacing: 0.1 em;
-    grid-column: 1/4;
-    grid-row: 2/3;
+    grid-column: 1 / 4;
+    grid-row: 2 / 3;
     color: #3A86FF;
 }
+
+@media only screen and (max-width: 600px ){
+    .tag-line {
+        font-size: 20px;
+    }
+}
+
 #landing-text {
-    margin-top: 20px;
+    margin-left: 7.5%;
+    margin-right: 7.5%;
     text-align: center;
     font-family: Roboto;
     font-size: 16px;
     font-weight: bold;
     letter-spacing: 0.1 em;
-    grid-column: 2/3;
-    grid-row: 3/4;
+    grid-column: 1 / 4;
+    grid-row: 3 / 4;
     color: #FF7B67;
+}
+
+@media only screen and (max-width: 600px ){
+    #landing-text {
+        font-size: 12px;
+    }
 }
 
 .login-signup{
     z-index: 1;
-    grid-column: 2/3;
-    grid-row: 2/2;
-    margin-top: 50px
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    margin-top: 50px;
     /* align-self: center; */
     /* background-color: lightcyan; */
 }
 .login-form, .signup-form {
-    background-color: lightcyan;
+    background-color: hsl(180, 100%, 94%, 0.6);
     grid-row: 2/2;
 }
 
 .background-image{
     opacity: 0.05;
-    grid-column: 1/4;
-    grid-row: 1/5
+    grid-column: 1 / 4;
+    grid-row: 1 / 4;
 } 
+
 #img {
     width: 100%;
 }
@@ -85,11 +111,18 @@ body {
     width: 100%;
 }
 
-@media only screen and (max-width: 600px ){
+.login-info {
+    width: 92%;
+}
 
-    #landing-text {
-        grid-column: 1/4;
-        grid-row: 3/4;
-    }
+.signup-info {
+    display: flex;
+    justify-content: space-around;
+}
 
+.main-info {
+    margin: 2%;
+}
+.more-info {
+    margin: 2%;
 }

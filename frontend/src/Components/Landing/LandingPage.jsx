@@ -14,6 +14,10 @@ class LandingPage extends Component {
             username: '',
             email: '',
             password: '',
+            location: '',
+            instrument: '',
+            fav_genre: '',
+            anthem: '',
             avatar: 'https://cdn.clipart.email/60dc0ace75203466caef979a0a5c4e24_17685-earphones-icon-cliparts-stock-vector-and-royalty-free-_450-450.jpeg',  
         }
 
@@ -43,12 +47,10 @@ class LandingPage extends Component {
             username: username, 
             password: password
         })
-        console.log('res =>', response)
+     
         const user = response.data.payload
-        console.log(user)
 
         this.props.setUser(user)
-        console.log(user)
 
         // history.push(`/profile/${user.id}`)
         history.push(`/feed`)       
@@ -59,8 +61,7 @@ class LandingPage extends Component {
    }
    
    signupUser = async () => {
-        console.log('Signing up user')
-        const {username, email, password, avatar} = this.state
+        const {username, email, password, location, instrument, fav_genre, anthem, avatar} = this.state
 
         try{
             let avatarLocation = avatar
@@ -82,9 +83,13 @@ class LandingPage extends Component {
                 username: username,
                 email: email,
                 password: password,
+                location: location,
+                instrument: instrument,
+                fav_genre: fav_genre,
+                anthem: anthem,
                 avatar: avatarLocation
             })
-            console.log('res =>',response)
+         
             this.loginUser()
         } catch(error){
             console.log('err =>', error)
@@ -106,14 +111,14 @@ class LandingPage extends Component {
     }
 
     render(){
-        const {login,signup, username, email, password} = this.state
+        const {login, signup, username, email, password, location, instrument, fav_genre, anthem} = this.state
         const user = this.props.user
         let renderLoginForm = login ? (
             <LoginForm handleChange={this.handleChange} username={username} password={password} loginUser= {this.loginUser} />
         ) :null
 
         let renderSignupForm = signup ? (
-            <SignupForm handleChange={this.handleChange} handleFile={this.handleFile} username={username} email={email} password={password} signupUser={this.signupUser}/>
+            <SignupForm handleChange={this.handleChange} handleFile={this.handleFile} username={username} email={email} password={password} location={location} instrument={instrument} fav_genre={fav_genre} anthem={anthem} signupUser={this.signupUser}/>
         ) :null
         
         return(
@@ -121,7 +126,7 @@ class LandingPage extends Component {
             <div className='main-page'>
                 <h1 className='main-title'>Choral</h1>
                 <h4 className='tag-line'>A remote musical playground</h4>
-                <p id='landing-text' >Collaborate with strangers and friends alike to make the music you enjoy. Contribute to other musicians songs and create a new sound for people to add to.</p>
+                <p id='landing-text' >Collaborate with strangers and friends alike to make the music you enjoy.<br/>Contribute to other musicians songs and create a new sound for people to add to.</p>
                 <div className='login-signup'>
                     <button className='round-button' onClick={this.displayLoginForm}>Login</button>
                     <button className='round-button' onClick={this.displaySignupForm}>Sign up</button>
