@@ -20,27 +20,30 @@ class MyFeed extends Component {
         try{
             const response = await axios.get(`api/sessions/localfeed/${userId}`)
             // const response = await axios.get(`api/sessions/localfeed/2`) 
-            console.log(response)
+
             const sessionList = response.data.payload
+
             for(let sesh of sessionList){
                 sesh.collaborations = await this.fetchCollaborators(sesh.id)
             }
+
             this.setState({
                 myFeedData: sessionList
             })
-        }catch(error){
+        } catch(error){
             console.log('err =>', error)
         }  
     }
     fetchCollaborators = async (id) => {
         try{
             let response2 = await axios.get(`/api/collaborations/${id}`)
-            console.log(response2)
+           
             return response2.data.payload.collabs
-        }catch(error){
+        } catch(error){
             console.log('err =>', error)
         }  
     }
+    
     render(){
         return(
             <>
