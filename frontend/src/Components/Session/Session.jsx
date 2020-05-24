@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import './Session.css'
 import Navigation from '../Navigation/Navigation.jsx'
 import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
 import Slider from '@material-ui/core/Slider'
 import VolumeDownIcon from '@material-ui/icons/VolumeDown'
 import { ProgressBar, Spinner } from 'react-bootstrap'
@@ -19,7 +21,10 @@ class Session extends Component {
             saved: false,
             playing: false,
             time: 0,
-            hideInfo: false
+            hideInfo: false,
+            collabInstrument: '',
+            session_owner_id : null,
+            toggle: 'show'
         }
     }
 
@@ -45,7 +50,8 @@ class Session extends Component {
         this.setState({
             sessionData: sessionData,
             collabsData: collabsData,
-            isOwner: (this.state.loggedUser === sessionData.owner_id)
+            isOwner: (this.state.loggedUser === sessionData.owner_id),
+            session_owner_id: sessionData.owner_id
         })
     }
 
@@ -364,7 +370,9 @@ class Session extends Component {
         })
     }
 
-    uploadCollab = async () => {
+    uploadCollab = async (event) => {
+        event.preventDefault()
+
         const data = new FormData()
         data.append('audio', this.state.selectedAudio)
         
@@ -378,9 +386,10 @@ class Session extends Component {
         
         let body = {
             session_id: this.state.sessionData.id,
+            session_owner_id: this.state.session_owner_id,
             collaborator_id: this.state.loggedUser,
             audio: response.data.audioUrl,
-            comment: '',
+            instrument_name: this.state.collabInstrument,
             approved: false,
             volume: 80,
             stereo_position: 50
@@ -480,36 +489,58 @@ class Session extends Component {
             this.setState({recording:false})
         }
     }
-    // toggles between a display that shows session info and one that doesn't  
-    hideInfo = () => {
-       console.log('this will toggle the specific info div')
-       this.setState({
-           hideInfo: !this.state.hideInfo
-       })
+
+    toggleInfo = () => {
+        if (this.state.toggle === 'show') {
+            this.setState({
+                hideInfo: !this.state.hideInfo,
+                toggle: 'hide'
+            })
+        } else {
+            this.setState({
+                hideInfo: !this.state.hideInfo,
+                toggle: 'show'
+            })
+        }
+    }
+
+    handleInstrument = (event) => {
+        this.setState({
+            collabInstrument: event.target.value
+        })
     }
 
     render(){
         let specificInfo = this.state.hideInfo ? (
-            <div>
-                <h5>Genre: {this.state.sessionData.genre} </h5>
-                <h5>{this.state.sessionData.bpm} BPM</h5>
-                <h5>Key: {this.state.sessionData.session_key}</h5>
-                <h5>Chord Progression: {this.state.sessionData.chord_progression}</h5>
-                <h5>Looking for {this.state.sessionData.looking_for}</h5>
+            <div className='specific-info'>
+                <div id='genre'>
+                    <label htmlFor='genre'><b>Genre</b></label>
+                    <p name='genre'>{this.state.sessionData.genre}</p>
+                </div>
+                <p id='bpm'><b>{this.state.sessionData.bpm} BPM</b></p>
+                <div id='key'>
+                    <label htmlFor='key'><b>Key</b></label>
+                    <p name='key'>{this.state.sessionData.session_key}</p>
+                </div>
+                <div id='chords'>
+                    <label htmlFor='chords'><b>Chord Progression</b></label>
+                    <p name='chords'>{this.state.sessionData.chord_progression}</p>
+                </div>
             </div>
         ): <> </>
-        return(
+
+        return (
             <div>
-                <Navigation />
                 {this.state.sessionData ? 
                 <div className='session'>
+                    <img className='cover-art' src={this.state.sessionData.art}></img>
                     <div className='info'>
-                        <img src={this.state.sessionData.art} style={{width: '500px', height: '350px'}}></img>
                         <h2>{this.state.sessionData.session_name}</h2>
                         <h3>by <Link to={`/profile/${this.state.sessionData.owner_id}`}><h3 id='profile-link'>{this.state.sessionData.username}</h3></Link></h3>
+                        <h5 id='looking-for'>Looking for {this.state.sessionData.looking_for}</h5>
                         <div id='specific-info'>
                             {specificInfo}
-                            <button className='round-button' onClick={this.hideInfo}>Toggle Info</button>
+                            <p onClick={this.toggleInfo}>{this.state.toggle} info</p>
                         </div>
                     </div>
                     <div className='collaborate'>
@@ -521,26 +552,34 @@ class Session extends Component {
                                 {this.state.newCollab && !this.state.recording ? <><a download='newcollab' href={this.state.newCollab}>DOWNLOAD</a><br/><br/></> : <br/>}
                                 {!this.state.newCollab && !this.state.recording ? <br/> : <></>}
                             </div>
-                            <div className='file-input'>
-                                <Input type='file' name='audio' onChange={this.fileHandler}></Input>
-                            </div>
-                            <br/>
-                            <div className='upload'>
-                                <button className='round-button' onClick={this.uploadCollab}>UPLOAD</button><br/>
-                                {this.state.added ? <h5>added!</h5> : <><h5>{' '}</h5><br/></>}
-                            </div>
+                            <form onSubmit={this.uploadCollab}>
+                                <div className='file-input'>
+                                    <input required type='file' name='audio' accept='audio/*' onChange={this.fileHandler}></input>
+                                </div>
+                                <FormControl>
+                                    <InputLabel htmlFor='instrument'>instrument</InputLabel>
+                                    <Input required type='text' name='instrument' onChange={this.handleInstrument}></Input>
+                                </FormControl>
+                                <br/><br/>
+                                <div className='upload'>
+                                    <button className='round-button'>UPLOAD</button><br/>
+                                    {this.state.added ? <h5>added!</h5> : <><h5>{' '}</h5><br/></>}
+                                </div>
+                            </form>
                         </div>
                     </div>
                     {this.state.isOwner && this.state.poolTracks ?
                     <div className='pool'>
                         <h3>Pool</h3>
                         <button className='round-button' onClick={this.clearPool}>CLEAR POOL</button>
+                        <br/><br/>
                         <div className='tracks-container'>
                             {this.state.collabsData.map((collab, index) => {
                                 if (collab.approved === false) {
                                     return (
                                         <div className='pool-track' key={index} style={{}}>
                                             <img className='pool-pic' onClick={() => this.checkPool(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
+                                            <h5 className='pool-instrument'>{collab.instrument_name}</h5>
                                             <button className='pool-button' onClick={() => this.merge(index)}>MERGE</button>
                                         </div>
                                     )
@@ -569,11 +608,12 @@ class Session extends Component {
                         <div className='tracks-container'>
                             <div className='merged-track'>
                                 <p className='left-pan'>L</p>
-                                <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
+                                <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3', alignSelf:'center'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
                                 <p className='right-pan'>R</p>
                                 <img className='track-pic' src={this.state.sessionData.avatar} alt=''></img>
+                                <h5 className='track-instrument'>original</h5>
                                 <a id='download-session-track' download href={this.state.sessionData.audio}>DOWNLOAD</a>
-                                <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
+                                <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'97px', justifySelf:'center'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
                                 <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
                             </div>
                             {this.state.collabsData.map((collab, index) => {
@@ -581,14 +621,15 @@ class Session extends Component {
                                     return (
                                         <div className='merged-track' key={index}>
                                             <p className='left-pan'>L</p>
-                                            <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3'}} onChange={(event) => this.changePanning(index, event)}></Slider>
+                                            <Slider defaultValue={collab.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3', alignSelf:'center'}} onChange={(event) => this.changePanning(index, event)}></Slider>
                                             <p className='right-pan'>R</p>
                                             <img className='track-pic' onClick={() => this.muteTrack(index)} src={collab.avatar} alt='' style={{filter:`${collab.filter}`}}></img>
+                                            <h5 className='track-instrument'>{collab.instrument_name}</h5>
                                             {this.state.isOwner ?
                                             <button className='track-button' onClick={() => this.unmerge(index)}>UNMERGE</button>
                                             : <></>}
-                                            <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'85px'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
-                                            <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
+                                            <Slider defaultValue={collab.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'95px', justifySelf:'center'}} onChange={(event) => this.changeVolume((index), event)}></Slider>
+                                            <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', alignSelf:'end', color:'indigo', margin:'0px'}}/>
                                         </div>
                                     )
                                 } return true

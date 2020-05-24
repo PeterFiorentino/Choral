@@ -1,0 +1,15 @@
+.collabPics {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+}
+
+.collabName {
+    font-weight: bold;
+}
+
+#allCollabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
