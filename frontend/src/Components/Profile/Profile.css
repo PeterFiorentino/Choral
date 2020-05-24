@@ -30,8 +30,8 @@ session-preview {
     display: grid;
     align-items: end;
     padding: 15px;
-    grid-row: 2/3;
-    grid-column: 2/3;
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
     grid-template-rows: 50px auto;
     grid-template-columns: 30% 25% 45%;
     align-items: center;
@@ -44,6 +44,7 @@ session-preview {
     border: 2px; 
     border-style: groove;
     border-color: lightcyan;
+
     font-size: 9px;
 }
 
@@ -69,7 +70,7 @@ session-preview {
 }
 
 #contact{
-    grid-column: 2/4;
+    grid-column: 2 / 4;
     justify-self: start;
     align-self: center;
     font-size: 9px;
@@ -83,44 +84,38 @@ session-preview {
     }
 }
 
-
-#location{
-    grid-column: 2/4;
-
-    background-color: lightgrey;
-    align-self: start;
-    margin: 0px;
-
-}
-
-#instrument{
-    grid-column: 2/4;
-    background-color: lightgrey;
+.location-info{
+    grid-column: 2 / 4; 
     align-self: start;
     margin: 0px;
 }
 
-#genre{
-    grid-column: 2/4;
+.instrument-info{
+    grid-column: 2 / 4;
     align-self: start;
     margin: 0px;
 }
 
-#anthem {
-    grid-column: 2/4;
-    background-color: lightgrey;
+.style-info{
+    grid-column: 2 / 4;
+    align-self: start;
+    margin: 0px;
 }
+
+.anthem-info{
+    grid-column: 2 / 4;
+    align-self: start;
+    margin: 0px;
+}
+.collapse-info{
+    grid-column: 1 / 2;
+}
+
  #follow {
     color: blue
  }
 
  #unfollow{
     color: red;
-    align-self: start;
-    margin: 0px;
-}
 
-.collapse-info{
-    grid-column: 1/2;
-}
-
+ }
