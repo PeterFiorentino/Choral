@@ -14,7 +14,6 @@ class ProfilePage extends Component {
                id: props.match.params.id,
                username: '',
                email: '',
-               avatar: '',
                location:'',
                instrument:'',
                fav_genre: '',
@@ -22,7 +21,10 @@ class ProfilePage extends Component {
            },
            loggedUser: props.user,
            isUserLoggedIn: props.isUserLoggedIn,
-           isFollowingUser: null
+           isFollowingUser: null,
+           changePic: false,
+           avatar: '',
+           newAvatar: ''
         }
     }
     componentDidMount = () => {
@@ -40,23 +42,24 @@ class ProfilePage extends Component {
 
     fetchUserData = async () => {
         const {displayedUser} = this.state
-        console.log(displayedUser)
+     
         try{
             const response = await axios.get(`/api/users/${displayedUser.id}`)
             const userData = response.data.payload.user
-            console.log(userData)
+
             this.setState({
                 displayedUser: {
                     id: this.state.displayedUser.id,
                     username: userData.username,
                     email: userData.email,
-                    avatar: userData.avatar,
                     location: userData.location,
                     instrument: userData.instrument,
                     fav_genre: userData.fav_genre,
                     anthem: userData.anthem
                 },
-                isOwner: (this.state.loggedUser.toString() === displayedUser.id)  
+                isOwner: (this.state.loggedUser.toString() === displayedUser.id),
+                avatar: userData.avatar,
+                newAvatar: null, 
             })
         }catch(error){
             console.log('err =>', error)
@@ -123,11 +126,11 @@ class ProfilePage extends Component {
 
     fetchUserSessionsAndCollaborators = async () => {
         const {displayedUser} = this.state
-        console.log(displayedUser)
+
         try {
             let response = await axios.get(`/api/sessions/user/${displayedUser.id}`)
             const sessionList = response.data.payload.session
-            console.log(sessionList)
+    
             for (let sesh of sessionList){
                sesh.collaborations = await this.fetchCollaborators(sesh.id)   
             }
@@ -149,16 +152,12 @@ class ProfilePage extends Component {
 
     followUser = async () => {
         const {displayedUser, loggedUser} = this.state
-        console.log('logInState =>', this.state.isUserLoggedIn)
-        console.log('followState =>', this.state.isFollowingUser)
-        console.log('This button follows the user', displayedUser)
 
         try{
-            const response = await axios.post(`/api/follows/${loggedUser}/follows/${displayedUser.id}`, {
+            await axios.post(`/api/follows/${loggedUser}/follows/${displayedUser.id}`, {
                 user_id: loggedUser,
                 followed_id: displayedUser.id
             })
-            console.log('response =>', response)
             this.setState({
                 isFollowingUser: true 
             })
@@ -177,13 +176,69 @@ class ProfilePage extends Component {
         })
     }
 
+    changePic = () => {
+        this.setState({
+            changePic: !this.state.changePic
+        })
+    }
+
+    handleNewPic = (event) => {
+        this.setState({
+            newAvatar: event.target.files[0]
+        })
+    }
+
+    uploadNewPic = async (event) => {
+        event.preventDefault()
+        
+        const { newAvatar, loggedUser } = this.state
+
+        const avatarData = new FormData()
+        avatarData.append('image', newAvatar)
+            
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+
+        let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData, config)
+        let avatarLocation = avatarResponse.data.imageUrl
+
+        await axios.patch(`/api/users/${loggedUser}`, {avatar: avatarLocation})
+
+        this.setState({
+            avatar: avatarLocation,
+            changePic: false
+        })
+    }
+
     render(){
-        const {displayedUser, loggedUser, isUserLoggedIn, isFollowingUser} = this.state
+        const {avatar, displayedUser, loggedUser, isUserLoggedIn, isFollowingUser, isOwner} = this.state
         return(
             <>
             {/* <h1 className='main-title'>Choral</h1> */}
             <div className='user-info'>
-                <img id='profile-picture' src={displayedUser.avatar} ></img>
+                <div className='profile-pic-container'>
+                    <img id='profile-picture' src={avatar} ></img>
+                    {isOwner ? <p onClick={this.changePic} style={{margin:'0px'}}>edit</p> : <></>}
+                    {this.state.changePic ?
+                        <form onSubmit={this.uploadNewPic}> 
+                            <br/>
+                            <input
+                                required
+                                type='file'
+                                accept='image/*'
+                                name='avatar'
+                                placeholder='new avatar'
+                                onChange={this.handleNewPic}
+                            />
+                            <br/><br/>
+                            <button className='round-button'>change</button>
+                            <br/><br/>
+                        </form>
+                    : <br/>}
+                </div>
                 <ProfileCard
                     displayedUser={displayedUser}
                     loggedUser={loggedUser}
