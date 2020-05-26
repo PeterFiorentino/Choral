@@ -1,7 +1,6 @@
 import React from 'react'
 
 const ProfileCard = (props) => {
-    console.log(props)
     if(props.displayInfo){
         return(
             <>

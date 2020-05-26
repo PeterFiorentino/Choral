@@ -12,33 +12,36 @@ const LoginForm = (props) => {
     }
 
     return (
-        <div className='login-form'>
+        <div>
             <br/>
             <h3>enter choral</h3>
-            <form onSubmit ={handleSubmit}>
-                <FormControl>
-                    <InputLabel htmlFor='username'>username</InputLabel>
-                    <Input
-                        required
-                        type='text'
-                        name='username'
-                        value= {props.username}
-                        placeholder='username'
-                        onChange={props.handleChange}
-                    />
-                </FormControl>
+            <form className='login-form' onSubmit ={handleSubmit}>
                 <br/>
-                <FormControl>
-                    <InputLabel htmlFor='password'>password</InputLabel>
-                    <Input
-                        required
-                        type='password'
-                        name='password'
-                        value={props.password}
-                        placeholder='password'
-                        onChange={props.handleChange}
-                    />
-                </FormControl>
+                <div className='login-info'>
+                    <FormControl style={{width:'60%', marginLeft:'20%'}}>
+                        <InputLabel htmlFor='username'>username</InputLabel>
+                        <Input
+                            required
+                            type='text'
+                            name='username'
+                            value= {props.username}
+                            placeholder='username'
+                            onChange={props.handleChange}
+                        />
+                    </FormControl>
+                    <br/>
+                    <FormControl style={{width:'60%', marginLeft:'20%'}}>
+                        <InputLabel htmlFor='password'>password</InputLabel>
+                        <Input
+                            required
+                            type='password'
+                            name='password'
+                            value={props.password}
+                            placeholder='password'
+                            onChange={props.handleChange}
+                        />
+                    </FormControl>
+                </div>
                 <br/><br/>
                 <button className='round-button' type='submit'>SUBMIT</button>
             </form>

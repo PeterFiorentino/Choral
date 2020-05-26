@@ -20,12 +20,12 @@ class Collaborators extends Component {
     getCollaborators = async () => {
         
         const {loggedUser} = this.state;
-        console.log(loggedUser)
+        
         try{
             let response = await axios.get(`/api/collaborations/collaborators/${loggedUser}`)
             let collabArr = response.data.payload
             let collabObj = {}
-            console.log(collabArr)
+            
             for(let i of collabArr) {
                 if(!collabObj[i.username]) {
                     collabObj[i.username] = [i.id, i.avatar]

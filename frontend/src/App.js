@@ -33,7 +33,6 @@ class App extends Component {
     })
   }
   setUser = (user) => {
-    console.log('setting user to =>', user.id)
     this.setState({
       user: user.id,
       isUserLoggedIn: true
@@ -43,25 +42,23 @@ class App extends Component {
   logOutUser = async () => {
     try{
       await axios.post(`/api/auth/logout`)
-      console.log('Logging out user')
       this.setState({
         user: null,
         isUserLoggedIn: false
       })
       this.props.history.push('/landing')
-    }catch(error){
+    } catch(error){
       console.log('err =>', error)
     }
   }
   checkLoginStatus = async () => {
     try{
       const response = await axios.get('/api/auth/isUserLoggedIn')
-      console.log(response.data.payload)
+
       this.setUser(response.data.payload)
-    }catch(error){
+    } catch(error){
       console.log('err =>', error)
     }
-    console.log('Checking if user is logged in')
   }
 
   renderLandingPage = (routeProps) => {
