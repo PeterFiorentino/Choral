@@ -50,7 +50,7 @@ const Navigation = ({user, logOutUser, isUserLoggedIn }) => {
                     <ToolBar style={{justifyContent:'space-between'}}>
                         <React.Fragment key={anchor}>
                         <Button id='nav-button' onClick={toggleDrawer(anchor, true)}>NAVIGATE</Button>
-                        <Typography style={{fontFamily:'Boogaloo', fontSize:'35px', fontWeight:'550', letterSpacing:'0.1 em', color:'#FF7B67'}}>Choral</Typography>
+                        <Typography style={{position: 'absolute', left: '50%', transform: 'translate(-50%)', fontFamily:'Boogaloo', fontSize:'35px', fontWeight:'550', letterSpacing:'0.1 em', color:'#FF7B67'}}>Choral</Typography>
                         <Drawer anchor={anchor} 
                             open={state[anchor]} 
                             onClose={toggleDrawer(anchor, false)}
