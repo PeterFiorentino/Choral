@@ -1,9 +1,9 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Boogaloo&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Open+Sans+Condensed:wght@300&family=Roboto&display=swap');
 
 html, body {
     margin: 0;
     height: 100%;
+    font-family: Roboto;
 }
 
 body {
@@ -125,4 +125,8 @@ body {
 }
 .more-info {
     margin: 2%;
+}
+
+#form-title {
+    font-family: Roboto;
 }

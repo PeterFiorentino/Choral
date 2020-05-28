@@ -14,7 +14,7 @@ const LoginForm = (props) => {
     return (
         <div>
             <br/>
-            <h3>enter choral</h3>
+            <h3 className='form-title'>enter choral</h3>
             <form className='login-form' onSubmit ={handleSubmit}>
                 <br/>
                 <div className='login-info'>
