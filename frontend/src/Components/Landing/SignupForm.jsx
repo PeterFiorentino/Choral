@@ -14,7 +14,7 @@ const SignupForm = (props) => {
     return (
         <div>
             <br/>
-            <h3>create your user</h3>
+            <h3 className='form-title'>create your user</h3>
             <form className='signup-form' onSubmit={handleSubmit}>
                 <div className='signup-info'>
                     <div className='main-info'>

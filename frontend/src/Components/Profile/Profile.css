@@ -19,6 +19,9 @@ session-preview {
         width: 45%;
     }
 }
+.profile-pic-container {
+    margin-bottom: 1rem;
+}
 
 #profile-picture{ 
     width: 225px;
@@ -27,6 +30,7 @@ session-preview {
 }
 
 .user-card-info{
+    background-color: white;
     display: grid;
     align-items: end;
     padding: 15px;
@@ -39,12 +43,9 @@ session-preview {
     margin: 2px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-
-    /* background-color: lightcyan; */
-    border: 2px; 
-    border-style: groove;
-    border-color: lightcyan;
-
+    border: 0 solid #bcccdc;
+    border-width: 1px;
+    border-radius: .375rem;
     font-size: 9px;
 }
 
