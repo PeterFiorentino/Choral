@@ -74,7 +74,10 @@ INSERT INTO collaborations (collaborator_id, session_id, session_owner_id, audio
 INSERT INTO follows (user_id, followed_id, active_status)
     VALUES(1,2, true),
           (1,3, true),
+          (1,1, true),
           (2,1, true),
+          (2,2, true),
+          (3,3, true),
           (2,3, true),
           (3,1, true),
           (3,2, true);
