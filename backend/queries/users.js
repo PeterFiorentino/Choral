@@ -21,6 +21,10 @@ const createUser = async (user) => {
     anthem: user.anthem
   })
 
+  let user_id = newUser.id;
+  
+  let newFollow = await db.one(`INSERT INTO follows (user_id, followed_id, active_status) VALUES ($1, $2, $3) RETURNING *`, [user_id, user_id, true]);
+    
   delete newUser.password_digest 
   return newUser
 }
