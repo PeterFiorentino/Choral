@@ -4,6 +4,7 @@ import Post from '../Post/Post.jsx'
 import FollowButton from '../Profile/FollowButton.jsx'
 import axios from 'axios'
 import './Profile.css'
+import { ClickAwayListener } from '@material-ui/core'
  
 // Logged User Id is taken from params id and User Signed In is taken 
 class ProfilePage extends Component {
@@ -24,7 +25,8 @@ class ProfilePage extends Component {
            isFollowingUser: null,
            changePic: false,
            avatar: '',
-           newAvatar: ''
+           newAvatar: '',
+           editInfo: false
         }
     }
     componentDidMount = () => {
@@ -172,7 +174,7 @@ class ProfilePage extends Component {
 
     toggleInfo = () => {
         this.setState({
-            displayInfo: !this.state.displayInfo
+            displayInfo: !this.state.displayInfo,
         })
     }
 
@@ -213,6 +215,39 @@ class ProfilePage extends Component {
         })
     }
 
+    toggleEditInfo = () => {
+        this.setState({
+            editInfo: !this.state.editInfo
+        })
+    }
+
+    handleNewInfo = (event) => {
+        this.setState({
+            [event.target.id]: event.target.value
+        })
+    }
+
+    uploadNewInfo = async () => {
+        const { displayedUser, loggedUser} = this.state
+        
+        const body = {
+            username: displayedUser.username,
+            email: (this.state.contact || displayedUser.email),
+            location: (this.state.location || displayedUser.location),
+            instrument: (this.state.instrument || displayedUser.instrument),
+            fav_genre: (this.state.style || displayedUser.fav_genre),
+            anthem: (this.state.anthem || displayedUser.anthem)
+        }
+
+        await axios.patch(`/api/users/info/${loggedUser}`, body)
+
+        await this.fetchUserData()
+
+        this.setState({
+            editInfo: false
+        })
+    }
+
     render(){
         const {avatar, displayedUser, loggedUser, isUserLoggedIn, isFollowingUser, isOwner} = this.state
         return(
@@ -242,8 +277,13 @@ class ProfilePage extends Component {
                 <ProfileCard
                     displayedUser={displayedUser}
                     loggedUser={loggedUser}
+                    isOwner={isOwner}
                     toggleInfo={this.toggleInfo}
                     displayInfo={this.state.displayInfo}
+                    toggleEditInfo={this.toggleEditInfo}
+                    editInfo={this.state.editInfo}
+                    handleNewInfo={this.handleNewInfo}
+                    uploadNewInfo={this.uploadNewInfo}
                 />
             </div>
             <div>
