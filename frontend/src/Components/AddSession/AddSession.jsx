@@ -150,6 +150,7 @@ class AddSession extends React.Component {
                     {this.state.added ? <h5>Added!</h5> : <></>}
                 </form>
             </div>
+            <br/>
             </>
         )
     }
