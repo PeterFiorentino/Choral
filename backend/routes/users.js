@@ -55,4 +55,30 @@ router.patch('/:id', authHelpers.loginRequired, async (req, res)  => {
   }
 });
 
+router.patch('/info/:id', authHelpers.loginRequired, async (req, res)  => {
+  let username = req.body.username
+  let email = req.body.email
+  let location = req.body.location
+  let instrument = req.body.instrument
+  let fav_genre = req.body.fav_genre
+  let anthem = req.body.anthem
+  
+  let id = req.params.id
+  
+  try {
+    let updateUser =  await db.oneOrNone(`UPDATE users SET username = $1, email = $2, location = $3, instrument = $4, fav_genre = $5, anthem = $6 WHERE id=$7`, [username, email, location, instrument, fav_genre, anthem, id]);
+    res.json({
+      message: "Success",
+      payload: updateUser, 
+      error: null
+    })
+  } catch (error) {
+    res.json({
+      message: "Cannot change that user's information",
+      payload: null,
+      error: error
+    })
+  }
+});
+
 module.exports = router;
