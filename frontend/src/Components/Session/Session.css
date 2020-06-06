@@ -9,7 +9,7 @@
 }
 
 .cover-art {
-    max-width: 100%;
+    max-width: 80%;
 }
 
 .specific-info {
@@ -111,7 +111,7 @@
     justify-self: end;
     align-self: center;
     margin: 0px;
-    margin-right: 1px;
+    margin-right: 6px;
     color: indigo;
 }
 
@@ -121,7 +121,7 @@
     justify-self: start;
     align-self: center;
     margin: 0px;
-    margin-left: 1px;
+    margin-left: 6px;
     color: indigo;
 }
 
