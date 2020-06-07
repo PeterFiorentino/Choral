@@ -50,7 +50,7 @@ class Collaborators extends Component {
                     {Object.keys(collaborators).map(collab => {
                         return(
                             <div>
-                                <img src={collaborators[collab][1]} className="collabPics"></img>
+                                <img src={collaborators[collab][1]} alt='' className="collabPics"></img>
                                 <Link to={`/profile/${collaborators[collab][0]}`}><p className="collabName">{collab}</p></Link>
                             </div>                   
                         )
