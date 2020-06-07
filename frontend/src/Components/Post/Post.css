@@ -45,8 +45,10 @@
 .delete-button {
     grid-row: 1 / 2;
     grid-column: 4 / 5;
-    border-radius: 0.8rem;
-    font-size: 16px;
+    position: absolute;
+    right: 7%;
+    border-radius: 50%;
+    font-size: 12px;
     background-color: white;
     border-color: white;
 }
