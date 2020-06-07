@@ -4,7 +4,6 @@ import Post from '../Post/Post.jsx'
 import FollowButton from '../Profile/FollowButton.jsx'
 import axios from 'axios'
 import './Profile.css'
-import { ClickAwayListener } from '@material-ui/core'
  
 // Logged User Id is taken from params id and User Signed In is taken 
 class ProfilePage extends Component {
@@ -31,16 +30,20 @@ class ProfilePage extends Component {
     }
     componentDidMount = () => {
         this.getFollowRelation()
-        console.log(this.state.isFollowingUser)
         this.fetchUserData()
         this.fetchUserSessionsAndCollaborators()       
-        console.log(this.props)
         // Adding a callback to check if user is following the displayed User
     }
 
     // componentDidUpdate = () => {
     //     this.getFollowRelation()
     // }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+          window.location.reload()
+        }
+    }
 
     fetchUserData = async () => {
         const {displayedUser} = this.state
@@ -148,7 +151,6 @@ class ProfilePage extends Component {
 
     fetchCollaborators = async (id) => {
         let response2 = await axios.get(`/api/collaborations/${id}`)
-        console.log(response2)
         return response2.data.payload.collabs
     }
 
@@ -255,7 +257,7 @@ class ProfilePage extends Component {
             {/* <h1 className='main-title'>Choral</h1> */}
             <div className='user-info'>
                 <div className='profile-pic-container'>
-                    <img id='profile-picture' src={avatar} ></img>
+                    <img id='profile-picture' alt='' src={avatar} ></img>
                     {isOwner ? <p onClick={this.changePic} style={{margin:'0px'}}>edit</p> : <></>}
                     {this.state.changePic ?
                         <form onSubmit={this.uploadNewPic}> 
@@ -300,6 +302,7 @@ class ProfilePage extends Component {
                     <Post session={session} key={session.id} canDelete={this.state.isOwner}></Post>
                 ) : <></>}
             </div>
+            <br/>
             </>
         )
     }

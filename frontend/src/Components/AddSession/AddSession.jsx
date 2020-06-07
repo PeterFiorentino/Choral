@@ -62,7 +62,7 @@ class AddSession extends React.Component {
             stereo_position: 50
         }
     
-        let response = await axios.post('http://localhost:3001/api/sessions', body)
+        await axios.post('http://localhost:3001/api/sessions', body)
 
         this.setState({
             added: true

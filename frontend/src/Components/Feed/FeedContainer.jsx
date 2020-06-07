@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import Navigation from '../Navigation/Navigation.jsx'
 import MyFeed from '../Feed/MyFeed.jsx'
 import Explore from '../Feed/Explore.jsx'
 import './FeedContainer.css'
@@ -10,21 +9,27 @@ class FeedContainer extends Component {
         this.state = {
             user : props.user,
             myFeed: false,
+            myFeedSelectedColor: 'white',
             explore: true,
+            exploreSelectedColor: 'lightcoral'
         }
     }
     
    toggleMyFeed = () => {
         this.setState({
-            myFeed: !this.state.myFeed,
-            explore: false
+            myFeed: true,
+            myFeedSelectedColor: 'lightcoral',
+            explore: false,
+            exploreSelectedColor: 'white'
         })
    }
 
    toggleExplore = () => {
         this.setState({
-            explore: !this.state.explore,
-            myFeed: false
+            explore: true,
+            exploreSelectedColor: 'lightcoral',
+            myFeed: false,
+            myFeedSelectedColor: 'white'
         })
    }
 
@@ -45,8 +50,8 @@ class FeedContainer extends Component {
         return(
             <div>
                 {/* <h1 className='main-title'>Choral</h1> */}
-                <button className='round-button' onClick={this.toggleMyFeed}>My Feed</button>
-                <button className='round-button' onClick={this.toggleExplore}>Explore</button>
+                <button className='round-button' onClick={this.toggleMyFeed} style={{backgroundColor:`${this.state.myFeedSelectedColor}`}}>My Feed</button>
+                <button className='round-button' onClick={this.toggleExplore} style={{backgroundColor:`${this.state.exploreSelectedColor}`}}>Explore</button>
                 {renderMyFeed}
                 {renderExplorePage}
             </div>

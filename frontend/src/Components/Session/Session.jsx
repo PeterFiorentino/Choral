@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import './Session.css'
-import Navigation from '../Navigation/Navigation.jsx'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -401,6 +400,8 @@ class Session extends Component {
             added: true
         })
 
+        this.stopAll()
+
         if (this.state.isOwner) {
             await this.saveMix()
 
@@ -444,7 +445,7 @@ class Session extends Component {
                 bouncing: true
             })
 
-        } else {
+        } else if (this.state.bouncing) {
             const { recorder } = this.state
             
             recorder.stop()
@@ -533,7 +534,7 @@ class Session extends Component {
             <div>
                 {this.state.sessionData ? 
                 <div className='session'>
-                    <img className='cover-art' src={this.state.sessionData.art}></img>
+                    <img className='cover-art' alt='' src={this.state.sessionData.art}></img>
                     <div className='info'>
                         <h2>{this.state.sessionData.session_name}</h2>
                         <h3>by <Link to={`/profile/${this.state.sessionData.owner_id}`}><h3 id='profile-link'>{this.state.sessionData.username}</h3></Link></h3>
@@ -600,7 +601,7 @@ class Session extends Component {
                             <div className='bounce'>
                                 <button className='round-button' onClick={this.bounce}>BOUNCE</button><br/>
                                 {this.state.bouncing ? <h5>bouncing...</h5> : <><h5>{' '}</h5></>}
-                                {this.state.newBounce && !this.state.bouncing ? <><a download href={this.state.newBounce}>DOWNLOAD</a><br/><br/></> : <br/>}
+                                {this.state.newBounce && !this.state.bouncing ? <><a download='bounce' href={this.state.newBounce}>DOWNLOAD</a><br/><br/></> : <br/>}
                                 {!this.state.newBounce && !this.state.bouncing ? <br/> : <></>}
                             </div>
                         </div>
@@ -612,7 +613,7 @@ class Session extends Component {
                                 <p className='right-pan'>R</p>
                                 <img className='track-pic' src={this.state.sessionData.avatar} alt=''></img>
                                 <h5 className='track-instrument'>original</h5>
-                                <a id='download-session-track' download href={this.state.sessionData.audio}>DOWNLOAD</a>
+                                <a id='download-session-track' download target='_blank' rel="noopener noreferrer" href={this.state.sessionData.audio}>DOWNLOAD</a>
                                 <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'97px', justifySelf:'center'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
                                 <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
                             </div>
