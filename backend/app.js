@@ -160,7 +160,7 @@ app.post('/upload/image', uploader.single('image'), async (req, res, next) => {
             res.status(400).send('No file uploaded.');
             return;
         }
-        const blob = imageBucket.file(Date.now() + "-" + req.file.originalname);
+        const blob = imageBucket.file(Date.now() + req.file.originalname);
 
         const blobWriter = blob.createWriteStream({
           metadata: {
