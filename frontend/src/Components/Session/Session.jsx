@@ -375,19 +375,19 @@ class Session extends Component {
         const data = new FormData()
         data.append('audio', this.state.selectedAudio)
         
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        }
+        // const config = {
+        //     headers: {
+        //         'content-type': 'multipart/form-data'
+        //     }
+        // }
         
-        let response = await axios.post('http://localhost:3001/upload/audio', data, config)
+        let response = await axios.post('http://localhost:3001/upload/audio', data)
         
         let body = {
             session_id: this.state.sessionData.id,
             session_owner_id: this.state.session_owner_id,
             collaborator_id: this.state.loggedUser,
-            audio: response.data.audioUrl,
+            audio: response.data.fileLocation,
             instrument_name: this.state.collabInstrument,
             approved: false,
             volume: 80,
