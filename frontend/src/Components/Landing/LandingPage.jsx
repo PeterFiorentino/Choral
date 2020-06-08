@@ -69,14 +69,14 @@ class LandingPage extends Component {
                 const avatarData = new FormData()
                 avatarData.append('image', avatar)
             
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                }
+                // const config = {
+                //     headers: {
+                //         'content-type': 'multipart/form-data'
+                //     }
+                // }
 
-                let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData, config)
-                avatarLocation = avatarResponse.data.imageUrl
+                let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData)
+                avatarLocation = avatarResponse.data.fileLocation
             }
 
             await axios.post('/api/auth/signup',{
