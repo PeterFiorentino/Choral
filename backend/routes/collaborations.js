@@ -41,17 +41,18 @@ router.get('/collaborators/:user_id', async (req, res)  => {
 });  
 
 router.post('/', async (req, res) => {
-  let reef_id = req.body.reef_id
   let collaborator_id = req.body.collaborator_id
+  let reef_id = req.body.reef_id
+  let reef_owner_id = req.body.reef_owner_id
   let audio = req.body.audio
+  let instrument_name = req.body.instrument_name
   let approved = req.body.approved
   let volume = req.body.volume
   let stereo_position = req.body.stereo_position
-  let instrument_name = req.body.instrument_name
-  let reef_owner_id = req.body.reef_owner_id
+  let is_deleted = req.body.is_deleted
 
   try {
-    let newCollab = await collabQueries.postCollab(reef_id, reef_owner_id, collaborator_id, audio, instrument_name, approved, volume, stereo_position, false);
+    let newCollab = await collabQueries.postCollab(collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted);
     res.json({
       message: "Success",
       payload: {
