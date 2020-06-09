@@ -14,7 +14,7 @@ class Explore extends Component {
 
     fetchExploreFeedData = async () => {
         try{
-            let response = await axios.get(`http://localhost:3001/api/reefs`)
+            let response = await axios.get(`/api/reefs`)
          
             const reefList = response.data.payload.reefs
             for(let reef of reefList){

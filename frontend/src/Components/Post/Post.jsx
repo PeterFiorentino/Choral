@@ -53,7 +53,7 @@ const Post = (props) => {
 
     const deleteReef = async () => {
         if (window.confirm('Are you sure that you want to delete this Reef?')) {
-            await axios.patch(`http://localhost:3001/api/reefs/delete/${props.reef.id}`)
+            await axios.patch(`/api/reefs/delete/${props.reef.id}`)
             window.location.reload()
         }
     }
