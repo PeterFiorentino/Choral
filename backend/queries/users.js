@@ -1,5 +1,6 @@
 const db = require('../db/db')
 const authHelpers = require("../auth/helpers");
+const followingQueries = require('../queries/following')
 
 const createUser = async (user) => {
   const passwordDigest = await authHelpers.hashPassword(user.password);
@@ -22,10 +23,10 @@ const createUser = async (user) => {
   })
 
   let user_id = newUser.id;
-  
-  let newFollow = await db.one(`INSERT INTO follows (user_id, followed_id, active_status) VALUES ($1, $2, $3) RETURNING *`, [user_id, user_id, true]);
-    
   delete newUser.password_digest 
+
+  followingQueries.postNewFollow(user_id, user_id)
+      
   return newUser
 }
 
@@ -34,20 +35,32 @@ const getAllUsers = async () => {
     return users;
   }
 
-  const getUserByUsername = async (username) => {
-    console.log('getting user...', username)
+const getUserByUsername = async (username) => {
 	const user = await db.oneOrNone("SELECT * FROM users WHERE username = $1", [username])
 	return user;
 }
 
 const getUserbyID = async (id) => {
-    const user = await db.oneOrNone("SELECT * FROM users WHERE id = $1", [id])
+  const user = await db.oneOrNone("SELECT * FROM users WHERE id = $1", [id])
 	return user;
+}
+
+
+const updateAvatar = async (avatar, id) => { 
+  const updatedUser = await db.oneOrNone(`UPDATE users SET avatar = $1 WHERE id=$2`, [avatar, id]);
+  return updatedUser
+}
+
+const updateUserInfo = async (username, email, location, instrument, fav_genre, anthem, id) => {
+  let updatedInfo =  await db.oneOrNone(`UPDATE users SET username = $1, email = $2, location = $3, instrument = $4, fav_genre = $5, anthem = $6 WHERE id=$7`, [username, email, location, instrument, fav_genre, anthem, id]);
+  return updatedInfo
 }
 
   module.exports = { 
       createUser,
       getUserbyID,
       getUserByUsername,
-      getAllUsers
+      getAllUsers,
+      updateAvatar,
+      updateUserInfo
   }

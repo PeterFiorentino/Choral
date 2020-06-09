@@ -16,18 +16,18 @@ CREATE TABLE users (
     anthem VARCHAR
 );
 
-CREATE TABLE sessions (
+CREATE TABLE reefs  (
     id SERIAL PRIMARY KEY,
     owner_id INT REFERENCES users(id),
-    session_name VARCHAR,
+    reef_name VARCHAR,
     genre VARCHAR,
     bpm INT,
-    session_key VARCHAR,
+    reef_key VARCHAR,
     chord_progression VARCHAR,
     looking_for VARCHAR,
     audio VARCHAR,
     art VARCHAR,
-    session_closed BOOLEAN,
+    reef_closed BOOLEAN,
     volume INT,
     stereo_position INT,
     is_deleted BOOLEAN
@@ -36,8 +36,8 @@ CREATE TABLE sessions (
 CREATE TABLE collaborations (
     id SERIAL PRIMARY KEY,
     collaborator_id INT REFERENCES users(id),
-    session_id INT REFERENCES sessions(id),
-    session_owner_id INT REFERENCES users(id),
+    reef_id INT REFERENCES reefs(id),
+    reef_owner_id INT REFERENCES users(id),
     audio VARCHAR,
     instrument_name VARCHAR,
     approved BOOLEAN,
@@ -59,12 +59,12 @@ INSERT INTO users (username, email, password, avatar, location, instrument, fav_
            ('Owen', 'owenjones@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/68545479_3598552950170956_2369962734889467904_n.jpg?_nc_cat=104&_nc_sid=13bebb&_nc_ohc=3Rpomf8HFrQAX_utV5F&_nc_ht=scontent-lga3-1.xx&oh=26a085edc15ae0d711cda1a044510f8d&oe=5EE50B60', 'Brooklyn, NY', 'Bass', 'Acid Jazz', 'Coronus the Terminator by Flying Lotus');
 
 
-INSERT INTO sessions (owner_id, session_name, genre, bpm, session_key, chord_progression, looking_for, audio, art, session_closed, volume, stereo_position, is_deleted)
+INSERT INTO reefs  (owner_id, reef_name, genre, bpm, reef_key, chord_progression, looking_for, audio, art, reef_closed, volume, stereo_position, is_deleted)
     VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', 'http://localhost:3001/audios/drums.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50, false),
            (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50, false);
            
 
-INSERT INTO collaborations (collaborator_id, session_id, session_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted)
+INSERT INTO collaborations (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted)
     VALUES (1, 1, 1, 'http://localhost:3001/audios/bassguitar.mp3', 'bass', false, 80, 50, false),
            (2, 1, 1, 'http://localhost:3001/audios/leadguitar.mp3', 'guitar', false, 80, 50, false),
            (3, 1, 1, 'http://localhost:3001/audios/horns.mp3', 'horns', false, 80, 50, false),
