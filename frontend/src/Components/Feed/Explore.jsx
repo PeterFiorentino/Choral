@@ -14,14 +14,14 @@ class Explore extends Component {
 
     fetchExploreFeedData = async () => {
         try{
-            let response = await axios.get(`http://localhost:3001/api/sessions`)
+            let response = await axios.get(`http://localhost:3001/api/reefs`)
          
-            const sessionList = response.data.payload.sessions
-            for(let sesh of sessionList){
-                sesh.collaborations = await this.fetchCollaborators(sesh.id)
+            const reefList = response.data.payload.reefs
+            for(let reef of reefList){
+                reef.collaborations = await this.fetchCollaborators(reef.id)
             }
             this.setState({
-                exploreFeedData: sessionList
+                exploreFeedData: reefList
             })
         }catch(error){
             console.log('err =>', error)
@@ -42,10 +42,10 @@ class Explore extends Component {
     render(){
         return(
             <>
-                <div className='session-info2'>
+                <div className='reef-info2'>
                     {this.state.exploreFeedData ? 
-                    this.state.exploreFeedData.map((session) =>
-                    <Post session={session} key={session.id}></Post>) : <></>}
+                    this.state.exploreFeedData.map((reef) =>
+                    <Post reef={reef} key={reef.id}></Post>) : <></>}
                 </div>
             </>
         )
