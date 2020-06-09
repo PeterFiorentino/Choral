@@ -14,14 +14,14 @@ const Post = (props) => {
 
     const setVolumes = () => {
         let audioElements = getAudioElements()
-        audioElements.forEach((audio, index) => {
-            if (index === 0) {
-                audio.volume = props.session.volume / 100
-            } else {
-                let collabIndex = index - 1
-                audio.volume = props.session.collaborations[collabIndex].volume / 100
-            }
-        })
+        // audioElements.forEach((audio, index) => {
+        //     if (index === 0) {
+                audioElements[0].volume = props.session.volume / 100
+        //     } else {
+        //         let collabIndex = index - 1
+        //         audio.volume = props.session.collaborations[collabIndex].volume / 100
+        //     }
+        // })
     }
 
     const handleTime = () => {
@@ -36,13 +36,14 @@ const Post = (props) => {
         let audioElements = getAudioElements()
         setVolumes()
         if (audioElements[0].currentTime === 0) { 
-            for (let index = 0; index < audioElements.length; index ++) {
-                audioElements[index].play()
-            }
+            // for (let index = 0; index < audioElements.length; index ++) {
+                audioElements[0].play()
+            // }
         } else {
-            for (let index = 0; index < audioElements.length; index ++) {
-                audioElements[index].load()
-            }
+            // for (let index = 0; index < audioElements.length; index ++) {
+                audioElements[0].load()
+                setTime(0)
+            // }
         }
     }
  
@@ -90,7 +91,7 @@ const Post = (props) => {
             <audio className='audio-element' name={`session${props.session.id}`} volume={props.session.volume / 100} onTimeUpdate={handleTime}>
                 <source src={props.session.audio}></source>
             </audio>
-            {props.session.collaborations.map((collaboration) => {
+            {/* {props.session.collaborations.map((collaboration) => {
                 if (collaboration.approved) {
                     return (   
                         <audio className='audio-element' name={`session${props.session.id}`} volume={collaboration.volume / 100} key={collaboration.id}>
@@ -99,7 +100,7 @@ const Post = (props) => {
                     )
                 }
                 return true 
-            })}
+            })} */}
         </div>
         </>
     )
