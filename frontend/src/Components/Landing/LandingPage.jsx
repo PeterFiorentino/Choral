@@ -41,7 +41,7 @@ class LandingPage extends Component {
    loginUser = async () => {
     const {username, password} = this.state
     const {history} = this.props
-    console.log('Logging in user')
+    
        try{
         const response = await axios.post('/api/auth/login',{
             username: username, 
@@ -69,17 +69,17 @@ class LandingPage extends Component {
                 const avatarData = new FormData()
                 avatarData.append('image', avatar)
             
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                }
+                // const config = {
+                //     headers: {
+                //         'content-type': 'multipart/form-data'
+                //     }
+                // }
 
-                let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData, config)
-                avatarLocation = avatarResponse.data.imageUrl
+                let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData)
+                avatarLocation = avatarResponse.data.fileLocation
             }
 
-            const response = await axios.post('/api/auth/signup',{
+            await axios.post('/api/auth/signup',{
                 username: username,
                 email: email,
                 password: password,
@@ -112,7 +112,7 @@ class LandingPage extends Component {
 
     render(){
         const {login, signup, username, email, password, location, instrument, fav_genre, anthem} = this.state
-        const user = this.props.user
+        
         let renderLoginForm = login ? (
             <LoginForm handleChange={this.handleChange} username={username} password={password} loginUser= {this.loginUser} />
         ) :null
@@ -134,7 +134,7 @@ class LandingPage extends Component {
                     {renderSignupForm}
                 </div>
                 <div className='background-image'>
-                    <img id='img' src='https://cdn.wallpapersafari.com/24/86/2y6oVT.png'></img>
+                    <img id='img' alt='' src='https://cdn.wallpapersafari.com/24/86/2y6oVT.png'></img>
                 </div>
             </div>
            

@@ -35,17 +35,17 @@ class AddSession extends React.Component {
         audioData.append('audio', this.state.audio)
         imageData.append('image', this.state.image)
         
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        }
+        // const config = {
+        //     headers: {
+        //         'content-type': 'multipart/form-data'
+        //     }
+        // }
 
-        let audioResponse = await axios.post('http://localhost:3001/upload/audio', audioData, config)
-        let audioLocation = audioResponse.data.audioUrl
+        let audioResponse = await axios.post('http://localhost:3001/upload/audio', audioData)
+        let audioLocation = audioResponse.data.fileLocation
 
-        let imageResponse = await axios.post('http://localhost:3001/upload/image', imageData, config)
-        let imageLocation = imageResponse.data.imageUrl
+        let imageResponse = await axios.post('http://localhost:3001/upload/image', imageData)
+        let imageLocation = imageResponse.data.fileLocation
 
         let body = {
             owner_id: this.state.loggedUser,
@@ -62,7 +62,7 @@ class AddSession extends React.Component {
             stereo_position: 50
         }
     
-        let response = await axios.post('http://localhost:3001/api/sessions', body)
+        await axios.post('http://localhost:3001/api/sessions', body)
 
         this.setState({
             added: true

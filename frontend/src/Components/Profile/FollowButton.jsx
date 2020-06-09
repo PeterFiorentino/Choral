@@ -4,7 +4,7 @@ import './Profile.css'
 const FollowButton = (props) => {
     const {displayedUser, isUserLoggedIn, loggedUser, isFollowingUser, followButton} = props
 
-    if(loggedUser == displayedUser.id){
+    if(loggedUser === displayedUser.id){
         return <> </>
     } else if (isUserLoggedIn && !isFollowingUser){
         return(

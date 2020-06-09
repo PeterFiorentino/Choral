@@ -9,6 +9,7 @@ router.get('/', async (req, res) => {
         message: "Success",
         payload: {
           reefs: allReefs
+
         }, 
         error: null
       })
@@ -151,4 +152,3 @@ router.patch('/delete/:id', async (req, res)  => {
 
 
 module.exports = router;
-  
