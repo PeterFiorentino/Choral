@@ -69,7 +69,6 @@ const SignupForm = (props) => {
                         <FormControl>
                             <InputLabel htmlFor='instrument'>instrument</InputLabel>
                             <Input 
-                                required
                                 type='text'
                                 name='instrument'
                                 value={props.instrument}
@@ -81,7 +80,6 @@ const SignupForm = (props) => {
                         <FormControl>
                             <InputLabel htmlFor='fav_genre'>style</InputLabel>
                             <Input 
-                                required
                                 type='text'
                                 name='fav_genre'
                                 value={props.fav_genre}
@@ -93,7 +91,6 @@ const SignupForm = (props) => {
                         <FormControl>
                             <InputLabel htmlFor='anthem'>anthem</InputLabel>
                             <Input 
-                                required
                                 type='text'
                                 name='anthem'
                                 value={props.anthem}
