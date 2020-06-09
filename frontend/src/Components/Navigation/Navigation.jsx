@@ -76,7 +76,7 @@ const Navigation = ({user, logOutUser, isUserLoggedIn }) => {
                                                 <ListItemIcon  button='true'>
                                                     <PlaylistAddIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={"New Session"} />
+                                                <ListItemText primary={"New Reef"} />
                                             </ListItem>
                                         </Link>{" "}
                                     <Divider />

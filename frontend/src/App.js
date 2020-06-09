@@ -6,8 +6,8 @@ import LandingPage from './Components/Landing/LandingPage'
 import ProfilePage from './Components/Profile/ProfilePage'
 import Collaborators from './Components/Collaborators/Collaborators'
 import FeedContainer from './Components/Feed/FeedContainer'
-import Session from './Components/Session/Session'
-import AddSession from './Components/AddSession/AddSession'
+import Reef from './Components/Reef/Reef'
+import AddReef from './Components/AddReef/AddReef'
 import axios from 'axios'
 import './App.css';
 
@@ -77,12 +77,12 @@ class App extends Component {
     return <FeedContainer user={this.state.user}  />
   }
 
-  renderSessionPageById = (routeProps) => {
-    return <Session user={this.state.user} isUserLoggedIn={this.state.isUserLoggedIn} {...routeProps} />
+  renderReefPageById = (routeProps) => {
+    return <Reef user={this.state.user} isUserLoggedIn={this.state.isUserLoggedIn} {...routeProps} />
   }
 
-  renderAddSessionPage = () => {
-    return <AddSession user={this.state.user}/>
+  renderAddReefPage = () => {
+    return <AddReef user={this.state.user}/>
   }
 
   render(){
@@ -100,8 +100,8 @@ class App extends Component {
             <PrivateRoute path = "/profile/:id" render = {this.renderProfilePage} isUserLoggedIn= {isUserLoggedIn} wasInitialized= {wasInitialized}/>
             <PrivateRoute path = "/collaborators" render = {this.renderCollaboratorsPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
             <PrivateRoute path = "/feed" render = {this.renderFeedPage } isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
-            <PrivateRoute path = "/session/:id" render = {this.renderSessionPageById} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
-            <PrivateRoute path = "/add" render = {this.renderAddSessionPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
+            <PrivateRoute path = "/reef/:id" render = {this.renderReefPageById} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
+            <PrivateRoute path = "/add" render = {this.renderAddReefPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
           </Switch>
         </div>
         

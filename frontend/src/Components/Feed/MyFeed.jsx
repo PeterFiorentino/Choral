@@ -18,17 +18,17 @@ class MyFeed extends Component {
     fetchMyFeedData = async () => {
         const {userId} = this.state
         try{
-            const response = await axios.get(`api/sessions/localfeed/${userId}`)
+            const response = await axios.get(`api/reefs/localfeed/${userId}`)
             // const response = await axios.get(`api/sessions/localfeed/2`) 
 
-            const sessionList = response.data.payload
+            const reefList = response.data.payload
 
-            for(let sesh of sessionList){
-                sesh.collaborations = await this.fetchCollaborators(sesh.id)
+            for(let reef of reefList){
+                reef.collaborations = await this.fetchCollaborators(reef.id)
             }
 
             this.setState({
-                myFeedData: sessionList
+                myFeedData: reefList
             })
         } catch(error){
             console.log('err =>', error)
@@ -49,8 +49,8 @@ class MyFeed extends Component {
             <>
                 <div className='personal-feed'>
                     {this.state.myFeedData ? 
-                    this.state.myFeedData.map((session) =>
-                    <Post session={session} key={session.id}></Post>) : <></>}
+                    this.state.myFeedData.map((reef) =>
+                    <Post reef={reef} key={reef.id}></Post>) : <></>}
                 </div>
             </>
         )

@@ -4,9 +4,9 @@ import Navigation from '../Navigation/Navigation.jsx'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
-import './AddSession.css'
+import './AddReef.css'
 
-class AddSession extends React.Component {
+class AddReef extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -49,20 +49,20 @@ class AddSession extends React.Component {
 
         let body = {
             owner_id: this.state.loggedUser,
-            session_name: this.state.session_name,
+            reef_name: this.state.reef_name,
             genre: this.state.genre,
             bpm: this.state.bpm,
-            session_key: this.state.session_key,
+            reef_key: this.state.reef_key,
             chord_progression: this.state.chord_progression,
             looking_for: this.state.looking_for,
             audio: audioLocation,
             art: imageLocation,
-            session_closed: false,
+            reef_closed: false,
             volume: 80,
             stereo_position: 50
         }
     
-        await axios.post('http://localhost:3001/api/sessions', body)
+        await axios.post('http://localhost:3001/api/reefs', body)
 
         this.setState({
             added: true
@@ -79,7 +79,7 @@ class AddSession extends React.Component {
             recorder.start()
             recorder.addEventListener('dataavailable', (e) => {
                 this.setState({
-                    newSession: URL.createObjectURL(e.data),
+                    newReef: URL.createObjectURL(e.data),
                     audio: URL.createObjectURL(e.data)
                 })
                 recorder = false
@@ -137,8 +137,8 @@ class AddSession extends React.Component {
                     <br/>
                     <button className='round-button' type='button' onClick={this.record}>RECORD LIVE</button><br/>
                     {this.state.recording ? <h5>recording...</h5> : <><h5>{' '}</h5></>}
-                    {this.state.newSession ? <><a download='newsession' href={this.state.newSession}>DOWNLOAD</a><br/></> : <></>}
-                    {!this.state.newSession && !this.state.recording ? <br/> : <></>}
+                    {this.state.newReef ? <><a download='newreef' href={this.state.newReef}>DOWNLOAD</a><br/></> : <></>}
+                    {!this.state.newReef && !this.state.recording ? <br/> : <></>}
                     <br/>
                     <InputLabel htmlFor='audio'>Upload Audio</InputLabel>
                     <input required onChange={this.fileHandler} type='file' name='audio' accept='audio/*'></input><br/>
@@ -156,4 +156,4 @@ class AddSession extends React.Component {
     }
 }
 
-export default AddSession
+export default AddReef
