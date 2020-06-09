@@ -31,7 +31,7 @@ class ProfilePage extends Component {
     componentDidMount = () => {
         this.getFollowRelation()
         this.fetchUserData()
-        this.fetchUserSessionsAndCollaborators()       
+        this.fetchUserReefsAndCollaborators()       
         // Adding a callback to check if user is following the displayed User
     }
 
@@ -129,21 +129,21 @@ class ProfilePage extends Component {
         }
     }
 
-    fetchUserSessionsAndCollaborators = async () => {
+    fetchUserReefsAndCollaborators = async () => {
         const {displayedUser} = this.state
 
         try {
-            let response = await axios.get(`/api/sessions/user/${displayedUser.id}`)
-            const sessionList = response.data.payload.session
+            let response = await axios.get(`/api/reefs/user/${displayedUser.id}`)
+            const reefList = response.data.payload.reef
     
-            for (let sesh of sessionList){
-               sesh.collaborations = await this.fetchCollaborators(sesh.id)   
+            for (let reef of reefList){
+               reef.collaborations = await this.fetchCollaborators(reef.id)   
             }
            
             this.setState({
-                sessionData: sessionList
+                reefData: reefList
             })
-            // console.log(this.state.sessionData)
+           
         } catch(error){
             console.log('err =>', error)
         }  
@@ -296,10 +296,10 @@ class ProfilePage extends Component {
                     isFollowingUser= {isFollowingUser}
                     followButton= {this.followButton}/>
             </div>
-            <div className='session-info'>
-                {this.state.sessionData ? 
-                this.state.sessionData.map((session) =>
-                    <Post session={session} key={session.id} canDelete={this.state.isOwner}></Post>
+            <div className='reef-info'>
+                {this.state.reefData ? 
+                this.state.reefData.map((reef) =>
+                    <Post reef={reef} key={reef.id} canDelete={this.state.isOwner}></Post>
                 ) : <></>}
             </div>
             <br/>
