@@ -46,10 +46,10 @@ class AddReef extends React.Component {
         //     }
         // }
 
-        let audioResponse = await axios.post('http://localhost:3001/upload/audio', audioData)
+        let audioResponse = await axios.post('/upload/audio', audioData)
         let audioLocation = audioResponse.data.fileLocation
 
-        let imageResponse = await axios.post('http://localhost:3001/upload/image', imageData)
+        let imageResponse = await axios.post('/upload/image', imageData)
         let imageLocation = imageResponse.data.fileLocation
 
         let body = {
@@ -67,14 +67,14 @@ class AddReef extends React.Component {
             stereo_position: 50
         }
     
-        await axios.post('http://localhost:3001/api/reefs', body)
+        await axios.post('/api/reefs', body)
 
         this.setState({
             uploading: false,
             added: true
         })
 
-        setTimeout(() => window.location.href = `http://localhost:3000/profile/${this.state.loggedUser}`, 1500)
+        setTimeout(() => window.location.href = `/profile/${this.state.loggedUser}`, 1500)
     }
 
     record = async () => {

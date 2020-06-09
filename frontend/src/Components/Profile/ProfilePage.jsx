@@ -206,7 +206,7 @@ class ProfilePage extends Component {
             }
         }
 
-        let avatarResponse = await axios.post('http://localhost:3001/upload/image', avatarData, config)
+        let avatarResponse = await axios.post('/upload/image', avatarData, config)
         let avatarLocation = avatarResponse.data.imageUrl
 
         await axios.patch(`/api/users/${loggedUser}`, {avatar: avatarLocation})
