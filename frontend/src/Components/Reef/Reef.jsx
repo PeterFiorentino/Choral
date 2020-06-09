@@ -11,18 +11,18 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 
-class Session extends Component {
+class Reef extends Component {
     constructor(props){
         super(props)
         this.state = {
             loggedUser: props.user,
-            sessionId: props.match.params.id,
+            reefId: props.match.params.id,
             saved: false,
             playing: false,
             time: 0,
             hideInfo: false,
             collabInstrument: '',
-            session_owner_id : null,
+            reef_owner_id : null,
             toggle: 'show'
         }
     }
@@ -40,32 +40,32 @@ class Session extends Component {
     }
 
     getData = async () => {
-        let sessionResponse = await axios.get(`http://localhost:3001/api/sessions/${this.state.sessionId}`)
-        let sessionData = sessionResponse.data.payload.session[0]
+        let reefResponse = await axios.get(`http://localhost:3001/api/reefs/${this.state.reefId}`)
+        let reefData = reefResponse.data.payload.reef[0]
 
-        let collabsResponse = await axios.get(`http://localhost:3001/api/collaborations/${this.state.sessionId}`)
+        let collabsResponse = await axios.get(`http://localhost:3001/api/collaborations/${this.state.reefId}`)
         let collabsData = collabsResponse.data.payload.collabs
 
         this.setState({
-            sessionData: sessionData,
+            reefData: reefData,
             collabsData: collabsData,
-            isOwner: (this.state.loggedUser === sessionData.owner_id),
-            session_owner_id: sessionData.owner_id
+            isOwner: (this.state.loggedUser === reefData.owner_id),
+            reef_owner_id: reefData.owner_id
         })
     }
 
     createHowls = () => {
-        const {sessionData, collabsData} = this.state
+        const {reefData, collabsData} = this.state
     
         let howl = new Howl({
-            src: sessionData.audio
+            src: reefData.audio
         })
 
-        let newSessionData = sessionData
-        newSessionData.howl = howl
-        newSessionData.howl.volume(sessionData.volume / 100)
-        newSessionData.howl.stereo(sessionData.stereo_position * 2 / 100 - 1)
-        newSessionData.howl._html5 = true
+        let newReefData = reefData
+        newReefData.howl = howl
+        newReefData.howl.volume(reefData.volume / 100)
+        newReefData.howl.stereo(reefData.stereo_position * 2 / 100 - 1)
+        newReefData.howl._html5 = true
         
         let newCollabsData = collabsData 
         collabsData.forEach((collab, index) => {
@@ -79,7 +79,7 @@ class Session extends Component {
         })
 
         this.setState({
-            sessionData: newSessionData,
+            reefData: newReefData,
             collabsData: newCollabsData
         })
     }
@@ -108,10 +108,10 @@ class Session extends Component {
     }
 
     getHowls = () => {
-        const {sessionData, collabsData} = this.state
+        const {reefData, collabsData} = this.state
         let howls = []
 
-        howls.push(sessionData.howl)
+        howls.push(reefData.howl)
         for (let collab of collabsData) {
             howls.push(collab.howl)
         }
@@ -224,11 +224,11 @@ class Session extends Component {
     }
 
     clearPool = async () => {
-        const { sessionData } = this.state
+        const { reefData } = this.state
         
         await this.saveMix()
 
-        await axios.patch(`http://localhost:3001/api/collaborations/clear_pool/${sessionData.id}`)
+        await axios.patch(`http://localhost:3001/api/collaborations/clear_pool/${reefData.id}`)
         
         await this.getData()
 
@@ -307,7 +307,7 @@ class Session extends Component {
     }
 
     changeVolume = (index, event) => {
-        const { sessionData, collabsData } = this.state
+        const { reefData, collabsData } = this.state
         let currentValue = event.target.getAttribute('aria-valuenow')
 
         this.setState({saved: false})
@@ -316,7 +316,7 @@ class Session extends Component {
             const newValue = currentValue / 100
 
             if (index === -1) {
-            sessionData.howl.volume(newValue)
+                reefData.howl.volume(newValue)
             } else {
                 collabsData[index].howl.volume(newValue)
             }
@@ -324,7 +324,7 @@ class Session extends Component {
     }
 
     changePanning = (index, event) => {
-        const { sessionData, collabsData } = this.state
+        const { reefData, collabsData } = this.state
         let currentValue = event.target.getAttribute('aria-valuenow')
 
         this.setState({saved: false})
@@ -333,7 +333,7 @@ class Session extends Component {
             const newValue = currentValue * 2 / 100 - 1
             
             if (index === -1) {
-                sessionData.howl.stereo(newValue)           
+                reefData.howl.stereo(newValue)           
             } else {
                 collabsData[index].howl.stereo(newValue)
             }
@@ -341,13 +341,13 @@ class Session extends Component {
     }
 
     saveMix = async () => {
-        const { collabsData, sessionData } = this.state
+        const { reefData, collabsData } = this.state
 
-        let sessionBody = {
-            volume: sessionData.howl._volume * 100,
-            stereo_position: ((sessionData.howl._stereo + 1) * 100) / 2
+        let reefBody = {
+            volume: reefData.howl._volume * 100,
+            stereo_position: ((reefData.howl._stereo + 1) * 100) / 2
         }
-        axios.patch(`http://localhost:3001/api/sessions/${sessionData.id}`, sessionBody)
+        axios.patch(`http://localhost:3001/api/reefs/${reefData.id}`, reefBody)
         
         await collabsData.forEach((collab) => {
             let collabBody = {
@@ -384,8 +384,8 @@ class Session extends Component {
         let response = await axios.post('http://localhost:3001/upload/audio', data)
         
         let body = {
-            session_id: this.state.sessionData.id,
-            session_owner_id: this.state.session_owner_id,
+            reef_id: this.state.reefData.id,
+            reef_owner_id: this.state.reef_owner_id,
             collaborator_id: this.state.loggedUser,
             audio: response.data.fileLocation,
             instrument_name: this.state.collabInstrument,
@@ -516,29 +516,29 @@ class Session extends Component {
             <div className='specific-info'>
                 <div id='genre'>
                     <label htmlFor='genre'><b>Genre</b></label>
-                    <p name='genre'>{this.state.sessionData.genre}</p>
+                    <p name='genre'>{this.state.reefData.genre}</p>
                 </div>
-                <p id='bpm'><b>{this.state.sessionData.bpm} BPM</b></p>
+                <p id='bpm'><b>{this.state.reefData.bpm} BPM</b></p>
                 <div id='key'>
                     <label htmlFor='key'><b>Key</b></label>
-                    <p name='key'>{this.state.sessionData.session_key}</p>
+                    <p name='key'>{this.state.reefData.reef_key}</p>
                 </div>
                 <div id='chords'>
                     <label htmlFor='chords'><b>Chord Progression</b></label>
-                    <p name='chords'>{this.state.sessionData.chord_progression}</p>
+                    <p name='chords'>{this.state.reefData.chord_progression}</p>
                 </div>
             </div>
         ): <> </>
 
         return (
             <div>
-                {this.state.sessionData ? 
-                <div className='session'>
-                    <img className='cover-art' alt='' src={this.state.sessionData.art}></img>
+                {this.state.reefData ? 
+                <div className='reef'>
+                    <img className='cover-art' alt='' src={this.state.reefData.art}></img>
                     <div className='info'>
-                        <h2>{this.state.sessionData.session_name}</h2>
-                        <h3>by <Link to={`/profile/${this.state.sessionData.owner_id}`}><h3 id='profile-link'>{this.state.sessionData.username}</h3></Link></h3>
-                        <h5 id='looking-for'>Looking for {this.state.sessionData.looking_for}</h5>
+                        <h2>{this.state.reefData.reef_name}</h2>
+                        <h3>by <Link to={`/profile/${this.state.reefData.owner_id}`}><h3 id='profile-link'>{this.state.reefData.username}</h3></Link></h3>
+                        <h5 id='looking-for'>Looking for {this.state.reefData.looking_for}</h5>
                         <div id='specific-info'>
                             {specificInfo}
                             <p onClick={this.toggleInfo}>{this.state.toggle} info</p>
@@ -609,12 +609,12 @@ class Session extends Component {
                         <div className='tracks-container'>
                             <div className='merged-track'>
                                 <p className='left-pan'>L</p>
-                                <Slider defaultValue={this.state.sessionData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3', alignSelf:'center'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
+                                <Slider defaultValue={this.state.reefData.stereo_position} track={false} orientation='horizontal' style={{gridRow: '1 / 2', gridColumn: '2 / 3', alignSelf:'center'}} onChange={(event) => this.changePanning(-1, event)}></Slider>
                                 <p className='right-pan'>R</p>
-                                <img className='track-pic' src={this.state.sessionData.avatar} alt=''></img>
+                                <img className='track-pic' src={this.state.reefData.avatar} alt=''></img>
                                 <h5 className='track-instrument'>original</h5>
-                                <a id='download-session-track' download target='_blank' rel="noopener noreferrer" href={this.state.sessionData.audio}>DOWNLOAD</a>
-                                <Slider defaultValue={this.state.sessionData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'97px', justifySelf:'center'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
+                                <a id='download-reef-track' download target='_blank' rel="noopener noreferrer" href={this.state.reefData.audio}>DOWNLOAD</a>
+                                <Slider defaultValue={this.state.reefData.volume} orientation='vertical' style={{gridRow: '2 / 3', gridColumn:'3 / 4', marginTop: '15px', height:'97px', justifySelf:'center'}} onChange={(event) => this.changeVolume(-1, event)}></Slider>
                                 <VolumeDownIcon style={{gridRow: '3 / 4', gridColumn: '3 / 4', color:'indigo'}}/>
                             </div>
                             {this.state.collabsData.map((collab, index) => {
@@ -648,7 +648,7 @@ class Session extends Component {
                     </div>
                     <div className='audios'>
                         <audio crossOrigin='anonymous' muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
-                            <source src={this.state.sessionData.audio}></source>
+                            <source src={this.state.reefData.audio}></source>
                         </audio>
                     </div>
                 </div>
@@ -658,4 +658,4 @@ class Session extends Component {
     }
 }
 
-export default Session
+export default Reef

@@ -1,9 +1,9 @@
-.session-info2 {
+.reef-info2 {
     margin-top: 50px;
 }
 
 @media only screen and (max-width: 767px) {
-    .session-info2 {
+    .reef-info2 {
         margin-top: 0px;
     }
 }
