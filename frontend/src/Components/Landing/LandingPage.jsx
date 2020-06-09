@@ -18,7 +18,8 @@ class LandingPage extends Component {
             instrument: '',
             fav_genre: '',
             anthem: '',
-            avatar: 'https://cdn.clipart.email/60dc0ace75203466caef979a0a5c4e24_17685-earphones-icon-cliparts-stock-vector-and-royalty-free-_450-450.jpeg',  
+            avatar: 'https://cdn.clipart.email/60dc0ace75203466caef979a0a5c4e24_17685-earphones-icon-cliparts-stock-vector-and-royalty-free-_450-450.jpeg',
+            uploading: false  
         }
 
     }
@@ -64,6 +65,10 @@ class LandingPage extends Component {
         const {username, email, password, location, instrument, fav_genre, anthem, avatar} = this.state
 
         try{
+            this.setState({
+                uploading: true
+            })
+
             let avatarLocation = avatar
             if (avatar !== 'https://cdn.clipart.email/60dc0ace75203466caef979a0a5c4e24_17685-earphones-icon-cliparts-stock-vector-and-royalty-free-_450-450.jpeg') {
                 const avatarData = new FormData()
@@ -132,6 +137,7 @@ class LandingPage extends Component {
                     <button className='round-button' onClick={this.displaySignupForm}>Sign up</button>
                     {renderLoginForm}
                     {renderSignupForm}
+                    {this.state.uploading ? <p>signing you up...</p> : <></>}
                 </div>
                 <div className='background-image'>
                     <img id='img' alt='' src='https://cdn.wallpapersafari.com/24/86/2y6oVT.png'></img>
