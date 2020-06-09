@@ -45,7 +45,7 @@ router.get('/:id', async (req, res)  => {
     res.json({
       message: "Success",
       payload: {
-        session: singleReef
+        reef: singleReef
       }, 
       error: null
     })
@@ -64,7 +64,7 @@ router.get('/user/:user_id', async (req, res)  => {
     res.json({
       message: "Success",
       payload: {
-        session: users_reefs
+        reef: users_reefs
       }, 
       error: null
     })
@@ -85,7 +85,7 @@ router.patch('/:id', async (req, res)  => {
     res.json({
       message: "Success",
       payload: {
-        session: update_reef
+        reef: update_reef
       }, 
       error: null
     })
