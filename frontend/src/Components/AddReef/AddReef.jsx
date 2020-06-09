@@ -10,7 +10,8 @@ class AddReef extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            loggedUser: props.user
+            loggedUser: props.user,
+            uploading: false
         }
     }
 
@@ -26,8 +27,12 @@ class AddReef extends React.Component {
         })
     }
 
-    uploadSession = async (event) => {
+    uploadReef = async (event) => {
         event.preventDefault()
+
+        this.setState({
+            uploading: true
+        })
 
         const audioData = new FormData()
         const imageData = new FormData()
@@ -65,6 +70,7 @@ class AddReef extends React.Component {
         await axios.post('http://localhost:3001/api/reefs', body)
 
         this.setState({
+            uploading: false,
             added: true
         })
 
@@ -109,10 +115,10 @@ class AddReef extends React.Component {
             {/* <h1 className='main-title'>Choral</h1> */}
             <h3 id='new-reef'>New Reef</h3>
             <div className='form' style={{width:'100%'}}>
-                <form className='form' onSubmit={this.uploadSession}>
+                <form className='form' onSubmit={this.uploadReef}>
                     <FormControl style={{width:'70%'}}>
-                        <InputLabel htmlFor='session_name'>Name</InputLabel>
-                        <Input required onChange={this.inputHandler} type='text' name='session_name'></Input><br/>
+                        <InputLabel htmlFor='reef_name'>Name</InputLabel>
+                        <Input required onChange={this.inputHandler} type='text' name='reef_name'></Input><br/>
                     </FormControl>
                     <FormControl style={{width:'36%', marginLeft:'2%', marginRight:'2%'}}>
                         <InputLabel htmlFor='genre'>Genre</InputLabel>
@@ -123,8 +129,8 @@ class AddReef extends React.Component {
                         <Input onChange={this.inputHandler} type='number' name='bpm'></Input><br/>
                     </FormControl>
                     <FormControl style={{width:'16%', marginLeft:'2%', marginRight:'2%'}}>
-                        <InputLabel htmlFor='session_key'>Key</InputLabel>
-                        <Input onChange={this.inputHandler} type='text' name='session_key'></Input><br/>
+                        <InputLabel htmlFor='reef_key'>Key</InputLabel>
+                        <Input onChange={this.inputHandler} type='text' name='reef_key'></Input><br/>
                     </FormControl>
                     <FormControl style={{width:'70%'}}>
                         <InputLabel htmlFor='chord_progression'>Chord Progression</InputLabel>
@@ -147,6 +153,7 @@ class AddReef extends React.Component {
                     <input required onChange={this.fileHandler} type='file' name='image' accept='image/*'></input><br/>
                     <br/>
                     <button className='round-button' type='submit'>ADD REEF</button>
+                    {this.state.uploading ? <h5>uploading...</h5> : <></>}
                     {this.state.added ? <h5>Added!</h5> : <></>}
                 </form>
             </div>

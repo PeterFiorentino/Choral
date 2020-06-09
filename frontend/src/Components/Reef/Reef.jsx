@@ -23,7 +23,8 @@ class Reef extends Component {
             hideInfo: false,
             collabInstrument: '',
             reef_owner_id : null,
-            toggle: 'show'
+            toggle: 'show',
+            uploading: false
         }
     }
 
@@ -372,6 +373,10 @@ class Reef extends Component {
     uploadCollab = async (event) => {
         event.preventDefault()
 
+        this.setState({
+            uploading: true
+        })
+
         const data = new FormData()
         data.append('audio', this.state.selectedAudio)
         
@@ -382,7 +387,8 @@ class Reef extends Component {
         // }
         
         let response = await axios.post('http://localhost:3001/upload/audio', data)
-        
+        console.log(response)
+
         let body = {
             reef_id: this.state.reefData.id,
             reef_owner_id: this.state.reef_owner_id,
@@ -391,12 +397,14 @@ class Reef extends Component {
             instrument_name: this.state.collabInstrument,
             approved: false,
             volume: 80,
-            stereo_position: 50
+            stereo_position: 50,
+            is_deleted: false
         }
         
         await axios.post('http://localhost:3001/api/collaborations', body)
-        
+
         this.setState({
+            uploading: false,
             added: true
         })
 
@@ -564,7 +572,9 @@ class Reef extends Component {
                                 <br/><br/>
                                 <div className='upload'>
                                     <button className='round-button'>UPLOAD</button><br/>
-                                    {this.state.added ? <h5>added!</h5> : <><h5>{' '}</h5><br/></>}
+                                    {this.state.uploading ? <h5 style={{padding:'0px'}}>uploading...</h5> : <></>}
+                                    {this.state.added ? <h5 style={{padding:'0px'}}>added!</h5> : <></>}
+                                    {!this.state.uploading && !this.state.added ? <><h5>{' '}</h5><br/></> : <></>}
                                 </div>
                             </form>
                         </div>
