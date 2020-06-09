@@ -42,7 +42,7 @@ const uploadImage = multer(
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const sessionsRouter = require('./routes/sessions');
+const reefsRouter = require('./routes/reefs');
 const collaborationsRouter = require('./routes/collaborations');
 const authRouter = require('./routes/auth');
 const followRouter = require('./routes/following')
@@ -73,7 +73,7 @@ app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/sessions', sessionsRouter);
+app.use('/api/reefs', reefsRouter);
 app.use('/api/collaborations', collaborationsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/follows', followRouter);

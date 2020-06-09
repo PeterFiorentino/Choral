@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const db = require('../db/db');
-const multer = require('multer');
 const userQueries = require('../queries/users')
 const authHelpers = require('../auth/helpers')
 
@@ -40,7 +38,7 @@ router.patch('/:id', authHelpers.loginRequired, async (req, res)  => {
   let id = req.params.id
   
   try {
-    let updateAvatar =  await db.none(`UPDATE users SET avatar = $1 WHERE id=$2`, [avatar, id]);
+    let updateAvatar =  await userQueries.updateUser(avatar, id)
     res.json({
       message: "Success",
       payload: updateAvatar, 
@@ -66,7 +64,7 @@ router.patch('/info/:id', authHelpers.loginRequired, async (req, res)  => {
   let id = req.params.id
   
   try {
-    let updateUser =  await db.oneOrNone(`UPDATE users SET username = $1, email = $2, location = $3, instrument = $4, fav_genre = $5, anthem = $6 WHERE id=$7`, [username, email, location, instrument, fav_genre, anthem, id]);
+    let updateUser =  await userQueries.updateUserInfo(username, email, location, instrument, fav_genre, anthem, id);
     res.json({
       message: "Success",
       payload: updateUser, 
