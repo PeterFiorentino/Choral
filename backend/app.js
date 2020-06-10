@@ -94,7 +94,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use('/', indexRouter);
+//app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/reefs', reefsRouter);
 app.use('/api/collaborations', collaborationsRouter);
