@@ -66,7 +66,7 @@ class Reef extends Component {
         newReefData.howl = howl
         newReefData.howl.volume(reefData.volume / 100)
         newReefData.howl.stereo(reefData.stereo_position * 2 / 100 - 1)
-        newReefData.howl._html5 = true
+        // newReefData.howl._html5 = true
         
         let newCollabsData = collabsData 
         collabsData.forEach((collab, index) => {
@@ -102,8 +102,9 @@ class Reef extends Component {
 
         this.setState({
             collabsData: completeCollabsData,
-            guide: audioElement,
-            duration: reefData.howl.duration,
+           // guide: audioElement,
+           // duration: audioElement.duration,
+            duration: 100,
             poolTracks: poolTracks
         })
     }
@@ -276,13 +277,17 @@ class Reef extends Component {
     secondsToMinutes = (seconds) => Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2)
 
     handleTime = () => {
-        const { guide } = this.state
-
-        let currentTime = guide.currentTime
-
+        let audioElements = getAudioElements()
         this.setState({
-            time: currentTime
+            time: audioElements[0].currentTime
         })
+        // const { guide } = this.state
+
+        // let currentTime = guide.currentTime
+
+        // this.setState({
+        //     time: currentTime
+        // })
     }
 
     changeTime = (event) => {
@@ -656,7 +661,7 @@ class Reef extends Component {
                         <button className='round-button' onClick={this.stopAll}>STOP</button>
                     </div>
                     <div className='audios'>
-                        <audio crossOrigin='use-credentials' muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
+                        <audio muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
                             <source src={this.state.reefData.audio}></source>
                         </audio>
                     </div>
