@@ -30,8 +30,6 @@ class AddReef extends React.Component {
     uploadReef = async (event) => {
         event.preventDefault()
 
-        const {history} = this.props
-
         this.setState({
             uploading: true
         })
@@ -76,7 +74,7 @@ class AddReef extends React.Component {
             added: true
         })
 
-        setTimeout(() => history.push(`/profile/${this.state.loggedUser}`), 1500)
+        //setTimeout(() => window.location.href = `/profile/${this.state.loggedUser}`, 1500)
     }
 
     record = async () => {

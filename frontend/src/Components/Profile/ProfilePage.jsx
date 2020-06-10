@@ -40,10 +40,8 @@ class ProfilePage extends Component {
     // }
 
     componentDidUpdate(prevProps) {
-        const history = prevProps.history
-
         if (this.props.location !== prevProps.location) {
-          history.push(`/profile/${prevProps.user}`)
+          window.location.reload()
         }
     }
 
