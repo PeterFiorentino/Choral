@@ -62,7 +62,7 @@ const imageBucket = storageImage.bucket('gs://choral-9a276.appspot.com')
 //         storage: storageImage
 //     })
 
-const indexRouter = require('./routes/index');
+//const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const reefsRouter = require('./routes/reefs');
 const collaborationsRouter = require('./routes/collaborations');
@@ -94,7 +94,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.use('/', indexRouter);
+//app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/reefs', reefsRouter);
 app.use('/api/collaborations', collaborationsRouter);
