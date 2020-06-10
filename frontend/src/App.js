@@ -25,6 +25,9 @@ class App extends Component {
   componentDidMount = async () => {
     await this.checkLoginStatus()
     this.initialize()
+    if (this.props.refreshRoute) {
+      this.props.history.replace(this.props.refreshRoute)
+    }
   }
 
   initialize = () => {
