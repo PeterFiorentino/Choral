@@ -23,11 +23,11 @@ class App extends Component {
   }
   
   componentDidMount = async () => {
+    await this.checkLoginStatus()
+    this.initialize()
     if (this.props.refreshRoute) {
       this.props.history.replace(this.props.refreshRoute)
     }
-    await this.checkLoginStatus()
-    this.initialize()
   }
 
   initialize = () => {
@@ -98,7 +98,7 @@ class App extends Component {
         </div>
         <div>
           <Switch>
-            <Route exact path = "/" render= {this.renderLandingPage}/>
+            {/* <Route exact path = "/" render= {this.renderLandingPage}/> */}
             <Route path = "/landing" render= {this.renderLandingPage}/>
             <PrivateRoute path = "/profile/:id" render = {this.renderProfilePage} isUserLoggedIn= {isUserLoggedIn} wasInitialized= {wasInitialized}/>
             <PrivateRoute path = "/collaborators" render = {this.renderCollaboratorsPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
