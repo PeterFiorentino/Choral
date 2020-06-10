@@ -386,7 +386,7 @@ class Reef extends Component {
         //     }
         // }
         
-        let response = await axios.post('/upload/audio', data)
+        let response = await axios.post('/api/upload/audio', data)
 
         let body = {
             reef_id: this.state.reefData.id,

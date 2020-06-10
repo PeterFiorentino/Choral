@@ -121,7 +121,7 @@ app.use('/api/follows', followRouter);
 //     })
 // } )
 
-app.post('/upload/audio', uploader.single('audio'), async (req, res, next) => {
+app.post('/api/upload/audio', uploader.single('audio'), async (req, res, next) => {
     try {
         if (!req.file) {
             res.status(400).send('No file uploaded.');
@@ -155,7 +155,7 @@ app.post('/upload/audio', uploader.single('audio'), async (req, res, next) => {
     }
 });
 
-app.post('/upload/image', uploader.single('image'), async (req, res, next) => {
+app.post('/api/upload/image', uploader.single('image'), async (req, res, next) => {
     try {
         if (!req.file) {
             res.status(400).send('No file uploaded.');
