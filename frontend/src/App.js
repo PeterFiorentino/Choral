@@ -95,11 +95,11 @@ class App extends Component {
         </div>
         <div>
           <Switch>
-            <Route exact path = "/" render= {this.renderLandingPage}/>
+            {/* <Route exact path = "/" render= {this.renderLandingPage}/> */}
             <Route path = "/landing" render= {this.renderLandingPage}/>
             <PrivateRoute path = "/profile/:id" render = {this.renderProfilePage} isUserLoggedIn= {isUserLoggedIn} wasInitialized= {wasInitialized}/>
             <PrivateRoute path = "/collaborators" render = {this.renderCollaboratorsPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
-            <PrivateRoute path = "/#/feed" render = {this.renderFeedPage } isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
+            <PrivateRoute path = "/feed" render = {this.renderFeedPage } isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
             <PrivateRoute path = "/reef/:id" render = {this.renderReefPageById} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
             <PrivateRoute path = "/add" render = {this.renderAddReefPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
           </Switch>
