@@ -277,7 +277,7 @@ class Reef extends Component {
     secondsToMinutes = (seconds) => Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2)
 
     handleTime = () => {
-        let audioElements = getAudioElements()
+        let audioElements = document.getElementsByClassName('audio-element')
         this.setState({
             time: audioElements[0].currentTime
         })
