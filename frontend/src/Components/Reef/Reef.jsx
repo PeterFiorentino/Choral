@@ -87,7 +87,7 @@ class Reef extends Component {
 
     completeState = () => {
         const audioElement = document.getElementsByClassName('audio-element')[0]
-        const { reefData, collabsData } = this.state
+        const { collabsData } = this.state
 
         let completeCollabsData = collabsData
         let poolTracks = false
@@ -102,8 +102,6 @@ class Reef extends Component {
 
         this.setState({
             collabsData: completeCollabsData,
-           // guide: audioElement,
-           // duration: audioElement.duration,
             duration: audioElement.duration,
             poolTracks: poolTracks
         })
@@ -123,27 +121,39 @@ class Reef extends Component {
 
 
     playAll = () => {
-        const audioElements = document.getElementsByClassName('audio-element')
-        const howls = this.getHowls()
+        if (!this.state.playing) {
 
-        for (let howl of howls) {
-            howl.play()
+            const guide = document.getElementsByClassName('audio-element')[0]
+            const howls = this.getHowls()
+
+            for (let howl of howls) {
+                howl.play()
+            }
+            guide.play()
+
+            this.setState({
+                playing: true
+            })
+        
         }
-        audioElements[0].play()
     }
 
     pauseAll = () => {
-        const { guide } = this.state
+        const guide = document.getElementsByClassName('audio-element')[0]
         const howls = this.getHowls()
         
         guide.pause()
         for (let howl of howls) {
             howl.pause()
         }
+
+        this.setState({
+            playing: false
+        })
     }
 
     stopAll = () => {
-        const { guide } = this.state
+        const guide = document.getElementsByClassName('audio-element')[0]
         const howls = this.getHowls()
         
         guide.load()
@@ -152,6 +162,7 @@ class Reef extends Component {
         }
 
         this.setState({
+            playing: false,
             time: 0
         })
     }
@@ -277,9 +288,9 @@ class Reef extends Component {
     secondsToMinutes = (seconds) => Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2)
 
     handleTime = () => {
-        let audioElements = document.getElementsByClassName('audio-element')
+        const guide = document.getElementsByClassName('audio-element')[0]
         this.setState({
-            time: audioElements[0].currentTime
+            time: guide.currentTime
         })
         // const { guide } = this.state
 
@@ -291,7 +302,8 @@ class Reef extends Component {
     }
 
     changeTime = (event) => {
-        const { duration, guide } = this.state
+        const guide = document.getElementsByClassName('audio-element')[0]
+        const { duration } = this.state
 
         let clickX = event.pageX + 0.5 - window.innerWidth * 0.10
         let totalX = window.innerWidth * 0.80
@@ -428,7 +440,7 @@ class Reef extends Component {
     }
 
     bounce = () => {
-        const { guide } = this.state
+        const guide = document.getElementsByClassName('audio-element')[0]
 
         if (guide.paused && !guide.ended) {
             let recordingstream = Howler.ctx.createMediaStreamDestination()
@@ -469,7 +481,7 @@ class Reef extends Component {
     }
 
     record = async () => {
-        const { guide } = this.state
+        const guide = document.getElementsByClassName('audio-element')[0]
 
         if (guide.paused && !guide.ended) {
             let stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false})
