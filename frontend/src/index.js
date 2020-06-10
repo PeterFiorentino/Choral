@@ -9,7 +9,10 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
   <React.StrictMode>
       <Router>
-        <Route exact path="/" component={App} />
+        {/* <Route exact path="/" component={App} /> */}
+        <Route exact path="/"
+            render={(props) => <App {...props} refreshRoute={"/landing"}/>}
+        />
         <Route exact path="/feed"
             render={(props) => <App {...props} refreshRoute={"/feed"}/>}
         />
