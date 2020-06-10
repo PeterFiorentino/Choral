@@ -79,10 +79,6 @@ app.use(cookieParser());
 
 const frontend = path.join(__dirname, '../frontend/build')
 app.use(express.static(frontend));
-app.use(function (req, res, next) {
-  res.sendFile(path.join(frontend, 'index.html'));
-})
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -196,5 +192,7 @@ app.post('/upload/image', uploader.single('image'), async (req, res, next) => {
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "../frontend/build/index.html"));
 });
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 module.exports = app;
