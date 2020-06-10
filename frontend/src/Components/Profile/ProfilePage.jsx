@@ -40,6 +40,8 @@ class ProfilePage extends Component {
     // }
 
     componentDidUpdate(prevProps) {
+        const { history } = this.props
+
         if (this.props.location !== prevProps.location) {
           history.push(`/profile/${this.props.match.params.id}`)
         }

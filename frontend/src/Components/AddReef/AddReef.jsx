@@ -30,6 +30,8 @@ class AddReef extends React.Component {
     uploadReef = async (event) => {
         event.preventDefault()
 
+        const {history} = this.props
+
         this.setState({
             uploading: true
         })
