@@ -10,6 +10,9 @@ ReactDOM.render(
   <React.StrictMode>
       <Router>
         <Route exact path="/" component={App} />
+        <Route exact path="/feed"
+            render={(props) => <App {...props} refreshRoute={"/feed"}/>}
+        />
       </Router>
   </React.StrictMode>,
   document.getElementById('root')
