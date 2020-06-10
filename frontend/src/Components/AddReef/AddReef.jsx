@@ -74,7 +74,7 @@ class AddReef extends React.Component {
             added: true
         })
 
-        setTimeout(() => window.location.href = `/profile/${this.state.loggedUser}`, 1500)
+        setTimeout(() => history.push(`/profile/${this.state.loggedUser}`), 1500)
     }
 
     record = async () => {
