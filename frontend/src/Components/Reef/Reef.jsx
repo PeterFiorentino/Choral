@@ -392,7 +392,7 @@ class Reef extends Component {
             reef_id: this.state.reefData.id,
             reef_owner_id: this.state.reef_owner_id,
             collaborator_id: this.state.loggedUser,
-            audio: response.data.fileLocation,
+            audio: response.data.audioUrl,
             instrument_name: this.state.collabInstrument,
             approved: false,
             volume: 80,
