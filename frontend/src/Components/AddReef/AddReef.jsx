@@ -46,10 +46,10 @@ class AddReef extends React.Component {
         //     }
         // }
 
-        let audioResponse = await axios.post('/upload/audio', audioData)
+        let audioResponse = await axios.post('/api/upload/audio', audioData)
         let audioLocation = audioResponse.data.fileLocation
 
-        let imageResponse = await axios.post('/upload/image', imageData)
+        let imageResponse = await axios.post('/api/upload/image', imageData)
         let imageLocation = imageResponse.data.fileLocation
 
         let body = {

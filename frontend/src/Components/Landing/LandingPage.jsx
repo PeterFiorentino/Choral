@@ -80,7 +80,7 @@ class LandingPage extends Component {
                 //     }
                 // }
 
-                let avatarResponse = await axios.post('/upload/image', avatarData)
+                let avatarResponse = await axios.post('/api/upload/image', avatarData)
                 avatarLocation = avatarResponse.data.fileLocation
             }
 
