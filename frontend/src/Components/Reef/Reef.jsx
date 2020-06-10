@@ -87,7 +87,7 @@ class Reef extends Component {
 
     completeState = () => {
         const audioElement = document.getElementsByClassName('audio-element')[0]
-        const { collabsData } = this.state
+        const { reefData, collabsData } = this.state
 
         let completeCollabsData = collabsData
         let poolTracks = false
@@ -103,7 +103,7 @@ class Reef extends Component {
         this.setState({
             collabsData: completeCollabsData,
             guide: audioElement,
-            duration: audioElement.duration,
+            duration: reefData.howl.duration,
             poolTracks: poolTracks
         })
     }
