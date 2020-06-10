@@ -123,13 +123,13 @@ class Reef extends Component {
 
 
     playAll = () => {
-        const { guide } = this.state
+        const audioElements = document.getElementsByClassName('audio-element')
         const howls = this.getHowls()
 
         for (let howl of howls) {
             howl.play()
         }
-        guide.play()
+        audioElements[0].play()
     }
 
     pauseAll = () => {
