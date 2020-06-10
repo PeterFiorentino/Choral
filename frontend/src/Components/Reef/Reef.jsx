@@ -104,7 +104,7 @@ class Reef extends Component {
             collabsData: completeCollabsData,
            // guide: audioElement,
            // duration: audioElement.duration,
-            duration: 100,
+            duration: audioElement.duration,
             poolTracks: poolTracks
         })
     }
