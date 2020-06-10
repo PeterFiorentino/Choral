@@ -22,7 +22,7 @@ class AddReef extends React.Component {
     }
 
     fileHandler = (event) => {
-        if (event.target.files[0] < 15 * 1024 * 1024) {
+        if (event.target.files[0].size < 15 * 1024 * 1024) {
             this.setState({
                 [event.target.name]: event.target.files[0]
             })

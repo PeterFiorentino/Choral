@@ -187,7 +187,7 @@ class ProfilePage extends Component {
     }
 
     handleNewPic = (event) => {
-        if (event.target.files[0] < 15 * 1024 * 1024) {
+        if (event.target.files[0].size < 15 * 1024 * 1024) {
             this.setState({
                 newAvatar: event.target.files[0]
             })
