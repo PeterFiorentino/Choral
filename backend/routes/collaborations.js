@@ -25,7 +25,7 @@ router.get('/:reef_id', async (req, res)  => {
 router.get('/collaborators/:user_id', async (req, res)  => {
   let user_id = req.params.user_id
   try {
-    let collaborators =  await collabQueries.getUsersCollaboratorsu(user_id);
+    let collaborators =  await collabQueries.getUsersCollaborators(user_id);
     res.json({
       message: "Success",
       payload: collaborators,
