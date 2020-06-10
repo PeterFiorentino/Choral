@@ -33,7 +33,7 @@ class Reef extends Component {
 
         this.createHowls()
 
-        setTimeout(() => this.completeState(), 1500)
+        setTimeout(() => this.completeState(), 1000)
     }
 
     componentWillUnmount() {
@@ -656,7 +656,7 @@ class Reef extends Component {
                         <button className='round-button' onClick={this.stopAll}>STOP</button>
                     </div>
                     <div className='audios'>
-                        <audio crossOrigin='anonymous' muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
+                        <audio crossOrigin='use-credentials' muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
                             <source src={this.state.reefData.audio}></source>
                         </audio>
                     </div>
