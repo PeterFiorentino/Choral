@@ -33,7 +33,7 @@ class Reef extends Component {
 
         this.createHowls()
 
-        setTimeout(() => this.completeState(), 1000)
+        setTimeout(() => this.completeState(), 1500)
     }
 
     componentWillUnmount() {
