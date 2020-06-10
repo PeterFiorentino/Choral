@@ -12,7 +12,7 @@ const { Storage } = require ('@google-cloud/storage')
 const uploader = multer({
     storage: multer.memoryStorage(),
     limits: {
-        fileSize: 10 * 1024 * 1024, // keep images size < 10 MB
+        fileSize: 15 * 1024 * 1024, // keep images size < 15 MB
     },
 })
 
@@ -30,39 +30,6 @@ const storageImage = new Storage({
 
 const imageBucket = storageImage.bucket('gs://choral-9a276.appspot.com')
 
-// const storageAudio = multer.diskStorage({
-//     destination: (req,file,cb) =>{
-//         cb(null,"./public/audios")
-//     },
-//     filename: (req,file,cb) =>{
-//         let name = Date.now() + "-" + file.originalname
-//         cb(null,name)
-//     }
-
-// })
-
-// const storageImage = multer.diskStorage({
-//     destination: (req,file,cb) =>{
-//         cb(null,"./public/images")
-//     },
-//     filename: (req,file,cb) =>{
-//         let name = Date.now() + "-" + file.originalname
-//         cb(null,name)
-//     }
-
-// })
-
-// const uploadAudio = multer(
-//     {
-//         storage: storageAudio
-//     })
-
-// const uploadImage = multer(
-//     {
-//         storage: storageImage
-//     })
-
-//const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const reefsRouter = require('./routes/reefs');
 const collaborationsRouter = require('./routes/collaborations');
@@ -93,33 +60,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-//app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/reefs', reefsRouter);
 app.use('/api/collaborations', collaborationsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/follows', followRouter);
-
-// app.post('/upload/audio',uploadAudio.single("audio"),(req,res,next) =>{
-//     console.log("file",req.file) 
-//     console.log("body",req.body)
-//     let audioURL = "http://localhost:3001" + req.file.path.replace('public','')
-//     res.json({
-//         message: "file uploaded",
-//         audioUrl: audioURL
-//     })
-// } )
-
-// app.post('/upload/image',uploadImage.single("image"),(req,res,next) =>{
-//     console.log("file",req.file) 
-//     console.log("body",req.body)
-//     let imageURL = "http://localhost:3001" + req.file.path.replace('public','')
-//     res.json({
-//         message: "file uploaded",
-//         imageUrl: imageURL
-//     })
-// } )
 
 app.post('/upload/audio', uploader.single('audio'), async (req, res, next) => {
     try {
@@ -189,7 +134,7 @@ app.post('/upload/image', uploader.single('image'), async (req, res, next) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "../frontend/build/index.html"));
+  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
 });
 
 module.exports = app;

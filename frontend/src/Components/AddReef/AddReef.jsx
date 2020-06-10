@@ -22,13 +22,19 @@ class AddReef extends React.Component {
     }
 
     fileHandler = (event) => {
-        this.setState({
-            [event.target.name]: event.target.files[0]
-        })
+        if (event.target.files[0] < 15 * 1024 * 1024) {
+            this.setState({
+                [event.target.name]: event.target.files[0]
+            })
+        } else {
+            window.alert('Maximum file size is 15 MB')
+        }
     }
 
     uploadReef = async (event) => {
         event.preventDefault()
+
+        console.log(this.state.audio.size)
 
         this.setState({
             uploading: true
@@ -39,12 +45,6 @@ class AddReef extends React.Component {
 
         audioData.append('audio', this.state.audio)
         imageData.append('image', this.state.image)
-        
-        // const config = {
-        //     headers: {
-        //         'content-type': 'multipart/form-data'
-        //     }
-        // }
 
         let audioResponse = await axios.post('/upload/audio', audioData)
         let audioLocation = audioResponse.data.fileLocation
@@ -74,7 +74,7 @@ class AddReef extends React.Component {
             added: true
         })
 
-        //setTimeout(() => window.location.href = `/profile/${this.state.loggedUser}`, 1500)
+        setTimeout(() => window.location.href = `/profile/${this.state.loggedUser}`, 1500)
     }
 
     record = async () => {

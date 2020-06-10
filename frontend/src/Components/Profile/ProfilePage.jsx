@@ -187,9 +187,13 @@ class ProfilePage extends Component {
     }
 
     handleNewPic = (event) => {
-        this.setState({
-            newAvatar: event.target.files[0]
-        })
+        if (event.target.files[0] < 15 * 1024 * 1024) {
+            this.setState({
+                newAvatar: event.target.files[0]
+            })
+        } else {
+            window.alert('Maximum file size is 15 MB')
+        }
     }
 
     uploadNewPic = async (event) => {
@@ -200,14 +204,8 @@ class ProfilePage extends Component {
         const avatarData = new FormData()
         avatarData.append('image', newAvatar)
             
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        }
-
-        let avatarResponse = await axios.post('/upload/image', avatarData, config)
-        let avatarLocation = avatarResponse.data.imageUrl
+        let avatarResponse = await axios.post('/upload/image', avatarData)
+        let avatarLocation = avatarResponse.data.fileLocation
 
         await axios.patch(`/api/users/${loggedUser}`, {avatar: avatarLocation})
 

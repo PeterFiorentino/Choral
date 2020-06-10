@@ -382,9 +382,13 @@ class Reef extends Component {
     }
 
     fileHandler = (event) => {
-        this.setState({
-            selectedAudio: event.target.files[0]
-        })
+        if (event.target.files[0] < 15 * 1024 * 1024) {
+            this.setState({
+                selectedAudio: event.target.files[0]
+            })
+        } else {
+            window.alert('Maximum file size is 15 MB')
+        }
     }
 
     uploadCollab = async (event) => {
@@ -396,12 +400,6 @@ class Reef extends Component {
 
         const data = new FormData()
         data.append('audio', this.state.selectedAudio)
-        
-        // const config = {
-        //     headers: {
-        //         'content-type': 'multipart/form-data'
-        //     }
-        // }
         
         let response = await axios.post('/upload/audio', data)
 

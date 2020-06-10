@@ -33,11 +33,15 @@ class LandingPage extends Component {
         // console.log(inputValue)
    }
 
-   handleFile = (e) => {
-       this.setState({
-           [e.target.name]: e.target.files[0]
-       })
-   }
+   handleFile = (event) => {
+        if (event.target.files[0] < 15 * 1024 * 1024) {
+            this.setState({
+                [event.target.name]: event.target.files[0]
+            })
+        } else {
+        window.alert('maximum file size is 15 mb')
+        }
+    }
 
    loginUser = async () => {
     const {username, password} = this.state
@@ -74,12 +78,6 @@ class LandingPage extends Component {
                 const avatarData = new FormData()
                 avatarData.append('image', avatar)
             
-                // const config = {
-                //     headers: {
-                //         'content-type': 'multipart/form-data'
-                //     }
-                // }
-
                 let avatarResponse = await axios.post('/upload/image', avatarData)
                 avatarLocation = avatarResponse.data.fileLocation
             }
