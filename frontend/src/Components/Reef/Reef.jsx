@@ -229,7 +229,7 @@ class Reef extends Component {
         
         await this.saveMix()
 
-        await axios.patch(`/collaborations/clear_pool/${reefData.id}`)
+        await axios.patch(`/api/collaborations/clear_pool/${reefData.id}`)
         
         await this.getData()
 
@@ -386,7 +386,7 @@ class Reef extends Component {
         //     }
         // }
         
-        let response = await axios.post('/api/upload/audio', data)
+        let response = await axios.post('/upload/audio', data)
 
         let body = {
             reef_id: this.state.reefData.id,
