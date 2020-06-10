@@ -76,7 +76,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+const frontend = path.join(__dirname, '../frontend/build')
+app.use(express.static(frontend));
+app.use(function (req, res, next) {
+  res.sendFile(path.join(frontend, 'index.html'));
+})
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
@@ -94,16 +99,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-//app.use('/', indexRouter);
+app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/reefs', reefsRouter);
 app.use('/api/collaborations', collaborationsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/follows', followRouter);
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "../frontend/build", "index.html"));
-});
 
 // app.post('/upload/audio',uploadAudio.single("audio"),(req,res,next) =>{
 //     console.log("file",req.file) 
@@ -190,6 +191,10 @@ app.post('/upload/image', uploader.single('image'), async (req, res, next) => {
         )
         return
     }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "../frontend/build/index.html"));
 });
 
 module.exports = app;
