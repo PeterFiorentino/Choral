@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router} from 'react-router-dom'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App';
@@ -9,7 +9,7 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
   <React.StrictMode>
       <Router>
-        <App />
+        <Route exact path="/" component={App} />
       </Router>
   </React.StrictMode>,
   document.getElementById('root')
