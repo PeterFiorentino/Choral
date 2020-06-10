@@ -47,10 +47,10 @@ class AddReef extends React.Component {
         }
 
         let audioResponse = await axios.post('/upload/audio', audioData, config)
-        let audioLocation = audioResponse.data.fileLocation
+        let audioLocation = audioResponse.data.audioUrl
 
         let imageResponse = await axios.post('/upload/image', imageData, config)
-        let imageLocation = imageResponse.data.fileLocation
+        let imageLocation = imageResponse.data.imageUrl
 
         let body = {
             owner_id: this.state.loggedUser,
