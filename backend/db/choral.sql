@@ -1,3 +1,9 @@
+DROP DATABASE IF EXISTS choral;
+
+CREATE DATABASE choral;
+
+\c choral
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR UNIQUE,
@@ -54,15 +60,15 @@ INSERT INTO users (username, email, password, avatar, location, instrument, fav_
 
 
 INSERT INTO reefs  (owner_id, reef_name, genre, bpm, reef_key, chord_progression, looking_for, audio, art, reef_closed, volume, stereo_position, is_deleted)
-    VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', '../audios/drums.mp3', '../images/coral.jpeg', false, 80, 50, false),
-           (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', '../audios/guit.mp3', '../images/coral.jpeg', false, 80, 50, false);
+    VALUES (1, 'Instrumental Groove', 'reggae', 74, 'C minor', 'C-C-Ab-Bb', 'all instruments', 'http://localhost:3001/audios/drums.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50, false),
+           (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50, false);
            
 
 INSERT INTO collaborations (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted)
-    VALUES (1, 1, 1, '../audios/bassguitar.mp3', 'bass', false, 80, 50, false),
-           (2, 1, 1, '../audios/leadguitar.mp3', 'guitar', false, 80, 50, false),
-           (3, 1, 1, '../audios/horns.mp3', 'horns', false, 80, 50, false),
-           (1, 2, 2, '../audios/beat.mp3', 'beat', false, 80, 50, false);
+    VALUES (1, 1, 1, 'http://localhost:3001/audios/bassguitar.mp3', 'bass', false, 80, 50, false),
+           (2, 1, 1, 'http://localhost:3001/audios/leadguitar.mp3', 'guitar', false, 80, 50, false),
+           (3, 1, 1, 'http://localhost:3001/audios/horns.mp3', 'horns', false, 80, 50, false),
+           (1, 2, 2, 'http://localhost:3001/audios/beat.mp3', 'beat', false, 80, 50, false);
 
 
 INSERT INTO follows (user_id, followed_id, active_status)

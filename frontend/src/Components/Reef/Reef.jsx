@@ -380,13 +380,13 @@ class Reef extends Component {
         const data = new FormData()
         data.append('audio', this.state.selectedAudio)
         
-        // const config = {
-        //     headers: {
-        //         'content-type': 'multipart/form-data'
-        //     }
-        // }
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
         
-        let response = await axios.post('/upload/audio', data)
+        let response = await axios.post('/upload/audio', data, config)
 
         let body = {
             reef_id: this.state.reefData.id,

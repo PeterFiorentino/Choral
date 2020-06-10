@@ -40,16 +40,16 @@ class AddReef extends React.Component {
         audioData.append('audio', this.state.audio)
         imageData.append('image', this.state.image)
         
-        // const config = {
-        //     headers: {
-        //         'content-type': 'multipart/form-data'
-        //     }
-        // }
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
 
-        let audioResponse = await axios.post('/upload/audio', audioData)
+        let audioResponse = await axios.post('/upload/audio', audioData, config)
         let audioLocation = audioResponse.data.fileLocation
 
-        let imageResponse = await axios.post('/upload/image', imageData)
+        let imageResponse = await axios.post('/upload/image', imageData, config)
         let imageLocation = imageResponse.data.fileLocation
 
         let body = {
