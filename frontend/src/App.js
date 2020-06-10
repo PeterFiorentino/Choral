@@ -23,11 +23,11 @@ class App extends Component {
   }
   
   componentDidMount = async () => {
-    await this.checkLoginStatus()
-    this.initialize()
     if (this.props.refreshRoute) {
       this.props.history.replace(this.props.refreshRoute)
     }
+    await this.checkLoginStatus()
+    this.initialize()
   }
 
   initialize = () => {
@@ -104,7 +104,7 @@ class App extends Component {
             <PrivateRoute path = "/collaborators" render = {this.renderCollaboratorsPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
             <PrivateRoute path = "/feed" render = {this.renderFeedPage } isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
             <PrivateRoute path = "/reef/:id" render = {this.renderReefPageById} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
-            <PrivateRoute path = "/add" render = {this.renderAddReefPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
+            <PrivateRoute exact path = "/add" render = {this.renderAddReefPage} isUserLoggedIn={isUserLoggedIn} wasInitialized={wasInitialized}/>
           </Switch>
         </div>
         
