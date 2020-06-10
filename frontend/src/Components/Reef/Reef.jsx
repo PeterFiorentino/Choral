@@ -41,10 +41,10 @@ class Reef extends Component {
     }
 
     getData = async () => {
-        let reefResponse = await axios.get(`/api/reefs/${this.state.reefId}`)
+        let reefResponse = await axios.get(`http://localhost:3001/api/reefs/${this.state.reefId}`)
         let reefData = reefResponse.data.payload.reef[0]
 
-        let collabsResponse = await axios.get(`/api/collaborations/${this.state.reefId}`)
+        let collabsResponse = await axios.get(`http://localhost:3001/api/collaborations/${this.state.reefId}`)
         let collabsData = collabsResponse.data.payload.collabs
 
         this.setState({
@@ -229,7 +229,7 @@ class Reef extends Component {
         
         await this.saveMix()
 
-        await axios.patch(`/api/collaborations/clear_pool/${reefData.id}`)
+        await axios.patch(`http://localhost:3001/api/collaborations/clear_pool/${reefData.id}`)
         
         await this.getData()
 
@@ -348,7 +348,7 @@ class Reef extends Component {
             volume: reefData.howl._volume * 100,
             stereo_position: ((reefData.howl._stereo + 1) * 100) / 2
         }
-        axios.patch(`/api/reefs/${reefData.id}`, reefBody)
+        axios.patch(`http://localhost:3001/api/reefs/${reefData.id}`, reefBody)
         
         await collabsData.forEach((collab) => {
             let collabBody = {
@@ -356,7 +356,7 @@ class Reef extends Component {
                 volume : collab.howl._volume * 100,
                 stereo_position: ((collab.howl._stereo + 1) * 100) / 2
             }
-            axios.patch(`/api/collaborations/${collab.id}`, collabBody)
+            axios.patch(`http://localhost:3001/api/collaborations/${collab.id}`, collabBody)
         })
         
         this.setState({
@@ -386,7 +386,7 @@ class Reef extends Component {
         //     }
         // }
         
-        await axios.post('/upload/audio', data)
+        let response = await axios.post('http://localhost:3001/upload/audio', data)
 
         let body = {
             reef_id: this.state.reefData.id,
@@ -400,7 +400,7 @@ class Reef extends Component {
             is_deleted: false
         }
         
-        await axios.post('/api/collaborations', body)
+        await axios.post('http://localhost:3001/api/collaborations', body)
 
         this.setState({
             uploading: false,
