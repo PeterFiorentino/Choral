@@ -18,14 +18,14 @@ const uploader = multer({
 
 const storageAudio = new Storage({
     projectId: 'choral-9a276',
-    keyFilename: './key/choral-9a276-firebase-adminsdk-hiybe-8ae98c3bef.json',
+    keyFilename: './gcpconfig.json',
 })
 
 const audioBucket = storageAudio.bucket('gs://choral-9a276.appspot.com')
 
 const storageImage = new Storage({
     projectId: 'choral-9a276',
-    keyFilename: './key/choral-9a276-firebase-adminsdk-hiybe-8ae98c3bef.json',
+    keyFilename: './gcpconfig.json',
 })
 
 const imageBucket = storageImage.bucket('gs://choral-9a276.appspot.com')
