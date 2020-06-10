@@ -39,7 +39,7 @@ class LandingPage extends Component {
                 [event.target.name]: event.target.files[0]
             })
         } else {
-        window.alert('maximum file size is 15 mb')
+        window.alert('Maximum file size is 15 MB')
         }
     }
 
