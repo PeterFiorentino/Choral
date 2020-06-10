@@ -189,7 +189,7 @@ app.post('/upload/image', uploader.single('image'), async (req, res, next) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "../frontend/app/build/index.html"));
+  res.sendFile(path.join(__dirname + "../frontend/build/index.html"));
 });
 
 module.exports = app;
