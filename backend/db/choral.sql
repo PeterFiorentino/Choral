@@ -48,9 +48,9 @@ CREATE TABLE follows (
 
 
 INSERT INTO users (username, email, password, avatar, location, instrument, fav_genre, anthem)
-    VALUES ('Pete', 'peterfiorentino@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/12308322_1064602090219673_346612030046945553_n.jpg?_nc_cat=104&_nc_sid=7aed08&_nc_oc=AQkzMYvgIgDfwwRP8vBwuO3FZN8qYvOeEvmQ_g6shz6Hpl7TD5obfRj3NZNWeLEp3pvyB5ormv0O6YgXC1ZxAksy&_nc_ht=scontent-lga3-1.xx&oh=1a8fb40d1e7f20fbda210c9af6113dd0&oe=5F01E35B', 'Staten Island, NY', 'Piano', 'Hip-Hop', 'I Want You Back by The Jackson 5'),
-           ('Sergio', 'sergiocohensalama@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', 'https://scontent-lga3-1.xx.fbcdn.net/v/t31.0-8/13909295_10209265229484283_8661418597510466381_o.jpg?_nc_cat=110&_nc_sid=e007fa&_nc_ohc=V2IX486EhwkAX9k5NGJ&_nc_ht=scontent-lga3-1.xx&oh=8e10bb9f9d828aaf9ae8b58beb9d6b4f&oe=5EE605E0','Philadelphia, PA', 'Guitar', 'Rock', 'Sailors Tale by King Crimson'),
-           ('Owen', 'owenjones@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', 'https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/68545479_3598552950170956_2369962734889467904_n.jpg?_nc_cat=104&_nc_sid=13bebb&_nc_ohc=3Rpomf8HFrQAX_utV5F&_nc_ht=scontent-lga3-1.xx&oh=26a085edc15ae0d711cda1a044510f8d&oe=5EE50B60', 'Brooklyn, NY', 'Bass', 'Acid Jazz', 'Coronus the Terminator by Flying Lotus');
+    VALUES ('Pete', 'peterfiorentino@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', '../images/pete.jpeg', 'Staten Island, NY', 'Piano', 'Hip-Hop', 'I Want You Back by The Jackson 5'),
+           ('Sergio', 'sergiocohensalama@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', '../images/sergio.jpeg','Philadelphia, PA', 'Guitar', 'Rock', 'Sailors Tale by King Crimson'),
+           ('Owen', 'owenjones@pursuit.org', '$2b$10$HOsrgrOd.3lQjKw00GNXvOiJveW2QYBJCRyebskKSdWpB.MxXU3xi', '../images/owen.jpeg', 'Brooklyn, NY', 'Bass', 'Acid Jazz', 'Coronus the Terminator by Flying Lotus');
 
 
 INSERT INTO reefs  (owner_id, reef_name, genre, bpm, reef_key, chord_progression, looking_for, audio, art, reef_closed, volume, stereo_position, is_deleted)
