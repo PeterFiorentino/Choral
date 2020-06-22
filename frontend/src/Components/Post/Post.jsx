@@ -7,9 +7,10 @@ import './Post.css'
 const Post = (props) => {
     const [ time, setTime ] = useState(0)
     let history = useHistory()
+    let reef = props.reef
 
     const getAudioElements = () => {
-        return document.getElementsByName(`reef${props.reef.id}`)
+        return document.getElementsByName(`reef${reef.id}`)
     }
 
     const setVolumes = () => {
@@ -53,7 +54,7 @@ const Post = (props) => {
 
     const deleteReef = async () => {
         if (window.confirm('Are you sure that you want to delete this Reef?')) {
-            await axios.patch(`/api/reefs/delete/${props.reef.id}`)
+            await axios.patch(`/api/reefs/delete/${reef.id}`)
             window.location.reload()
         }
     }
@@ -61,20 +62,20 @@ const Post = (props) => {
     return (
         <>
         <div className='post'>
-            <img onClick={() => goToReef(props.reef.id)} className='owner' src={props.reef.art} alt=''></img>
+            <img onClick={() => goToReef(reef.id)} className='owner' src={reef.art} alt=''></img>
             <button className='round-button' id='control' onClick={preview}>PREVIEW</button>
             <div id='info-link'>
-                <Link to={`/reef/${props.reef.id}`}><p className='link-content'>{`${props.reef.reef_name} `}</p></Link>
+                <Link to={`/reef/${reef.id}`}><p className='link-content'>{`${reef.reef_name} `}</p></Link>
                 <p className='link-content'>by </p>
-                <Link to={`/profile/${props.reef.owner_id}`}><p className='link-content'>{props.reef.username}</p></Link>
-                <p className='looking-for'>{' looking for ' + props.reef.looking_for}</p>
+                <Link to={`/profile/${reef.owner_id}`}><p className='link-content'>{reef.username}</p></Link>
+                <p className='looking-for'>{' looking for ' + reef.looking_for}</p>
             </div>
             {props.canDelete ?
             <button className='delete-button' onClick={deleteReef}>X</button>
             : <></>}
             <ProgressBar now={time} max='45' variant='info' style={{width: '100%', height:'4em', gridRow: '2 / 3', gridColumn:'3 / 4', alignSelf: 'center'}}></ProgressBar>
             <div className='collaborators'>
-                {props.reef.collaborations.map((collaboration) => {
+                {reef.collaborations.map((collaboration) => {
                     if (collaboration.approved) {
                         return (
                             <img className='merged-collaborator' src={collaboration.avatar} alt='' key={collaboration.id}></img>
@@ -88,8 +89,8 @@ const Post = (props) => {
             </div>
         </div>
         <div className='audios'>
-            <audio className='audio-element' name={`reef${props.reef.id}`} volume={props.reef.volume / 100} onTimeUpdate={handleTime}>
-                <source src={props.reef.audio}></source>
+            <audio className='audio-element' name={`reef${reef.id}`} volume={reef.volume / 100} onTimeUpdate={handleTime}>
+                <source src={reef.audio}></source>
             </audio>
             {/* {props.session.collaborations.map((collaboration) => {
                 if (collaboration.approved) {

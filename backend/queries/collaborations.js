@@ -1,7 +1,7 @@
 const db = require('../db/db')
 
 const getCollabsByReefID = async (reef_id) => {
-    let collabs =  await db.any(`SELECT c.id, c.collaborator_id, c.reef_id, c.audio, c.instrument_name, c.approved, c.volume, c.stereo_position, u.avatar, u.username FROM collaborations c LEFT JOIN users u ON u.id = c.collaborator_id WHERE (c.reef_id=$1 AND c.is_deleted = false)`, reef_id);
+    let collabs =  await db.any(`SELECT c.id, c.collaborator_id, c.reef_id, c.audio, c.instrument_name, c.approved, c.volume, c.stereo_position, c.starting_point, u.avatar, u.username FROM collaborations c LEFT JOIN users u ON u.id = c.collaborator_id WHERE (c.reef_id=$1 AND c.is_deleted = false)`, reef_id);
     return collabs
 }
 
@@ -10,8 +10,8 @@ const getUsersCollaborators = async (user_id) => {
     return collaborators;
 }  
 
-const postCollab = async (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted) => {
-    let newCollab = await db.none(`INSERT INTO collaborations(collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [collaborator_id, reef_owner_id, reef_id, audio, instrument_name, approved, volume, stereo_position, is_deleted]);
+const postCollab = async (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point) => {
+    let newCollab = await db.none(`INSERT INTO collaborations(collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`, [collaborator_id, reef_owner_id, reef_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point]);
     return newCollab
 }
 
