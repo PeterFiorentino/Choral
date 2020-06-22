@@ -43,7 +43,8 @@ CREATE TABLE collaborations (
     approved BOOLEAN,
     volume INT,
     stereo_position INT,
-    is_deleted BOOLEAN
+    is_deleted BOOLEAN,
+    starting_point INT
 );
 
 CREATE TABLE follows (
@@ -64,11 +65,11 @@ INSERT INTO reefs  (owner_id, reef_name, genre, bpm, reef_key, chord_progression
            (2, '3/4 Rocker', 'rock', 120, 'E major', 'A-G-E', 'beat and bass', 'http://localhost:3001/audios/guit.mp3', 'http://localhost:3001/images/coral.jpeg', false, 80, 50, false);
            
 
-INSERT INTO collaborations (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted)
-    VALUES (1, 1, 1, 'http://localhost:3001/audios/bassguitar.mp3', 'bass', false, 80, 50, false),
-           (2, 1, 1, 'http://localhost:3001/audios/leadguitar.mp3', 'guitar', false, 80, 50, false),
-           (3, 1, 1, 'http://localhost:3001/audios/horns.mp3', 'horns', false, 80, 50, false),
-           (1, 2, 2, 'http://localhost:3001/audios/beat.mp3', 'beat', false, 80, 50, false);
+INSERT INTO collaborations (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point)
+    VALUES (1, 1, 1, 'http://localhost:3001/audios/bassguitar.mp3', 'bass', false, 80, 50, false, 0),
+           (2, 1, 1, 'http://localhost:3001/audios/leadguitar.mp3', 'guitar', false, 80, 50, false, 0),
+           (3, 1, 1, 'http://localhost:3001/audios/horns.mp3', 'horns', false, 80, 50, false, 0),
+           (1, 2, 2, 'http://localhost:3001/audios/beat.mp3', 'beat', false, 80, 50, false, 0);
 
 
 INSERT INTO follows (user_id, followed_id, active_status)

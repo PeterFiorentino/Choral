@@ -10,7 +10,6 @@ import { Howler, Howl } from 'howler'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
-
 class Reef extends Component {
     constructor(props){
         super(props)
@@ -22,9 +21,11 @@ class Reef extends Component {
             time: 0,
             hideInfo: false,
             collabInstrument: '',
+            collabTime: 0,
             reef_owner_id : null,
             toggle: 'show',
-            uploading: false
+            uploading: false,
+            timeoutIds: {}
         }
     }
 
@@ -61,12 +62,14 @@ class Reef extends Component {
         let howl = new Howl({
             src: reefData.audio
         })
+        let startingPoints = {}
 
         let newReefData = reefData
         newReefData.howl = howl
         newReefData.howl.volume(reefData.volume / 100)
         newReefData.howl.stereo(reefData.stereo_position * 2 / 100 - 1)
         newReefData.howl._html5 = true
+        startingPoints[howl._src] = 0
         
         let newCollabsData = collabsData 
         collabsData.forEach((collab, index) => {
@@ -77,11 +80,13 @@ class Reef extends Component {
             newCollabsData[index].howl.volume(collab.volume / 100)
             newCollabsData[index].howl.stereo(collab.stereo_position * 2 / 100 - 1)
             newCollabsData[index].howl._html5 = true
+            startingPoints[howl._src] = collab.starting_point
         })
 
         this.setState({
             reefData: newReefData,
-            collabsData: newCollabsData
+            collabsData: newCollabsData,
+            startingPoints: startingPoints
         })
     }
 
@@ -96,6 +101,7 @@ class Reef extends Component {
             if (collab.approved === false) {
                 completeCollabsData[index].filter = 'grayscale(100%)'
                 completeCollabsData[index].howl._muted = true
+                completeCollabsData[index].starting_point = collab.starting_point
                 poolTracks = true
             }
         })
@@ -109,10 +115,11 @@ class Reef extends Component {
     }
 
     getHowls = () => {
-        const {reefData, collabsData} = this.state
+        const { reefData, collabsData } = this.state
         let howls = []
 
         howls.push(reefData.howl)
+
         for (let collab of collabsData) {
             howls.push(collab.howl)
         }
@@ -122,36 +129,51 @@ class Reef extends Component {
 
 
     playAll = () => {
-        const { guide } = this.state
+        const { guide, time, startingPoints, timeoutIds } = this.state
         const howls = this.getHowls()
-
+ 
         for (let howl of howls) {
-            howl.play()
+            const startTime = (Math.round((startingPoints[howl._src] - time) * 1000))
+            timeoutIds[howl._src] = setTimeout(() => howl.play(), startTime)
         }
+
         guide.play()
+
+        this.setState({
+            timeoutIds: timeoutIds
+        })
     }
 
     pauseAll = () => {
-        const { guide } = this.state
+        const { guide, timeoutIds } = this.state
         const howls = this.getHowls()
         
         guide.pause()
+
         for (let howl of howls) {
             howl.pause()
-        }
-    }
-
-    stopAll = () => {
-        const { guide } = this.state
-        const howls = this.getHowls()
-        
-        guide.load()
-        for (let howl of howls) {
-            howl.stop()
+            clearTimeout(timeoutIds[howl._src])
         }
 
         this.setState({
-            time: 0
+            timeoutIds: {}
+        })
+    }
+
+    stopAll = () => {
+        const { guide, timeoutIds } = this.state
+        const howls = this.getHowls()
+
+        guide.load()
+
+        for (let howl of howls) {
+            howl.stop()
+            clearTimeout(timeoutIds[howl._src])
+        }
+
+        this.setState({
+            time: 0,
+            timeoutIds: {}
         })
     }
 
@@ -286,7 +308,7 @@ class Reef extends Component {
     }
 
     changeTime = (event) => {
-        const { duration, guide } = this.state
+        const { duration, guide, startingPoints } = this.state
 
         let clickX = event.pageX + 0.5 - window.innerWidth * 0.10
         let totalX = window.innerWidth * 0.80
@@ -298,8 +320,14 @@ class Reef extends Component {
         guide.currentTime = newPosition
  
         const howls = this.getHowls()
+
         for (let howl of howls) {
-            howl.seek(newPosition)
+            const startingPoint = startingPoints[howl._src]
+            if (startingPoint >= newPosition) {
+                howl.seek(0)
+            } else {
+                howl.seek(newPosition - startingPoint)
+            }
         }
     
         this.setState({
@@ -397,9 +425,10 @@ class Reef extends Component {
             approved: false,
             volume: 80,
             stereo_position: 50,
-            is_deleted: false
+            is_deleted: false,
+            starting_point: this.state.collabTime
         }
-        
+    
         await axios.post('/api/collaborations', body)
 
         this.setState({
@@ -470,6 +499,7 @@ class Reef extends Component {
             let stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false})
             let recorder = new MediaRecorder(stream)
             
+            const collabTime = this.state.time
             recorder.start()
             
             this.playAll()
@@ -484,7 +514,8 @@ class Reef extends Component {
             
             this.setState({
                 recorder: recorder,
-                recording: true
+                recording: true,
+                collabTime: collabTime
             })
 
         } else {
@@ -494,7 +525,9 @@ class Reef extends Component {
             
             this.pauseAll()
 
-            this.setState({recording:false})
+            this.setState({
+                recording:false
+            })
         }
     }
 

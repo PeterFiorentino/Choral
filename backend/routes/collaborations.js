@@ -50,9 +50,10 @@ router.post('/', async (req, res) => {
   let volume = req.body.volume
   let stereo_position = req.body.stereo_position
   let is_deleted = req.body.is_deleted
+  let starting_point = req.body.starting_point
 
   try {
-    let newCollab = await collabQueries.postCollab(collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted);
+    let newCollab = await collabQueries.postCollab(collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point);
     res.json({
       message: "Success",
       payload: {
