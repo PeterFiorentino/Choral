@@ -34,7 +34,9 @@ class Reef extends Component {
 
         this.createHowls()
 
-        setTimeout(() => this.completeState(), 500)
+        this.stopAll()
+
+        setTimeout(() => this.completeState(), 1500)
     }
 
     componentWillUnmount() {
@@ -62,6 +64,7 @@ class Reef extends Component {
         let howl = new Howl({
             src: reefData.audio
         })
+
         let startingPoints = {}
 
         let newReefData = reefData
@@ -90,9 +93,17 @@ class Reef extends Component {
         })
     }
 
-    completeState = () => {
+    getGuide = () => {
         const audioElement = document.getElementsByClassName('audio-element')[0]
-        const { collabsData } = this.state
+
+        return audioElement
+    }
+
+    completeState = () => {
+        const { reefData, collabsData } = this.state
+
+        let completeReefData = reefData
+        completeReefData.duration = reefData.howl.duration()
 
         let completeCollabsData = collabsData
         let poolTracks = false
@@ -107,9 +118,8 @@ class Reef extends Component {
         })
 
         this.setState({
+            reefData: completeReefData,
             collabsData: completeCollabsData,
-            guide: audioElement,
-            duration: audioElement.duration,
             poolTracks: poolTracks
         })
     }
@@ -129,8 +139,9 @@ class Reef extends Component {
 
 
     playAll = () => {
-        const { guide, time, startingPoints, timeoutIds } = this.state
+        const { time, startingPoints, timeoutIds } = this.state
         const howls = this.getHowls()
+        const guide = this.getGuide()
  
         for (let howl of howls) {
             const startTime = (Math.round((startingPoints[howl._src] - time) * 1000))
@@ -145,8 +156,9 @@ class Reef extends Component {
     }
 
     pauseAll = () => {
-        const { guide, timeoutIds } = this.state
+        const { timeoutIds } = this.state
         const howls = this.getHowls()
+        const guide = this.getGuide()
         
         guide.pause()
 
@@ -161,8 +173,9 @@ class Reef extends Component {
     }
 
     stopAll = () => {
-        const { guide, timeoutIds } = this.state
+        const { timeoutIds } = this.state
         const howls = this.getHowls()
+        const guide = this.getGuide()
 
         guide.load()
 
@@ -298,7 +311,7 @@ class Reef extends Component {
     secondsToMinutes = (seconds) => Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2)
 
     handleTime = () => {
-        const { guide } = this.state
+        let guide = this.getGuide()
 
         let currentTime = guide.currentTime
 
@@ -308,14 +321,21 @@ class Reef extends Component {
     }
 
     changeTime = (event) => {
-        const { duration, guide, startingPoints } = this.state
+        const { reefData, startingPoints } = this.state
+
+        let guide = this.getGuide()
 
         let clickX = event.pageX + 0.5 - window.innerWidth * 0.10
         let totalX = window.innerWidth * 0.80
 
         let percentage = clickX / totalX
     
-        const newPosition = duration * percentage
+        const newPosition = reefData.duration * percentage
+
+        if (!guide.paused) {
+            this.pauseAll()
+            this.playAll()
+        }
 
         guide.currentTime = newPosition
  
@@ -329,10 +349,11 @@ class Reef extends Component {
                 howl.seek(newPosition - startingPoint)
             }
         }
-    
+
         this.setState({
             time: newPosition
         })
+
     }
 
     changeVolume = (index, event) => {
@@ -417,9 +438,9 @@ class Reef extends Component {
         let response = await axios.post('/upload/audio', data, config)
 
         let body = {
-            reef_id: this.state.reefData.id,
-            reef_owner_id: this.state.reef_owner_id,
             collaborator_id: this.state.loggedUser,
+            reef_id: parseInt(this.state.reefId),
+            reef_owner_id: this.state.reef_owner_id,
             audio: response.data.audioUrl,
             instrument_name: this.state.collabInstrument,
             approved: false,
@@ -428,8 +449,11 @@ class Reef extends Component {
             is_deleted: false,
             starting_point: this.state.collabTime
         }
+
+        console.log(body)
     
-        await axios.post('/api/collaborations', body)
+        let response2 = await axios.post('/api/collaborations', body)
+        console.log(response2)
 
         this.setState({
             uploading: false,
@@ -493,13 +517,14 @@ class Reef extends Component {
     }
 
     record = async () => {
-        const { guide } = this.state
+        const guide = this.getGuide()
 
         if (guide.paused && !guide.ended) {
             let stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false})
             let recorder = new MediaRecorder(stream)
             
             const collabTime = this.state.time
+            
             recorder.start()
             
             this.playAll()
@@ -681,7 +706,7 @@ class Reef extends Component {
                     </div>
                     <div className='transport'>
                         <div className='progress-bar-container'>
-                            <ProgressBar now={this.state.time} max={this.state.duration} style={{height:'5rem'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
+                            <ProgressBar now={this.state.time} max={this.state.reefData.duration} style={{height:'5rem'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
                         </div>
                         <br/>
                         <button className='round-button' onClick={this.playAll}>PLAY</button>
@@ -689,7 +714,7 @@ class Reef extends Component {
                         <button className='round-button' onClick={this.stopAll}>STOP</button>
                     </div>
                     <div className='audios'>
-                        <audio crossOrigin='anonymous' muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
+                        <audio muted={true} className='audio-element' onTimeUpdate={this.handleTime} key={-1}>
                             <source src={this.state.reefData.audio}></source>
                         </audio>
                     </div>
