@@ -142,17 +142,25 @@ class Reef extends Component {
         const { time, startingPoints, timeoutIds } = this.state
         const howls = this.getHowls()
         const guide = this.getGuide()
+
+        if (!guide.ended) {
  
-        for (let howl of howls) {
-            const startTime = (Math.round((startingPoints[howl._src] - time) * 1000))
-            timeoutIds[howl._src] = setTimeout(() => howl.play(), startTime)
+            for (let howl of howls) {
+                if (startingPoints[howl._src] !== 0) {
+                const startTime = (Math.round((startingPoints[howl._src] - time) * 1000))
+                timeoutIds[howl._src] = setTimeout(() => howl.play(), startTime)
+                } else {
+                    howl.play()
+                }
+            }
+
+            guide.play()
+
+            this.setState({
+                timeoutIds: timeoutIds
+            })
+        
         }
-
-        guide.play()
-
-        this.setState({
-            timeoutIds: timeoutIds
-        })
     }
 
     pauseAll = () => {
@@ -161,13 +169,14 @@ class Reef extends Component {
         const guide = this.getGuide()
         
         guide.pause()
-
+        
         for (let howl of howls) {
             howl.pause()
             clearTimeout(timeoutIds[howl._src])
         }
 
         this.setState({
+            time: Math.round(guide.currentTime),
             timeoutIds: {}
         })
     }
@@ -323,24 +332,19 @@ class Reef extends Component {
     changeTime = (event) => {
         const { reefData, startingPoints } = this.state
 
-        let guide = this.getGuide()
+        const guide = this.getGuide()
+        const howls = this.getHowls()
+
 
         let clickX = event.pageX + 0.5 - window.innerWidth * 0.10
         let totalX = window.innerWidth * 0.80
 
         let percentage = clickX / totalX
     
-        const newPosition = reefData.duration * percentage
-
-        if (!guide.paused) {
-            this.pauseAll()
-            this.playAll()
-        }
+        const newPosition = Math.round(reefData.duration * percentage)
 
         guide.currentTime = newPosition
  
-        const howls = this.getHowls()
-
         for (let howl of howls) {
             const startingPoint = startingPoints[howl._src]
             if (startingPoint >= newPosition) {
@@ -348,6 +352,11 @@ class Reef extends Component {
             } else {
                 howl.seek(newPosition - startingPoint)
             }
+        }
+
+        if (!guide.paused) {
+            this.pauseAll()
+            this.playAll()
         }
 
         this.setState({
@@ -449,11 +458,8 @@ class Reef extends Component {
             is_deleted: false,
             starting_point: this.state.collabTime
         }
-
-        console.log(body)
     
-        let response2 = await axios.post('/api/collaborations', body)
-        console.log(response2)
+        await axios.post('/api/collaborations', body)
 
         this.setState({
             uploading: false,
@@ -476,7 +482,7 @@ class Reef extends Component {
     }
 
     bounce = () => {
-        const { guide } = this.state
+        const guide = this.getGuide()
 
         if (guide.paused && !guide.ended) {
             let recordingstream = Howler.ctx.createMediaStreamDestination()
