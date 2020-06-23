@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
   try {
     let newCollab = await collabQueries.postCollab(collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point);
     res.json({
-      message: "Success",
+      message: `Success ${reef_id}`,
       payload: {
         newCollab: newCollab
       }, 
@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
     })
   } catch (error) {
     res.json({
-      message: "Could not add new session",
+      message: 'Could not add new session',
       payload: null,
       error: error
     })
