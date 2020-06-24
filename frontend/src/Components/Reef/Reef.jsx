@@ -10,7 +10,6 @@ import { Howler, Howl } from 'howler'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
-
 class Reef extends Component {
     constructor(props){
         super(props)
@@ -22,9 +21,11 @@ class Reef extends Component {
             time: 0,
             hideInfo: false,
             collabInstrument: '',
+            collabTime: 0,
             reef_owner_id : null,
             toggle: 'show',
-            uploading: false
+            uploading: false,
+            timeoutIds: {}
         }
     }
 
@@ -32,6 +33,8 @@ class Reef extends Component {
         await this.getData()
 
         this.createHowls()
+
+        this.stopAll()
 
         setTimeout(() => this.completeState(), 1500)
     }
@@ -62,11 +65,14 @@ class Reef extends Component {
             src: reefData.audio
         })
 
+        let startingPoints = {}
+
         let newReefData = reefData
         newReefData.howl = howl
         newReefData.howl.volume(reefData.volume / 100)
         newReefData.howl.stereo(reefData.stereo_position * 2 / 100 - 1)
-        // newReefData.howl._html5 = true
+        newReefData.howl._html5 = true
+        startingPoints[howl._src] = 0
         
         let newCollabsData = collabsData 
         collabsData.forEach((collab, index) => {
@@ -77,17 +83,27 @@ class Reef extends Component {
             newCollabsData[index].howl.volume(collab.volume / 100)
             newCollabsData[index].howl.stereo(collab.stereo_position * 2 / 100 - 1)
             newCollabsData[index].howl._html5 = true
+            startingPoints[howl._src] = collab.starting_point
         })
 
         this.setState({
             reefData: newReefData,
-            collabsData: newCollabsData
+            collabsData: newCollabsData,
+            startingPoints: startingPoints
         })
     }
 
-    completeState = () => {
+    getGuide = () => {
         const audioElement = document.getElementsByClassName('audio-element')[0]
-        const { collabsData } = this.state
+
+        return audioElement
+    }
+
+    completeState = () => {
+        const { reefData, collabsData } = this.state
+
+        let completeReefData = reefData
+        completeReefData.duration = reefData.howl.duration()
 
         let completeCollabsData = collabsData
         let poolTracks = false
@@ -96,22 +112,24 @@ class Reef extends Component {
             if (collab.approved === false) {
                 completeCollabsData[index].filter = 'grayscale(100%)'
                 completeCollabsData[index].howl._muted = true
+                completeCollabsData[index].starting_point = collab.starting_point
                 poolTracks = true
             }
         })
 
         this.setState({
+            reefData: completeReefData,
             collabsData: completeCollabsData,
-            duration: audioElement.duration,
             poolTracks: poolTracks
         })
     }
 
     getHowls = () => {
-        const {reefData, collabsData} = this.state
+        const { reefData, collabsData } = this.state
         let howls = []
 
         howls.push(reefData.howl)
+
         for (let collab of collabsData) {
             howls.push(collab.howl)
         }
@@ -121,49 +139,63 @@ class Reef extends Component {
 
 
     playAll = () => {
-        if (!this.state.playing) {
+        const { time, startingPoints, timeoutIds } = this.state
+        const howls = this.getHowls()
+        const guide = this.getGuide()
 
-            const guide = document.getElementsByClassName('audio-element')[0]
-            const howls = this.getHowls()
-
+        if (!guide.ended) {
+ 
             for (let howl of howls) {
-                howl.play()
+                if (startingPoints[howl._src] !== 0) {
+                const startTime = (Math.round((startingPoints[howl._src] - time) * 1000))
+                timeoutIds[howl._src] = setTimeout(() => howl.play(), startTime)
+                } else {
+                    howl.play()
+                }
             }
+
             guide.play()
 
             this.setState({
-                playing: true
+                timeoutIds: timeoutIds
             })
         
         }
     }
 
     pauseAll = () => {
-        const guide = document.getElementsByClassName('audio-element')[0]
+        const { timeoutIds } = this.state
         const howls = this.getHowls()
+        const guide = this.getGuide()
         
         guide.pause()
+        
         for (let howl of howls) {
             howl.pause()
+            clearTimeout(timeoutIds[howl._src])
         }
 
         this.setState({
-            playing: false
+            time: Math.round(guide.currentTime),
+            timeoutIds: {}
         })
     }
 
     stopAll = () => {
-        const guide = document.getElementsByClassName('audio-element')[0]
+        const { timeoutIds } = this.state
         const howls = this.getHowls()
-        
+        const guide = this.getGuide()
+
         guide.load()
+
         for (let howl of howls) {
             howl.stop()
+            clearTimeout(timeoutIds[howl._src])
         }
 
         this.setState({
-            playing: false,
-            time: 0
+            time: 0,
+            timeoutIds: {}
         })
     }
 
@@ -288,40 +320,49 @@ class Reef extends Component {
     secondsToMinutes = (seconds) => Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2)
 
     handleTime = () => {
-        const guide = document.getElementsByClassName('audio-element')[0]
+        let guide = this.getGuide()
+
+        let currentTime = guide.currentTime
+
         this.setState({
-            time: guide.currentTime
+            time: currentTime
         })
-        // const { guide } = this.state
-
-        // let currentTime = guide.currentTime
-
-        // this.setState({
-        //     time: currentTime
-        // })
     }
 
     changeTime = (event) => {
-        const guide = document.getElementsByClassName('audio-element')[0]
-        const { duration } = this.state
+        const { reefData, startingPoints } = this.state
+
+        const guide = this.getGuide()
+        const howls = this.getHowls()
+
 
         let clickX = event.pageX + 0.5 - window.innerWidth * 0.10
         let totalX = window.innerWidth * 0.80
 
         let percentage = clickX / totalX
     
-        const newPosition = duration * percentage
+        const newPosition = Math.round(reefData.duration * percentage)
 
         guide.currentTime = newPosition
  
-        const howls = this.getHowls()
         for (let howl of howls) {
-            howl.seek(newPosition)
+            const startingPoint = startingPoints[howl._src]
+            if (startingPoint >= newPosition) {
+                howl.seek(0)
+            } else {
+                howl.seek(newPosition - startingPoint)
+            }
         }
-    
+
+        if (!guide.paused) {
+            this.pauseAll()
+            this.playAll()
+        }
+
         this.setState({
             time: newPosition
         })
+
     }
 
     changeVolume = (index, event) => {
@@ -382,13 +423,9 @@ class Reef extends Component {
     }
 
     fileHandler = (event) => {
-        if (event.target.files[0].size < 15 * 1024 * 1024) {
-            this.setState({
-                selectedAudio: event.target.files[0]
-            })
-        } else {
-            window.alert('Maximum file size is 15 MB')
-        }
+        this.setState({
+            selectedAudio: event.target.files[0]
+        })
     }
 
     uploadCollab = async (event) => {
@@ -401,20 +438,27 @@ class Reef extends Component {
         const data = new FormData()
         data.append('audio', this.state.selectedAudio)
         
-        let response = await axios.post('/upload/audio', data)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        
+        let response = await axios.post('/upload/audio', data, config)
 
         let body = {
-            reef_id: this.state.reefData.id,
-            reef_owner_id: this.state.reef_owner_id,
             collaborator_id: this.state.loggedUser,
+            reef_id: parseInt(this.state.reefId),
+            reef_owner_id: this.state.reef_owner_id,
             audio: response.data.fileLocation,
             instrument_name: this.state.collabInstrument,
             approved: false,
             volume: 80,
             stereo_position: 50,
-            is_deleted: false
+            is_deleted: false,
+            starting_point: this.state.collabTime
         }
-        
+    
         await axios.post('/api/collaborations', body)
 
         this.setState({
@@ -438,7 +482,7 @@ class Reef extends Component {
     }
 
     bounce = () => {
-        const guide = document.getElementsByClassName('audio-element')[0]
+        const guide = this.getGuide()
 
         if (guide.paused && !guide.ended) {
             let recordingstream = Howler.ctx.createMediaStreamDestination()
@@ -479,11 +523,13 @@ class Reef extends Component {
     }
 
     record = async () => {
-        const guide = document.getElementsByClassName('audio-element')[0]
+        const guide = this.getGuide()
 
         if (guide.paused && !guide.ended) {
             let stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false})
             let recorder = new MediaRecorder(stream)
+            
+            const collabTime = this.state.time
             
             recorder.start()
             
@@ -499,7 +545,8 @@ class Reef extends Component {
             
             this.setState({
                 recorder: recorder,
-                recording: true
+                recording: true,
+                collabTime: collabTime
             })
 
         } else {
@@ -509,7 +556,9 @@ class Reef extends Component {
             
             this.pauseAll()
 
-            this.setState({recording:false})
+            this.setState({
+                recording:false
+            })
         }
     }
 
@@ -663,7 +712,7 @@ class Reef extends Component {
                     </div>
                     <div className='transport'>
                         <div className='progress-bar-container'>
-                            <ProgressBar now={this.state.time} max={this.state.duration} style={{height:'5rem'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
+                            <ProgressBar now={this.state.time} max={this.state.reefData.duration} style={{height:'5rem'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
                         </div>
                         <br/>
                         <button className='round-button' onClick={this.playAll}>PLAY</button>
