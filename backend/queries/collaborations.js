@@ -10,8 +10,8 @@ const getUsersCollaborators = async (user_id) => {
     return collaborators;
 }  
 
-const postCollab = async (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted) => {
-    let newCollab = await db.none(`INSERT INTO collaborations(collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [collaborator_id, reef_owner_id, reef_id, audio, instrument_name, approved, volume, stereo_position, is_deleted]);
+const postCollab = async (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point) => {
+    let newCollab = await db.none(`INSERT INTO collaborations(collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`, [collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point]);
     return newCollab
 }
 
