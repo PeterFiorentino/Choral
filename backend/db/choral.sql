@@ -37,7 +37,8 @@ CREATE TABLE collaborations (
     approved BOOLEAN,
     volume INT,
     stereo_position INT,
-    is_deleted BOOLEAN
+    is_deleted BOOLEAN,
+    starting_point INT
 );
 
 CREATE TABLE follows (
