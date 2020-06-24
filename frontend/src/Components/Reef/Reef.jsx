@@ -150,8 +150,6 @@ class Reef extends Component {
  
                 const startTime = (Math.round((startingPoints[howl._src] - time) * 1000))
 
-                console.log(startTime)
-
                 timeoutIds[howl._src] = setTimeout(() => howl.play(), startTime)
                 } else {
                     howl.play()
