@@ -640,7 +640,7 @@ class Reef extends Component {
                             </div>
                             <form onSubmit={this.uploadCollab}>
                                 <div className='file-input'>
-                                    <input required type='file' name='audio' accept='audio/*' onChange={this.fileHandler}></input>
+                                    <input required type='file' name='audio' accept='audio/*, video/mp4' onChange={this.fileHandler}></input>
                                 </div>
                                 <FormControl>
                                     <InputLabel htmlFor='instrument'>instrument</InputLabel>
