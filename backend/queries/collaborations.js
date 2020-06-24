@@ -1,7 +1,7 @@
 const db = require('../db/db')
 
 const getCollabsByReefID = async (reef_id) => {
-    let collabs =  await db.any(`SELECT c.id, c.collaborator_id, c.reef_id, c.audio, c.instrument_name, c.approved, c.volume, c.stereo_position, u.avatar, u.username FROM collaborations c LEFT JOIN users u ON u.id = c.collaborator_id WHERE (c.reef_id=$1 AND c.is_deleted = false)`, reef_id);
+    let collabs =  await db.any(`SELECT c.id, c.collaborator_id, c.reef_id, c.audio, c.instrument_name, c.approved, c.volume, c.stereo_position, c.starting_point, u.avatar, u.username FROM collaborations c LEFT JOIN users u ON u.id = c.collaborator_id WHERE (c.reef_id=$1 AND c.is_deleted = false)`, reef_id);
     return collabs
 }
 
