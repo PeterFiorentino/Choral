@@ -60,10 +60,10 @@ INSERT INTO reefs  (owner_id, reef_name, genre, bpm, reef_key, chord_progression
            
 
 INSERT INTO collaborations (collaborator_id, reef_id, reef_owner_id, audio, instrument_name, approved, volume, stereo_position, is_deleted, starting_point)
-    VALUES (1, 1, 1, 'http://localhost:3001/audios/bassguitar.mp3', 'bass', false, 80, 50, false, 0),
-           (2, 1, 1, 'http://localhost:3001/audios/leadguitar.mp3', 'guitar', false, 80, 50, false, 0),
-           (3, 1, 1, 'http://localhost:3001/audios/horns.mp3', 'horns', false, 80, 50, false, 0),
-           (1, 2, 2, 'http://localhost:3001/audios/beat.mp3', 'beat', false, 80, 50, false, 0);
+    VALUES (1, 1, 1, '../audios/bassguitar.mp3', 'bass', false, 80, 50, false, 0),
+           (2, 1, 1, '../audios/leadguitar.mp3', 'guitar', false, 80, 50, false, 0),
+           (3, 1, 1, '../audios/horns.mp3', 'horns', false, 80, 50, false, 0),
+           (1, 2, 2, '../audios/beat.mp3', 'beat', false, 80, 50, false, 0);
 
 
 INSERT INTO follows (user_id, followed_id, active_status)
