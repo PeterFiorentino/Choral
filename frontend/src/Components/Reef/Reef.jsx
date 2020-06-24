@@ -148,7 +148,7 @@ class Reef extends Component {
             for (let howl of howls) {
                 if (startingPoints[howl._src] !== 0) {
  
-                const startTime = (Math.round((startingPoints[howl._src] - time) * 1000))
+                const startTime = (startingPoints[howl._src] - time) * 1000
 
                 timeoutIds[howl._src] = setTimeout(() => howl.play(), startTime)
                 } else {
@@ -166,19 +166,29 @@ class Reef extends Component {
     }
 
     pauseAll = () => {
-        const { timeoutIds } = this.state
+        const { timeoutIds, startingPoints } = this.state
         const howls = this.getHowls()
         const guide = this.getGuide()
         
         guide.pause()
+
+        const roundedTime = Math.round(guide.currentTime)
+
+        guide.currentTime = roundedTime
         
         for (let howl of howls) {
             howl.pause()
             clearTimeout(timeoutIds[howl._src])
+            const startingPoint = startingPoints[howl._src]
+            if (startingPoint >= roundedTime) {
+                howl.seek(0)
+            } else {
+                howl.seek(roundedTime - startingPoint)
+            }
         }
 
         this.setState({
-            time: Math.round(guide.currentTime),
+            time: roundedTime,
             timeoutIds: {}
         })
     }
@@ -322,12 +332,12 @@ class Reef extends Component {
     secondsToMinutes = (seconds) => Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2)
 
     handleTime = () => {
-        let guide = this.getGuide()
+        const guide = this.getGuide()
 
-        let currentTime = guide.currentTime
+        const roundedTime = Math.round(guide.currentTime)
 
         this.setState({
-            time: Math.round(currentTime)
+            time: roundedTime
         })
     }
 
@@ -346,19 +356,20 @@ class Reef extends Component {
         const newPosition = Math.round(reefData.duration * percentage)
 
         guide.currentTime = newPosition
- 
-        for (let howl of howls) {
-            const startingPoint = startingPoints[howl._src]
-            if (startingPoint >= newPosition) {
-                howl.seek(0)
-            } else {
-                howl.seek(newPosition - startingPoint)
+        
+        if (guide.paused) {
+            for (let howl of howls) {
+                const startingPoint = startingPoints[howl._src]
+                if (startingPoint >= newPosition) {
+                    howl.seek(0)
+                } else {
+                    howl.seek(newPosition - startingPoint)
+                }
             }
         }
 
         if (!guide.paused) {
             this.pauseAll()
-            this.playAll()
         }
 
         this.setState({
