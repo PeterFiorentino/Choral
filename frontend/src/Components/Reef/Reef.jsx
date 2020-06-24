@@ -100,10 +100,7 @@ class Reef extends Component {
     }
 
     completeState = () => {
-        const { reefData, collabsData } = this.state
-
-        let completeReefData = reefData
-        completeReefData.duration = reefData.howl.duration()
+        const { collabsData } = this.state
 
         let completeCollabsData = collabsData
         let poolTracks = false
@@ -118,9 +115,9 @@ class Reef extends Component {
         })
 
         this.setState({
-            reefData: completeReefData,
             collabsData: completeCollabsData,
-            poolTracks: poolTracks
+            poolTracks: poolTracks,
+            completed: true
         })
     }
 
@@ -139,9 +136,14 @@ class Reef extends Component {
 
 
     playAll = () => {
-        const { time, startingPoints, timeoutIds } = this.state
+        const { time, reefData, startingPoints, timeoutIds } = this.state
         const howls = this.getHowls()
         const guide = this.getGuide()
+
+        if (!this.state.duration) {
+            const duration = reefData.howl.duration()
+            this.setState({duration: duration})
+        }
 
         if (!guide.ended) {
  
@@ -159,7 +161,7 @@ class Reef extends Component {
             guide.play()
 
             this.setState({
-                timeoutIds: timeoutIds
+                timeoutIds: timeoutIds,
             })
         
         }
@@ -347,14 +349,19 @@ class Reef extends Component {
         const guide = this.getGuide()
         const howls = this.getHowls()
 
+        const duration = reefData.howl.duration()
+        
+        if (!this.state.duration) {
+            this.setState({duration: duration})
+        }
 
         let clickX = event.pageX + 0.5 - window.innerWidth * 0.10
         let totalX = window.innerWidth * 0.80
 
         let percentage = clickX / totalX
     
-        const newPosition = Math.round(reefData.duration * percentage)
-
+        const newPosition = Math.round(duration * percentage)
+        
         guide.currentTime = newPosition
         
         if (guide.paused) {
@@ -719,7 +726,7 @@ class Reef extends Component {
                     </div>
                     <div className='transport'>
                         <div className='progress-bar-container'>
-                            <ProgressBar now={this.state.time} max={this.state.reefData.duration} style={{height:'5rem'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
+                            <ProgressBar now={this.state.time} max={this.state.duration} style={{height:'5rem'}} variant='info' label={this.secondsToMinutes(this.state.time)} onClick={this.changeTime}></ProgressBar>
                         </div>
                         <br/>
                         <button className='round-button' onClick={this.playAll}>PLAY</button>
