@@ -147,7 +147,11 @@ class Reef extends Component {
  
             for (let howl of howls) {
                 if (startingPoints[howl._src] !== 0) {
+ 
                 const startTime = (Math.round((startingPoints[howl._src] - time) * 1000))
+
+                console.log(startTime)
+
                 timeoutIds[howl._src] = setTimeout(() => howl.play(), startTime)
                 } else {
                     howl.play()
@@ -325,7 +329,7 @@ class Reef extends Component {
         let currentTime = guide.currentTime
 
         this.setState({
-            time: currentTime
+            time: Math.round(currentTime)
         })
     }
 
