@@ -50,7 +50,7 @@ Used PostgreSQL for the database
   - id
   - collaborator_id - _References Users_
   - reef_id - _References Reefs_
-  - reef_owner - _id _References Users_
+  - reef_owner_id - _References Users_
   - audio
   - instrument_name
   - approved
