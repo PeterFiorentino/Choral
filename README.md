@@ -17,7 +17,7 @@ Choral is a full-stack web solution for remote music collaboration.
 
 ## Database Structure
 
-Used PostgreSQL for the database 
+Choral uses PostgreSQL for the database. 
 
 - **users**
   - id
