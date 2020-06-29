@@ -7,6 +7,7 @@ import Slider from '@material-ui/core/Slider'
 import VolumeDownIcon from '@material-ui/icons/VolumeDown'
 import { ProgressBar, Spinner } from 'react-bootstrap'
 import { Howler, Howl } from 'howler'
+import { StereoAudioRecorder } from 'recordrtc'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
@@ -500,25 +501,24 @@ class Reef extends Component {
 
         if (guide.paused && !guide.ended) {
             let recordingstream = Howler.ctx.createMediaStreamDestination()
-            // const options = {
-            //     audioBitsPerSecond: 128000,
-            //     mimeType: 'audio/webm'
-            // }
-            let recorder = new MediaRecorder(recordingstream.stream)
+            const options = {
+                bufferSize: 1024 
+            }
+            let recorder = new StereoAudioRecorder(recordingstream.stream, options)
             
             Howler.masterGain.connect(recordingstream)
             
-            recorder.start()
+            recorder.record()
             
             this.playAll()
             
-            recorder.addEventListener('dataavailable', (e) => {
-                this.setState({
-                    newBounce: URL.createObjectURL(e.data)
-                })
-                recorder = false
-                recordingstream = false
-            })
+            // recorder.addEventListener('dataavailable', (e) => {
+            //     this.setState({
+            //         newBounce: URL.createObjectURL(e.data)
+            //     })
+            //     recorder = false
+            //     recordingstream = false
+            // })
             
             this.setState({
                 recorder: recorder,
@@ -528,7 +528,12 @@ class Reef extends Component {
         } else if (this.state.bouncing) {
             const { recorder } = this.state
             
-            recorder.stop()
+            recorder.stop((blob) => {
+                this.setState({
+                    newBounce: URL.createObjectURL(blob),
+                    recorder: false,
+                })
+            })
             
             this.pauseAll()
 
@@ -688,7 +693,7 @@ class Reef extends Component {
                             <div className='bounce'>
                                 <button className='round-button' onClick={this.bounce}>BOUNCE</button><br/>
                                 {this.state.bouncing ? <h5>bouncing...</h5> : <><h5>{' '}</h5></>}
-                                {this.state.newBounce && !this.state.bouncing ? <><a download='bounce' href={this.state.newBounce}>DOWNLOAD</a><br/><br/></> : <br/>}
+                                {this.state.newBounce && !this.state.bouncing ? <><a download={this.state.reefData.reef_name} href={this.state.newBounce}>DOWNLOAD</a><br/><br/></> : <br/>}
                                 {!this.state.newBounce && !this.state.bouncing ? <br/> : <></>}
                             </div>
                         </div>
