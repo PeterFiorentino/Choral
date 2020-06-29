@@ -164,7 +164,6 @@ class Reef extends Component {
             this.setState({
                 timeoutIds: timeoutIds,
             })
-        
         }
     }
 
