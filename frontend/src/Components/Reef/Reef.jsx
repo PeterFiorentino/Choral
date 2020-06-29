@@ -500,11 +500,11 @@ class Reef extends Component {
 
         if (guide.paused && !guide.ended) {
             let recordingstream = Howler.ctx.createMediaStreamDestination()
-            const options = {
-                audioBitsPerSecond: 128000,
-                mimeType: 'audio/webm'
-            }
-            let recorder = new MediaRecorder(recordingstream.stream, options)
+            // const options = {
+            //     audioBitsPerSecond: 128000,
+            //     mimeType: 'audio/webm'
+            // }
+            let recorder = new MediaRecorder(recordingstream.stream)
             
             Howler.masterGain.connect(recordingstream)
             
