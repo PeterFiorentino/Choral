@@ -512,14 +512,6 @@ class Reef extends Component {
             
             this.playAll()
             
-            // recorder.addEventListener('dataavailable', (e) => {
-            //     this.setState({
-            //         newBounce: URL.createObjectURL(e.data)
-            //     })
-            //     recorder = false
-            //     recordingstream = false
-            // })
-            
             this.setState({
                 recorder: recorder,
                 bouncing: true
