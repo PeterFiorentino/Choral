@@ -79,7 +79,7 @@ Choral uses PostgreSQL for the database.
 
   | Method | Endpoint                    | Description                           | Properties sent in JSON body         |
   | ------ | --------------------------- | ------------------------------------- | ------------------------------------ |
-  | GET    | `/reefs`                    | Get all reefs.                        | n/a                                  |
+  | GET    | `/reefs`                    | Get all reefs                         | n/a                                  |
   | GET    | `/reefs/localfeed/:user_id` | Get reefs from users a user follows   | n/a                                  |
   | GET    | `/reefs/:id`                | Get single reef by id                 | n/a                                  |
   | GET    | `/reefs/user/:user_id`      | Get all reefs from a user             | n/a                                  |
