@@ -13,7 +13,7 @@ const { Storage } = require ('@google-cloud/storage')
 const uploader = multer({
     storage: multer.memoryStorage(),
     limits: {
-        fileSize: 15 * 1024 * 1024, // keep files size < 15 MB
+        fileSize: 15 * 1024 * 1024,
     },
 })
 
