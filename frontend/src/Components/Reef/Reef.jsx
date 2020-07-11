@@ -391,7 +391,7 @@ class Reef extends Component {
     }
 
     playAll = () => {
-        const { time, reefData, startingPoints, timeoutIds } = this.state
+        const { playing, time, reefData, startingPoints, timeoutIds } = this.state
         const howls = this.getHowls()
         const guide = this.getGuide()
 
@@ -400,7 +400,7 @@ class Reef extends Component {
             this.setState({duration: duration})
         }
 
-        if (!guide.ended) {
+        if (!guide.ended && guide.paused) {
  
             for (let howl of howls) {
                 if (startingPoints[howl._src] !== 0) {
@@ -416,7 +416,7 @@ class Reef extends Component {
             guide.play()
 
             this.setState({
-                timeoutIds: timeoutIds,
+                timeoutIds: timeoutIds
             })
         }
     }
