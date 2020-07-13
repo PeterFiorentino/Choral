@@ -15,10 +15,10 @@ class Reef extends Component {
         this.state = {
             loggedUser: props.user,
             reefId: props.match.params.id,
+            reefOwnerId: null,
             saved: false,
             playing: false,
             time: 0,
-            reef_owner_id : null,
             timeoutIds: {}
         }
     }
@@ -48,7 +48,7 @@ class Reef extends Component {
             reefData: reefData,
             collabsData: collabsData,
             isOwner: (this.state.loggedUser === reefData.owner_id),
-            reef_owner_id: reefData.owner_id
+            reefOwnerId: reefData.owner_id
         })
     }
 

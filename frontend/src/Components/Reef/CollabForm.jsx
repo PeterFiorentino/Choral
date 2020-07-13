@@ -82,7 +82,7 @@ class CollabForm extends Component {
         let body = {
             collaborator_id: this.props.loggedUser,
             reef_id: parseInt(this.props.reefId),
-            reef_owner_id: this.props.reef_owner_id,
+            reef_owner_id: this.props.reefOwnerId,
             audio: response.data.fileLocation,
             instrument_name: this.state.collabInstrument,
             approved: false,
@@ -101,7 +101,7 @@ class CollabForm extends Component {
 
         this.props.stopAll()
 
-        if (this.state.isOwner) {
+        if (this.props.isOwner) {
             await this.props.saveMix()
 
             await this.props.getData()
