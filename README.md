@@ -3,6 +3,11 @@
 A remote musical playground. 
 Choral is a full-stack web solution for remote music collaboration.
 
+./frontend - npm start
+./backend - npm run start:dev
+
+![alt text](https://www.peter-fiorentino.com/static/media/ChoralPic.e744f9c2.png)
+
 - A user can upload a sound or song, from now on "reef", either from a preexistent file or by recording it live with the app. The user can include some specifics about the sound (musical key, genre, tempo, progression) and must complete a "looking for" field for letting other users know how to collaborate.
 - A user can find other user's reefs by: going to their profile page; by scrolling through the "Explore" feed (all reefs) or "My Feed" (reefs from users the user follows); by looking at the Collaborators page which has a list of all other users that have collaborated with the user in the past. 
 - A user can see the picture and info (homebase, anthem, fav genre) from a particular user, decide to follow or to unfollow, and preview the reefs from that user.
