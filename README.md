@@ -3,8 +3,9 @@
 A remote musical playground. 
 Choral is a full-stack web solution for remote music collaboration.
 
-./frontend - npm start
-./backend - npm run start:dev
+# Setup Instructions
+`./frontend - npm start`<br />
+`./backend - npm run start:dev`
 
 ![alt text](https://www.peter-fiorentino.com/static/media/ChoralPic.e744f9c2.png)
 
