@@ -16,7 +16,7 @@ Choral is a full-stack web solution for remote music collaboration.
 - A user can collaborate with a reef by uploading a sound, either from a preexistent file or by recording it live with the app. If the choice is the latter, the collaboration may be recorded from any point of the song and that time reference will be kept for when the creator of the reef listens to it.
 - A user can mix the original track of a reef with the merged collaborations by individually muting or changing volume and panning.
 - A user can play a reef with its merged tracks, pause at any point to resume from there or stop to go back to the beginning.
-- A user that owns a reef can listen to new collaborations made to that reef and decide to merge them or discard them
+- A user that owns a reef can listen to new collaborations made to that reef and decide to merge them or discard them.
 - A user that owns a reef can change his mind and unmerge a previously merged collaboration.
 - A user that owns a reef can save particular mix settings and the merged or unmerged state of the collaborations made to it.
 - A user that owns a reef can bounce an audio file out it, which is a live recording of the sound that's coming out of Choral.
